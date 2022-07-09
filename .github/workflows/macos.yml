@@ -1,0 +1,80 @@
+---
+name: On MacOS Deploy
+'on':
+  push:
+    branches:
+      - "master"
+jobs:
+  on-push-main:
+    runs-on: macos-latest
+    env:
+      MACOS_APP_RELEASE_PATH: build/macos/Build/Products/Release
+    steps:
+      - uses: actions/checkout@v2
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: dev
+      - name: Enable Macos
+        run: flutter config --enable-macos-desktop
+      - name: Build macOS app
+        run: flutter build macos --release
+      - name: Codesign executable
+        env:
+          MACOS_CERTIFICATE: ${{ secrets.MACOS_CERTIFICATE }}
+          MACOS_CERTIFICATE_PWD: ${{ secrets.MACOS_CERTIFICATE_PWD }}
+        run: |
+          echo $MACOS_CERTIFICATE | base64 --decode > certificate.p12
+          echo "Create Keychain"
+          security create-keychain -p 1234 build.keychain
+          echo "Assign to Login Keychain"
+          security default-keychain -s build.keychain
+          echo "Unlock the Login Keychain"
+          security unlock-keychain -p 1234 build.keychain
+          echo "Import certificate"
+          security import certificate.p12 -k build.keychain -P $MACOS_CERTIFICATE_PWD -T /usr/bin/codesign
+          echo "Set Key Partition"
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k 1234 build.keychain
+          echo "Find Identity"
+          security find-identity
+          echo "Sign the app"
+          /usr/bin/codesign --force --deep -s FNABQ95WAK ./$MACOS_APP_RELEASE_PATH/beben_pos_desktop.app
+#          /usr/bin/codesign --force --deep -s G3DYX48T6A ./$MACOS_APP_RELEASE_PATH/beben_pos_desktop.app
+      - name: Create a dmg
+        run: |
+          echo "Install create-dmg"
+          brew install create-dmg
+          cd $MACOS_APP_RELEASE_PATH
+          create-dmg \
+            --volname "beben_pos_desktop" \
+            --window-pos 200 120 \
+            --window-size 800 529 \
+            --icon-size 130 \
+            --text-size 14 \
+            --icon "beben_pos_desktop.app" 260 250 \
+            --hide-extension "beben_pos_desktop.app" \
+            --app-drop-link 540 250 \
+            --hdiutil-quiet \
+            "beben_pos_desktop.dmg" \
+            "beben_pos_desktop.app"
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v1.0.2+3
+          release_name: Release v1.0.2+3
+          body: |
+            Release Notes
+          draft: false
+          prerelease: false
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: build/macos/Build/Products/Release/beben_pos_desktop.dmg
+          asset_name: beben_pos_desktop.dmg
+          asset_content_type: application/octet-stream

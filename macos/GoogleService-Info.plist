@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>539214973296-hg6f9bn5d43k846nuc15a978a9te44u3.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.539214973296-hg6f9bn5d43k846nuc15a978a9te44u3</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBv-jpmO4zrjUj35rIGnn4-8VneI0wff_E</string>
+	<key>GCM_SENDER_ID</key>
+	<string>539214973296</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>id.co.bebenPosDesktop</string>
+	<key>PROJECT_ID</key>
+	<string>beben-pos-desktop</string>
+	<key>STORAGE_BUCKET</key>
+	<string>beben-pos-desktop.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:539214973296:ios:99e80678c9f82ab366e7b5</string>
+</dict>
+</plist>

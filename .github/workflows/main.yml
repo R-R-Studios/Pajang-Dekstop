@@ -1,0 +1,54 @@
+---
+name: On Windows Release
+'on':
+  push:
+    branches:
+      - "master"
+jobs:
+  on-push-main:
+    runs-on: windows-latest
+    env:
+      WINDOWS_APP_RELEASE_PATH: build/windows/runner/Release
+    steps:
+      - uses: actions/checkout@v2
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: beta
+      - name: Enable Windows
+        run: flutter config --enable-windows-desktop
+      - name: Build Windows app
+        run: flutter build windows --release
+      - name: Open File Directory
+        run: |
+          cd build/windows/runner/Release
+          ls
+      - name: Archive Release
+        uses: thedoctor0/zip-release@master
+        with:
+          type: 'zip'
+          filename: 'beben_pos_desktop.zip'
+          directory: "build/windows/runner/Release"
+      - name: Check Files
+        run: ls
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v1.2.4992
+          release_name: Release v1.2.4992 Beta
+          body: |
+            Release Notes
+          draft: false
+          prerelease: false
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+          asset_path: build/windows/runner/Release/beben_pos_desktop.zip
+          asset_name: beben_pos_desktop.zip
+          asset_content_type: application/zip
