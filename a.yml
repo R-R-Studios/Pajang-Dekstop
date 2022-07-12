@@ -1,0 +1,13 @@
+name: Flutter CI
+
+on: push
+
+jobs:
+  build-and-release-linux:
+    runs-on: ubuntu-latest
+
+  build-and-release-windows:
+    runs-on: windows-latest
+
+  build-and-release-macos:
+    runs-on: macos-latest
