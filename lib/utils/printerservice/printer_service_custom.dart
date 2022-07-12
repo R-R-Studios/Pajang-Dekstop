@@ -59,7 +59,7 @@ class PrinterServiceCustom {
             styles: PosStyles(
                 align: PosAlign.left, height: PosTextSize.size2, bold: true)),
         PosColumn(
-            text: "Raja Sembako",
+            text: "Pajang Desktop",
             width: 6,
             styles: PosStyles(
                 align: PosAlign.center, height: PosTextSize.size2, bold: true)),
@@ -166,7 +166,7 @@ class PrinterServiceCustom {
             styles: PosStyles(
                 align: PosAlign.left, height: PosTextSize.size2, bold: true)),
         PosColumn(
-            text: "Raja Sembako",
+            text: "Pajang Desktop",
             width: 6,
             styles: PosStyles(
                 align: PosAlign.center, height: PosTextSize.size2, bold: true)),

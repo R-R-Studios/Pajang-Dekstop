@@ -350,7 +350,7 @@ class _SalesReportsState extends State<SalesReports> {
         ),
         TextButton(
           onPressed: () async {
-          await PdfInvoiceSales.generate(startDate, endDate, listTransactionForPDF, profile.merchantName ?? "Raja Sembako");
+          await PdfInvoiceSales.generate(startDate, endDate, listTransactionForPDF, profile.merchantName ?? "Pajang");
             Navigator.pop(ctx, 'OK');
     },
           child: const Text('OK'),
