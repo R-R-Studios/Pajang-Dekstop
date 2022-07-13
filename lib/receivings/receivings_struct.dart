@@ -1,16 +1,9 @@
-import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:beben_pos_desktop/core/core.dart';
 import 'package:beben_pos_desktop/receivings/bloc/receivings_bloc.dart';
 import 'package:beben_pos_desktop/receivings/model/cart_receivings_model.dart';
-import 'package:beben_pos_desktop/utils/printer/printer_manager.dart';
-import 'package:beben_pos_desktop/utils/size_config.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:printing/printing.dart';
 import 'package:syncfusion_flutter_barcodes/barcodes.dart';
@@ -73,10 +66,7 @@ class _ReceivingsStructState extends State<ReceivingsStruct> {
               child: Text(
                 "Struk Barang Masuk",
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold
-                ),
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
             ),
           ),
@@ -458,7 +448,7 @@ class _ReceivingsStructState extends State<ReceivingsStruct> {
           pw.Padding(
             padding: pw.EdgeInsets.only(bottom: 3),
             child: pw.Text(
-              "Beben Pos Desktop",
+              "Pajang Pos Desktop",
               style: pw.TextStyle(
                 fontSize: 14,
               ),
@@ -522,17 +512,19 @@ class _ReceivingsStructState extends State<ReceivingsStruct> {
     var downloadDir = await getTemporaryDirectory();
     outputDir = "${downloadDir.path}/struct.pdf";
     doc.addPage(pw.MultiPage(
-      pageFormat: PdfPageFormat(80 * PdfPageFormat.mm, 210 * PdfPageFormat.mm, marginLeft: 0.5 * PdfPageFormat.cm, marginRight: 0.5 * PdfPageFormat.cm),
-        build: (context) => <pw.Widget>[
-          headerReceivingsStructToPrint(),
-          nameReceivingsStructToPrint(),
-          // tableRowToPrint(),
-          pw.Divider(thickness: 0.5),
-          for (CartReceivingsModel cart in cartReceivings)
-            tableColumnToPrintV2(cart),
-          pw.Divider(thickness: 0.5),
-          tableBottomToPrint(),
-        ],
+      pageFormat: PdfPageFormat(80 * PdfPageFormat.mm, 210 * PdfPageFormat.mm,
+          marginLeft: 0.5 * PdfPageFormat.cm,
+          marginRight: 0.5 * PdfPageFormat.cm),
+      build: (context) => <pw.Widget>[
+        headerReceivingsStructToPrint(),
+        nameReceivingsStructToPrint(),
+        // tableRowToPrint(),
+        pw.Divider(thickness: 0.5),
+        for (CartReceivingsModel cart in cartReceivings)
+          tableColumnToPrintV2(cart),
+        pw.Divider(thickness: 0.5),
+        tableBottomToPrint(),
+      ],
     ));
 
     final file = File(outputDir);
@@ -563,7 +555,10 @@ class _ReceivingsStructState extends State<ReceivingsStruct> {
     await file.writeAsBytes(await doc.save());
   }
 
-  Map<String, PdfPageFormat> pageFormats = {"80mm": PdfPageFormat(8 * PdfPageFormat.cm, 20 * PdfPageFormat.cm, marginAll: 0.5 * PdfPageFormat.cm)};
+  Map<String, PdfPageFormat> pageFormats = {
+    "80mm": PdfPageFormat(8 * PdfPageFormat.cm, 20 * PdfPageFormat.cm,
+        marginAll: 0.5 * PdfPageFormat.cm)
+  };
 
   Widget previewStruct() {
     List<PdfPreviewAction> actions = [];
@@ -571,7 +566,6 @@ class _ReceivingsStructState extends State<ReceivingsStruct> {
       PdfPreviewAction(
         icon: Icon(Icons.arrow_back, color: Colors.white),
         onPressed: (context, callback, pageFormat) async {
-
           // setIsStruct(false);
           // PrinterManager().printerCommand(outputDir);
           // PrinterManager().checkPort();
@@ -592,7 +586,4 @@ class _ReceivingsStructState extends State<ReceivingsStruct> {
       build: (format) => doc.save(),
     );
   }
-
-
-
 }

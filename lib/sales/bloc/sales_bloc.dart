@@ -9,18 +9,15 @@ import 'package:beben_pos_desktop/db/transaction_failed_db.dart';
 import 'package:beben_pos_desktop/db/transaction_failed_product_db.dart';
 import 'package:beben_pos_desktop/product/provider/product_provider.dart';
 import 'package:beben_pos_desktop/profile/bloc/profile_bloc.dart';
-import 'package:beben_pos_desktop/sales/model/example_product.dart';
 import 'package:beben_pos_desktop/db/merchant_product_db.dart';
 import 'package:beben_pos_desktop/sales/model/merchant_transaction_model.dart';
 import 'package:beben_pos_desktop/sales/model/request_transaction_model.dart';
 import 'package:beben_pos_desktop/sales/model/response_status_transaction.dart';
 import 'package:beben_pos_desktop/sales/model/return_transaction_model.dart';
-import 'package:beben_pos_desktop/sales/model/sales_model.dart';
 import 'package:beben_pos_desktop/sales/provider/sales_provider.dart';
 import 'package:beben_pos_desktop/utils/global_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:pdf/widgets.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:uuid/uuid.dart';
 
@@ -143,7 +140,7 @@ class SalesBloc {
     checkAllSumDataInputSales();
   }
 
-  checkAllSumDataInputSales(){
+  checkAllSumDataInputSales() {
     sumTotalQtyData();
     sumTotalProductItem();
     sumSubTotalProduct();
@@ -202,9 +199,9 @@ class SalesBloc {
   sumSubTotalProduct() {
     subtotal = 0;
     for (int a = 0; a < productList.length; a++) {
-      double qty = productList[a].quantity??0;
-      double price = productList[a].price??0;
-      subtotal +=  price * qty;
+      double qty = productList[a].quantity ?? 0;
+      double price = productList[a].price ?? 0;
+      subtotal += price * qty;
     }
     sumSubTotal.sink.add(subtotal);
   }
@@ -216,15 +213,16 @@ class SalesBloc {
     checkAllSumDataInputSales();
   }
 
-  updateItemPrice(int index, ProductModel productModel, double totalPrice) async {
+  updateItemPrice(
+      int index, ProductModel productModel, double totalPrice) async {
     var box = await Hive.openBox(FireshipBox.BOX_PRODUCT);
     box.putAt(index, productModel);
     productList[index].price = totalPrice;
     checkAllSumDataInputSales();
   }
 
-  updateItemTotalPrice(
-      int index, ProductModel productModel, double quantity, double price) async {
+  updateItemTotalPrice(int index, ProductModel productModel, double quantity,
+      double price) async {
     var box = await Hive.openBox(FireshipBox.BOX_PRODUCT);
     box.putAt(index, productModel);
     productList[index].total =
@@ -244,7 +242,7 @@ class SalesBloc {
 
   addProduct(MerchantProductDB merchantProduct) async {
     var box = await Hive.openBox(FireshipBox.BOX_PRODUCT);
-    double salePrice = double.parse("${merchantProduct.salePrice??"0"}");
+    double salePrice = double.parse("${merchantProduct.salePrice ?? "0"}");
     print("merchantProduct.salePrice $salePrice");
     ProductModel productModel = ProductModel(
         productId: merchantProduct.id,
@@ -255,18 +253,20 @@ class SalesBloc {
         total: 0,
         unitName: merchantProduct.unitName,
         unitId: merchantProduct.unitId,
-        quantity: double.parse(merchantProduct.qty??"0"));
+        quantity: double.parse(merchantProduct.qty ?? "0"));
     var productDB = box.values.toList();
     productList = productDB.cast<ProductModel>();
     // after that check the product on the list or not
     bool isAdded = false;
-    isAdded =
-        productList.any((product) => product.productId == merchantProduct.id && product.unitId == merchantProduct.unitId && product.unitName == merchantProduct.unitName);
+    isAdded = productList.any((product) =>
+        product.productId == merchantProduct.id &&
+        product.unitId == merchantProduct.unitId &&
+        product.unitName == merchantProduct.unitName);
     GlobalFunctions.logPrint("isAdded", isAdded);
     if (!isAdded) {
       productModel.total = productModel.quantity! * productModel.price!;
       box.add(productModel);
-      listTotal.add(productModel.total??0);
+      listTotal.add(productModel.total ?? 0);
       listTotalPriceController.sink.add(listTotal);
       productList.add(productModel);
     } else {
@@ -285,9 +285,10 @@ class SalesBloc {
     listProductController.sink.add(productList);
     checkAllSumDataInputSales();
   }
+
   addProductV2(ProductModelDB merchantProduct) async {
     var box = await Hive.openBox(FireshipBox.BOX_PRODUCT);
-    double salePrice = double.parse("${merchantProduct.salePrice??"0"}");
+    double salePrice = double.parse("${merchantProduct.salePrice ?? "0"}");
     print("merchantProduct.salePrice $salePrice");
     ProductModel productModel = ProductModel(
         productId: merchantProduct.id,
@@ -303,13 +304,15 @@ class SalesBloc {
     productList = productDB.cast<ProductModel>();
     // after that check the product on the list or not
     bool isAdded = false;
-    isAdded =
-        productList.any((product) => product.productId == merchantProduct.id && product.unitId == merchantProduct.unitsId && product.unitName == merchantProduct.unitsName);
+    isAdded = productList.any((product) =>
+        product.productId == merchantProduct.id &&
+        product.unitId == merchantProduct.unitsId &&
+        product.unitName == merchantProduct.unitsName);
     GlobalFunctions.logPrint("isAdded", isAdded);
     if (!isAdded) {
       productModel.total = productModel.quantity! * productModel.price!;
       box.add(productModel);
-      listTotal.add(productModel.total??0);
+      listTotal.add(productModel.total ?? 0);
       listTotalPriceController.sink.add(listTotal);
       productList.add(productModel);
     } else {
@@ -403,8 +406,10 @@ class SalesBloc {
     print("listProduct ${listProduct.length}");
     print("search $search");
     if (listProduct.length > 0) {
-      searchList = listProduct.firstWhere((element) => element.barcode!.toLowerCase().contains(search.toLowerCase()),
-          orElse:() => ProductModelDB());
+      searchList = listProduct.firstWhere(
+          (element) =>
+              element.barcode!.toLowerCase().contains(search.toLowerCase()),
+          orElse: () => ProductModelDB());
     }
     // productListDB = searchList;
     // controllerProductModelDB.sink.add(productListDB);
@@ -526,7 +531,8 @@ class SalesBloc {
     var box = await Hive.openBox(FireshipBox.BOX_PRODUCT);
     var productModel = box.values.toList();
     productList = productModel.cast<ProductModel>();
-    GlobalFunctions.log('sales_input', 'GetMerchantProductDB total Data : ${productList.length}');
+    GlobalFunctions.log('sales_input',
+        'GetMerchantProductDB total Data : ${productList.length}');
     listProductController.sink.add(productList);
     checkAllSumDataInputSales();
   }
@@ -569,8 +575,10 @@ class SalesBloc {
   Future<ResponseStatusTransaction> requestMerchantTransaction(
       double totalPriceTransaction,
       double totalPaymentCustomer,
-      int merchantId, String type) async {
-    ResponseStatusTransaction responseStatusTransaction = ResponseStatusTransaction(
+      int merchantId,
+      String type) async {
+    ResponseStatusTransaction responseStatusTransaction =
+        ResponseStatusTransaction(
       transactionCode: "",
       status: false,
     );
@@ -587,29 +595,28 @@ class SalesBloc {
           productId: productList[i].productId,
           trxStock: productList[i].quantity,
           unitId: productList[i].unitId,
-          unitName: productList[i].unitName
-          );
+          unitName: productList[i].unitName);
       merchantTransactionList.add(merchantTransaction);
     }
-    ProductTransaction producTransaction =
-        ProductTransaction(
-          type: type,
-            merchantTransaction: merchantTransactionList);
-    GlobalFunctions.logPrint("requestMerchantTransaction", jsonEncode(producTransaction));
-    var key = FireshipCrypt().encrypt(jsonEncode(producTransaction), await FireshipCrypt().getPassKeyPref());
+    ProductTransaction producTransaction = ProductTransaction(
+        type: type, merchantTransaction: merchantTransactionList);
+    GlobalFunctions.logPrint(
+        "requestMerchantTransaction", jsonEncode(producTransaction));
+    var key = FireshipCrypt().encrypt(
+        jsonEncode(producTransaction), await FireshipCrypt().getPassKeyPref());
     await SalesProvider.requestTransaction(BodyEncrypt(key, key).toJson())
         .then((value) async {
-          print('Data value from request -> ${value.status}');
-          responseStatusTransaction = ResponseStatusTransaction(
-            transactionCode: value.transactionCode ?? "",
-            status: value.status ?? false,
-            responseCode: value.responseCode
-          );
-          // isSuccessTransaction = value;
+      print('Data value from request -> ${value.status}');
+      responseStatusTransaction = ResponseStatusTransaction(
+          transactionCode: value.transactionCode ?? "",
+          status: value.status ?? false,
+          responseCode: value.responseCode);
+      // isSuccessTransaction = value;
       // print('isSuccessTransaction -> $isSuccessTransaction');
       if (!value.status!) {
-        if (value.responseCode != '402'){
-          GlobalFunctions.log('sales_bloc', 'response transaction [${value.responseCode}] code except 402 input to offline mode ');
+        if (value.responseCode != '402') {
+          GlobalFunctions.log('sales_bloc',
+              'response transaction [${value.responseCode}] code except 402 input to offline mode ');
           await addTransactionFailed(
               totalPriceTransaction, totalPaymentCustomer, merchantId, type);
         }
@@ -651,15 +658,13 @@ class SalesBloc {
         MerchantTransactionModel merchantTransaction = MerchantTransactionModel(
             productId: transaction.productList![i].productId,
             trxStock: transaction.productList![i].quantity,
-          unitId: transaction.productList![i].unitId,
-          unitName: transaction.productList![i].unitName
-        );
+            unitId: transaction.productList![i].unitId,
+            unitName: transaction.productList![i].unitName);
         merchantTransactionList.add(merchantTransaction);
       }
-      ProductTransaction producTransaction =
-          ProductTransaction(
-            type: transaction.type ?? "",
-              merchantTransaction: merchantTransactionList);
+      ProductTransaction producTransaction = ProductTransaction(
+          type: transaction.type ?? "",
+          merchantTransaction: merchantTransactionList);
       GlobalFunctions.logPrint(
           "requestMerchantTransaction", jsonEncode(producTransaction));
       var key = FireshipCrypt().encrypt(jsonEncode(producTransaction),
@@ -669,8 +674,9 @@ class SalesBloc {
         print('Data request status -> ${value.status}');
         print('Data response code  -> ${value.responseCode}');
         if (value.status!) {
-          if (value.responseCode == '402'){
-            GlobalFunctions.log('sales_bloc', 'Sales Bloc - RequestAsyncTransaction : Gagal Qty Melebihi kapasitas');
+          if (value.responseCode == '402') {
+            GlobalFunctions.log('sales_bloc',
+                'Sales Bloc - RequestAsyncTransaction : Gagal Qty Melebihi kapasitas');
           } else {
             final index = transactionList
                 .indexWhere((element) => element.id == transaction.id);

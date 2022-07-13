@@ -1,23 +1,27 @@
-import 'dart:io';
-
 import 'package:beben_pos_desktop/core/core.dart';
 import 'package:beben_pos_desktop/core/fireship/fireship_encrypt.dart';
 import 'package:beben_pos_desktop/db/product_db.dart';
 import 'package:beben_pos_desktop/receivings/model/cart_receivings_model.dart';
 import 'package:flutter_esc_pos_network/flutter_esc_pos_network.dart';
 import 'package:flutter_esc_pos_utils/flutter_esc_pos_utils.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:pdf/pdf.dart';
-import 'package:pdf/widgets.dart' as pw;
 
 class PrinterServiceCustom {
-  static Future printSales(List<ProductModel> list, double totalPayment, double customerMoney, String cashback, String trxCode, String merchantName) async {
-    var ticket = await PrinterServiceCustom.structSales(list, totalPayment, customerMoney, cashback, trxCode, merchantName);
+  static Future printSales(
+      List<ProductModel> list,
+      double totalPayment,
+      double customerMoney,
+      String cashback,
+      String trxCode,
+      String merchantName) async {
+    var ticket = await PrinterServiceCustom.structSales(
+        list, totalPayment, customerMoney, cashback, trxCode, merchantName);
     PrinterServiceCustom.connectPrint(ticket);
   }
 
-  static Future printReceivings(List<CartReceivingsModel> list, double totalPayment, String trxCode) async {
-    var ticket = await PrinterServiceCustom.structReceivings(list, totalPayment, trxCode);
+  static Future printReceivings(List<CartReceivingsModel> list,
+      double totalPayment, String trxCode) async {
+    var ticket = await PrinterServiceCustom.structReceivings(
+        list, totalPayment, trxCode);
     PrinterServiceCustom.connectPrint(ticket);
   }
 
@@ -77,13 +81,13 @@ class PrinterServiceCustom {
             text: strDate,
             width: 6,
             styles:
-            PosStyles(align: PosAlign.center, height: PosTextSize.size1)),
+                PosStyles(align: PosAlign.center, height: PosTextSize.size1)),
         PosColumn(text: "", width: 3, styles: PosStyles(align: PosAlign.right)),
       ],
     );
     bytes += generator.emptyLines(1);
 
-    if(trxCode.isNotEmpty){
+    if (trxCode.isNotEmpty) {
       bytes += generator.text("No. Transaksi : $trxCode",
           styles: PosStyles(align: PosAlign.left, height: PosTextSize.size1));
     }
@@ -120,7 +124,7 @@ class PrinterServiceCustom {
       bytes += generator.text(
           "${product.unitName} $qty @ ${Core.converNumeric("${product.originalPrice}")}",
           styles: PosStyles(align: PosAlign.left, height: PosTextSize.size1));
-      if(i != allProducts.length-1){
+      if (i != allProducts.length - 1) {
         bytes += generator.emptyLines(1);
       }
     }
@@ -146,7 +150,8 @@ class PrinterServiceCustom {
       double totalBelanja,
       double customerMoney,
       String kembalian,
-      String trxCode, String merchantName) async {
+      String trxCode,
+      String merchantName) async {
     List<int> bytes = [];
     var date = DateTime.now();
     var hour = date.hour < 10 ? "0${date.hour}" : "${date.hour}";
@@ -205,7 +210,7 @@ class PrinterServiceCustom {
     );
     bytes += generator.emptyLines(1);
 
-    if(trxCode.isNotEmpty){
+    if (trxCode.isNotEmpty) {
       bytes += generator.text("No. Transaksi : $trxCode",
           styles: PosStyles(align: PosAlign.left, height: PosTextSize.size1));
     }
@@ -245,7 +250,7 @@ class PrinterServiceCustom {
       bytes += generator.text(
           "${product.unitName} $qty @ ${Core.converNumeric("${product.price}")}",
           styles: PosStyles(align: PosAlign.left, height: PosTextSize.size1));
-      if(i != allProducts.length-1){
+      if (i != allProducts.length - 1) {
         bytes += generator.emptyLines(1);
       }
     }

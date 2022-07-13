@@ -1,31 +1,17 @@
-import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:beben_pos_desktop/commingsoon/menu_comming_soon.dart';
 import 'package:beben_pos_desktop/dashboard_bloc.dart';
 import 'package:beben_pos_desktop/db/profile_db.dart';
 import 'package:beben_pos_desktop/product/screen/menu_product.dart';
-import 'package:beben_pos_desktop/profile/bloc/profile_bloc.dart';
 import 'package:beben_pos_desktop/receivings/menu_receivings.dart';
 import 'package:beben_pos_desktop/reports/reports_merchant.dart';
-import 'package:beben_pos_desktop/sales/offline_sales_input.dart';
 import 'package:beben_pos_desktop/sales/sales_input.dart';
-import 'package:beben_pos_desktop/session/login_screen.dart';
 import 'package:beben_pos_desktop/utils/global_functions.dart';
 import 'package:beben_pos_desktop/utils/size_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:hive/hive.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
-import 'package:nav_router/nav_router.dart';
-import 'core/fireship/fireship_box.dart';
-import 'core/fireship/fireship_database.dart';
 import 'core/fireship/fireship_encrypt.dart';
-import 'core/fireship/fireship_utility_box.dart';
-import 'customer/menu_customer.dart';
-import 'gift/gift_screen.dart';
 import 'model/navigation_model.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -140,7 +126,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                 leadingWidth: MediaQuery.of(context).size.width * 0.2,
                 title: Padding(
                   padding: EdgeInsets.only(top: 20),
-                  child: Text('Beben POS'),
+                  child: Text('Pajang POS'),
                 ),
                 bottom: TabBar(
                   indicatorColor: Colors.white,
@@ -370,8 +356,7 @@ class _DashboardScreenState extends State<DashboardScreen>
           // );
           return Dialog(
             shape: RoundedRectangleBorder(
-                borderRadius:
-                BorderRadius.circular(20.0)), //this right here
+                borderRadius: BorderRadius.circular(20.0)), //this right here
             child: Container(
               child: Padding(
                 padding: const EdgeInsets.all(24.0),
@@ -389,20 +374,21 @@ class _DashboardScreenState extends State<DashboardScreen>
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           TextButton(
-                              onPressed: (){
-                                Navigator.pop(ctx);
-                              }, child:
-                          Container(
-                            width: SizeConfig.screenWidth * 0.12,
-                            height: 30,
-                            child: Center(
-                              child: Text(
-                                "Tidak",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(color: Colors.black),
+                            onPressed: () {
+                              Navigator.pop(ctx);
+                            },
+                            child: Container(
+                              width: SizeConfig.screenWidth * 0.12,
+                              height: 30,
+                              child: Center(
+                                child: Text(
+                                  "Tidak",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(color: Colors.black),
+                                ),
                               ),
                             ),
-                          ),),
+                          ),
                           SizedBox(
                             width: 24,
                           ),
@@ -410,7 +396,8 @@ class _DashboardScreenState extends State<DashboardScreen>
                             onPressed: () {
                               logout();
                             },
-                            style: ElevatedButton.styleFrom(primary: Colors.lightBlue),
+                            style: ElevatedButton.styleFrom(
+                                primary: Colors.lightBlue),
                             child: Container(
                               width: SizeConfig.screenWidth * 0.12,
                               height: 30,
@@ -510,7 +497,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                               padding: EdgeInsets.only(left: 2),
                               child: TextFormField(
                                 controller: printerAddressController,
-                                validator: (value){
+                                validator: (value) {
                                   if (value!.isEmpty) {
                                     return 'Masukan printer address';
                                   }
@@ -537,15 +524,13 @@ class _DashboardScreenState extends State<DashboardScreen>
                           padding: const EdgeInsets.all(8.0),
                           child: ElevatedButton(
                             onPressed: () {
-                              onSetupPrinter(printerAddressController.text, ctx);
+                              onSetupPrinter(
+                                  printerAddressController.text, ctx);
                             },
                             style: ElevatedButton.styleFrom(
                                 textStyle: TextStyle(color: Colors.white),
                                 padding: EdgeInsets.only(
-                                    left: 20,
-                                    right: 20,
-                                    top: 15,
-                                    bottom: 15),
+                                    left: 20, right: 20, top: 15, bottom: 15),
                                 primary: Color(0xff3498db)),
                             child: Text("Simpan"),
                           ),
@@ -562,7 +547,7 @@ class _DashboardScreenState extends State<DashboardScreen>
 
   void onSetupPrinter(String address, BuildContext ctx) {
     var form = _formKey.currentState;
-    if(form!= null && form.validate()){
+    if (form != null && form.validate()) {
       FireshipCrypt().setPrinterAddress(address);
       Navigator.pop(ctx);
     }

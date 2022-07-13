@@ -1,16 +1,8 @@
-import 'dart:convert';
-
 import 'package:beben_pos_desktop/core/core.dart';
-import 'package:beben_pos_desktop/db/product_model_db.dart';
-import 'package:beben_pos_desktop/product/model/product_model.dart';
-import 'package:beben_pos_desktop/receivings/bloc/receivings_bloc.dart';
 import 'package:beben_pos_desktop/receivings/model/price_list_model.dart';
-import 'package:beben_pos_desktop/receivings/model/product_receivings_model.dart';
 import 'package:beben_pos_desktop/receivings/model/unit_list_model.dart';
-import 'package:beben_pos_desktop/units/model/units_model.dart';
 import 'package:beben_pos_desktop/units/bloc/unit_bloc.dart';
 import 'package:beben_pos_desktop/utils/size_config.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class DialogFindUnits extends StatefulWidget {
@@ -108,24 +100,32 @@ class _DialogFindUnitsState extends State<DialogFindUnits> {
                 stream: unitBloc.streamListPrice,
                 builder: (context, AsyncSnapshot<List<PriceList>> snapshot) {
                   List<PriceList> list = [];
-                  if(snapshot.hasData){
+                  if (snapshot.hasData) {
                     list = snapshot.data!;
-                  }else{
+                  } else {
                     list = [PriceList()];
                   }
                   return ListView.builder(
                     shrinkWrap: true,
                     itemCount: list.length,
                     itemBuilder: (BuildContext context, int index) {
-                      UnitList unit = list[index].unitList != null ? list[index].unitList! : UnitList();
+                      UnitList unit = list[index].unitList != null
+                          ? list[index].unitList!
+                          : UnitList();
                       return ListTile(
                         contentPadding: EdgeInsets.only(left: 8, right: 8),
                         title: Row(
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text("${unit.name != null ? unit.name : "Units Tidak tersedia"}"),
-                            Text(Core.converNumeric(list[index].salePrice != null ? double.parse(list[index].salePrice!).toInt().toString() : ""))
+                            Text(
+                                "${unit.name != null ? unit.name : "Units Tidak tersedia"}"),
+                            Text(Core.converNumeric(
+                                list[index].salePrice != null
+                                    ? double.parse(list[index].salePrice!)
+                                        .toInt()
+                                        .toString()
+                                    : ""))
                           ],
                         ),
                         onTap: () {
@@ -145,13 +145,12 @@ class _DialogFindUnitsState extends State<DialogFindUnits> {
   }
 
   onSearchUnit(String val) {
-    if(val.isEmpty){
+    if (val.isEmpty) {
       print("onSearchUnit $val isEmpty");
       unitBloc.initPriceList(priceList);
-    }else{
+    } else {
       print("onSearchUnit $val isNotEmpty");
       unitBloc.searchPriceList(val);
     }
-
   }
 }

@@ -1,18 +1,13 @@
 import 'dart:convert';
 
-import 'package:beben_pos_desktop/db/product_receivings_db.dart';
-import 'package:beben_pos_desktop/product/bloc/product_bloc.dart';
 import 'package:beben_pos_desktop/receivings/bloc/receivings_bloc.dart';
-import 'package:beben_pos_desktop/receivings/model/cart_receivings_model.dart';
 import 'package:beben_pos_desktop/receivings/model/preview_transaction_po.dart';
 import 'package:beben_pos_desktop/receivings/model/product_receivings_model.dart';
 import 'package:beben_pos_desktop/service/model/core_model.dart';
 import 'package:beben_pos_desktop/service/model/meta.dart';
-import 'package:beben_pos_desktop/units/model/units_model.dart';
 import 'package:beben_pos_desktop/db/merchant_product_db.dart';
 import 'package:beben_pos_desktop/service/dio_client.dart';
 import 'package:beben_pos_desktop/service/dio_service.dart';
-import 'package:beben_pos_desktop/utils/global_functions.dart';
 
 class ReceivingsProvider {
   static Future<List<MerchantProductDB>> merchantListProduct(
@@ -38,17 +33,19 @@ class ReceivingsProvider {
     // var _navState = new GlobalKey<NavigatorState>();
     CoreModel? coreModel;
     await DioService.checkConnection(
-      isLoading: true,
-            tryAgainMethod: createReceivings, isUseBearer: true)
+            isLoading: true,
+            tryAgainMethod: createReceivings,
+            isUseBearer: true)
         .then((value) async {
       var dio = DioClient(value);
       var createProduct = await dio.createProduct(body);
       coreModel = createProduct;
     });
-    return coreModel??CoreModel(meta: Meta());
+    return coreModel ?? CoreModel(meta: Meta());
   }
 
-  static Future<List<ProductReceivingsModel>> listProductReceivings(String typePrice) async {
+  static Future<List<ProductReceivingsModel>> listProductReceivings(
+      String typePrice) async {
     List<ProductReceivingsModel> listProduct = [];
     await DioService.checkConnection(
             tryAgainMethod: listProductReceivings, isUseBearer: true)
@@ -83,8 +80,9 @@ class ReceivingsProvider {
       Map<String, dynamic> body) async {
     PreviewTransactionPO transactionPO = PreviewTransactionPO();
     await DioService.checkConnection(
-      isLoading: true,
-            tryAgainMethod: searchTransactionPO, isUseBearer: true)
+            isLoading: true,
+            tryAgainMethod: searchTransactionPO,
+            isUseBearer: true)
         .then((value) async {
       var dio = DioClient(value);
       var searchPO = await dio.searchTransactionPO(body);

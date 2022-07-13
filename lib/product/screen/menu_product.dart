@@ -1,19 +1,10 @@
-import 'dart:convert';
-
-import 'package:beben_pos_desktop/core/core.dart';
-import 'package:beben_pos_desktop/core/fireship/fireship_box.dart';
 import 'package:beben_pos_desktop/dashboard_bloc.dart';
-import 'package:beben_pos_desktop/db/product_model_db.dart';
-import 'package:beben_pos_desktop/db/unit_conversions_db.dart';
 import 'package:beben_pos_desktop/model/head_column_model.dart';
 import 'package:beben_pos_desktop/product/model/product_model.dart';
-import 'package:beben_pos_desktop/product/provider/product_provider.dart';
 
 import 'package:beben_pos_desktop/product/widget/dialog_create_product_data.dart';
 import 'package:beben_pos_desktop/utils/size_config.dart';
-import 'package:flutter/services.dart';
 import 'package:beben_pos_desktop/utils/global_functions.dart';
-import 'package:hive/hive.dart';
 
 import '../bloc/product_bloc.dart';
 import '../datasource/data_source_product.dart';
@@ -135,8 +126,9 @@ class _MenuProductState extends State<MenuProduct> {
                                 padding: EdgeInsets.only(right: 5),
                                 child: ElevatedButton.icon(
                                   onPressed: () async {
-                                    bool hasConnection = await GlobalFunctions.checkConnectivityApp();
-                                    if (hasConnection){
+                                    bool hasConnection = await GlobalFunctions
+                                        .checkConnectivityApp();
+                                    if (hasConnection) {
                                       productBloc.refreshProduct();
                                     }
                                   },
@@ -256,8 +248,10 @@ class _MenuProductState extends State<MenuProduct> {
                                 AsyncSnapshot<List<ProductModel>> snapshot) {
                               if (snapshot.hasData) {
                                 if (snapshot.data!.length > 0) {
-                                  _productModel = snapshot.data??[];
-                                  _productModel.sort((pA, pB) => pA.product?.productId??0.compareTo(pB.product?.productId??0));
+                                  _productModel = snapshot.data ?? [];
+                                  _productModel.sort((pA, pB) =>
+                                      pA.product?.productId ??
+                                      0.compareTo(pB.product?.productId ?? 0));
                                 } else {
                                   _productModel = [
                                     ProductModel(),
@@ -332,10 +326,10 @@ class _MenuProductState extends State<MenuProduct> {
         context: context,
         builder: (BuildContext dialogContext) {
           return DialogCreateProductData();
-    }).then((value) async {
+        }).then((value) async {
       GlobalFunctions.logPrint("request Create Merchant Product", '$value');
-      if (value != null){
-        if(value){
+      if (value != null) {
+        if (value) {
           productBloc.refreshProduct();
         }
       }

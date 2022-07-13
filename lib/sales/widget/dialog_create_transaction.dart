@@ -3,7 +3,6 @@ import 'package:beben_pos_desktop/db/product_db.dart';
 import 'package:beben_pos_desktop/model/head_column_model.dart';
 import 'package:beben_pos_desktop/sales/bloc/sales_bloc.dart';
 import 'package:beben_pos_desktop/sales/datasource/sales_data_source.dart';
-import 'package:beben_pos_desktop/db/merchant_product_db.dart';
 import 'package:beben_pos_desktop/utils/global_color_palette.dart';
 import 'package:beben_pos_desktop/utils/size_config.dart';
 import 'package:flutter/material.dart';
@@ -13,8 +12,7 @@ import 'dialog_find_product.dart';
 import 'dialog_save_transaction.dart';
 
 class DialogCreateTransaction extends StatefulWidget {
-  const DialogCreateTransaction( {Key? key})
-      : super(key: key);
+  const DialogCreateTransaction({Key? key}) : super(key: key);
 
   @override
   _DialogCreateTransactionState createState() =>
@@ -92,14 +90,8 @@ class _DialogCreateTransactionState extends State<DialogCreateTransaction> {
                                 });
                               }),
                       ],
-                      source: SalesDataSource(
-                        context,
-                        snapshot.data!,
-                        box,
-                        _formKey,
-                        salesBloc,
-                        FocusNode()
-                      ),
+                      source: SalesDataSource(context, snapshot.data!, box,
+                          _formKey, salesBloc, FocusNode()),
                     ),
                   );
                 return Container(
@@ -143,7 +135,8 @@ class _DialogCreateTransactionState extends State<DialogCreateTransaction> {
                               context: context,
                               barrierDismissible: true,
                               builder: (BuildContext context) {
-                                return DialogSaveTransaction("manual", salesBloc, totalTransaction);
+                                return DialogSaveTransaction(
+                                    "manual", salesBloc, totalTransaction);
                               });
                           print('error');
                           // await salesBloc.addTransactionFailed();
@@ -212,7 +205,8 @@ class _DialogCreateTransactionState extends State<DialogCreateTransaction> {
                               context: context,
                               barrierDismissible: true,
                               builder: (BuildContext c) {
-                                return DialogFindProduct(salesBloc.addProduct, "0");
+                                return DialogFindProduct(
+                                    salesBloc.addProduct, "0");
                               });
                         },
                       ),

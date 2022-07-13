@@ -1,13 +1,11 @@
 import 'dart:async';
 
-import 'package:beben_pos_desktop/db/product_db.dart';
 import 'package:beben_pos_desktop/db/product_model_db.dart';
 import 'package:beben_pos_desktop/sales/bloc/sales_bloc.dart';
 import 'package:beben_pos_desktop/db/merchant_product_db.dart';
 import 'package:beben_pos_desktop/utils/global_color_palette.dart';
 import 'package:beben_pos_desktop/utils/global_functions.dart';
 import 'package:beben_pos_desktop/utils/size_config.dart';
-import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 
 class DialogFindProduct extends StatefulWidget {
@@ -108,8 +106,7 @@ class _DialogFindProductState extends State<DialogFindProduct> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            margin:
-            EdgeInsets.only(left: 12, right: 12, top: 14, bottom: 8),
+            margin: EdgeInsets.only(left: 12, right: 12, top: 14, bottom: 8),
             width: SizeConfig.screenWidth * 0.49,
             child: TextFormField(
               maxLines: 1,
@@ -125,8 +122,7 @@ class _DialogFindProductState extends State<DialogFindProduct> {
                 prefixIcon: Icon(Icons.search),
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(
-                      color: GlobalColorPalette.colorButtonActive,
-                      width: 1.0),
+                      color: GlobalColorPalette.colorButtonActive, width: 1.0),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.grey, width: 1.0),
@@ -164,16 +160,21 @@ class _DialogFindProductState extends State<DialogFindProduct> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Expanded(
-                  flex:1,
-                  child: Text("Barcode", style: TextStyle(fontWeight: FontWeight.bold),),
+                  flex: 1,
+                  child: Text(
+                    "Barcode",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
                 ),
                 Expanded(
-                  flex:1,
-                  child: Text("Nama Produk", style: TextStyle(fontWeight: FontWeight.bold)),
+                  flex: 1,
+                  child: Text("Nama Produk",
+                      style: TextStyle(fontWeight: FontWeight.bold)),
                 ),
                 Expanded(
-                  flex:1,
-                  child: Text("Satuan", style: TextStyle(fontWeight: FontWeight.bold)),
+                  flex: 1,
+                  child: Text("Satuan",
+                      style: TextStyle(fontWeight: FontWeight.bold)),
                 ),
               ],
             ),
@@ -271,7 +272,8 @@ class _DialogFindProductState extends State<DialogFindProduct> {
           } else {
             productListDB.clear();
             productListDB.addAll(snapshot.data ?? []);
-            productListDB.sort((idA, idB) => idA.productId ?? 0.compareTo(idB.productId ?? 0));
+            productListDB.sort(
+                (idA, idB) => idA.productId ?? 0.compareTo(idB.productId ?? 0));
             return ListView.builder(
                 shrinkWrap: true,
                 itemCount: productListDB.length,

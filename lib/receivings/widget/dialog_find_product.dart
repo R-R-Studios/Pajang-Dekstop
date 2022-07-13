@@ -1,10 +1,6 @@
-import 'package:beben_pos_desktop/db/product_model_db.dart';
-import 'package:beben_pos_desktop/product/bloc/product_bloc.dart';
-import 'package:beben_pos_desktop/product/model/product_model.dart';
 import 'package:beben_pos_desktop/receivings/bloc/receivings_bloc.dart';
 import 'package:beben_pos_desktop/receivings/model/product_receivings_model.dart';
 import 'package:beben_pos_desktop/utils/size_config.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class DialogFindProductReceivings extends StatefulWidget {
@@ -14,7 +10,6 @@ class DialogFindProductReceivings extends StatefulWidget {
   @override
   _DialogFindProductReceivingsState createState() =>
       _DialogFindProductReceivingsState();
-
 }
 
 class _DialogFindProductReceivingsState
@@ -109,32 +104,40 @@ class _DialogFindProductReceivingsState
               width: SizeConfig.screenWidth * 0.49,
               child: StreamBuilder(
                 stream: receivingsBloc.streamProductReceivings,
-                builder: (BuildContext context, AsyncSnapshot<List<ProductReceivingsModel>> snapshot) {
-                if(snapshot.hasData){
-                  listProduct = snapshot.data!;
-                }else{
-                  listProduct = [ProductReceivingsModel()];
-                }
-                return ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: listProduct.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return ListTile(
-                      contentPadding: EdgeInsets.only(left: 8, right: 8),
-                      title: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text("${listProduct[index].barcode != null ? listProduct[index].barcode : "-"}"),
-                          Text("${listProduct[index].name != null ? listProduct[index].name : "Product Tidak Ditemukan"}")
-                        ],
-                      ),
-                      onTap: () {
-                        Navigator.pop(context, listProduct[index].id != null ? listProduct[index] : null);
-                      },
-                    );
-                  },);
-              },
+                builder: (BuildContext context,
+                    AsyncSnapshot<List<ProductReceivingsModel>> snapshot) {
+                  if (snapshot.hasData) {
+                    listProduct = snapshot.data!;
+                  } else {
+                    listProduct = [ProductReceivingsModel()];
+                  }
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: listProduct.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return ListTile(
+                        contentPadding: EdgeInsets.only(left: 8, right: 8),
+                        title: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                                "${listProduct[index].barcode != null ? listProduct[index].barcode : "-"}"),
+                            Text(
+                                "${listProduct[index].name != null ? listProduct[index].name : "Product Tidak Ditemukan"}")
+                          ],
+                        ),
+                        onTap: () {
+                          Navigator.pop(
+                              context,
+                              listProduct[index].id != null
+                                  ? listProduct[index]
+                                  : null);
+                        },
+                      );
+                    },
+                  );
+                },
               ),
             ),
           ],

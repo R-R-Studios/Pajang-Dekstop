@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:beben_pos_desktop/db/units_db.dart';
 import 'package:beben_pos_desktop/receivings/model/price_list_model.dart';
 import 'package:beben_pos_desktop/units/model/units_model.dart';
-import 'package:beben_pos_desktop/receivings/provider/receivings_provider.dart';
 import 'package:beben_pos_desktop/units/provider/unit_provider.dart';
 import 'package:hive/hive.dart';
 import 'package:rxdart/rxdart.dart';
@@ -18,7 +17,7 @@ class UnitBloc {
   Stream<List<UnitsModel>> get streamListUnits => listUnitsController.stream;
 
   BehaviorSubject<List<PriceList>> listPriceController =
-  new BehaviorSubject<List<PriceList>>();
+      new BehaviorSubject<List<PriceList>>();
 
   Stream<List<PriceList>> get streamListPrice => listPriceController.stream;
 
@@ -63,7 +62,7 @@ class UnitBloc {
     listUnits.addAll(await futureUnitListDB());
     listUnitsController.sink.add(listUnits);
   }
-  
+
   Future<List<UnitsModel>> futureUnitListDB() async {
     List<UnitsModel> unitsList = [];
     final box = await Hive.openBox<UnitsDB>("units_db");

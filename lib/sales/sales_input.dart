@@ -1,41 +1,28 @@
 import 'dart:convert';
-import 'dart:io';
-import 'dart:math';
 import 'package:beben_pos_desktop/core/core.dart';
 import 'package:beben_pos_desktop/core/fireship/fireship_box.dart';
-import 'package:beben_pos_desktop/dashboard_bloc.dart';
 import 'package:beben_pos_desktop/db/product_db.dart';
 import 'package:beben_pos_desktop/db/product_model_db.dart';
 import 'package:beben_pos_desktop/db/profile_db.dart';
-import 'package:beben_pos_desktop/db/transaction_failed_db.dart';
-import 'package:beben_pos_desktop/db/transaction_failed_product_db.dart';
 import 'package:beben_pos_desktop/model/head_column_model.dart';
 import 'package:beben_pos_desktop/product/bloc/product_bloc.dart';
 import 'package:beben_pos_desktop/profile/bloc/profile_bloc.dart';
 import 'package:beben_pos_desktop/sales/bloc/sales_bloc.dart';
 import 'package:beben_pos_desktop/sales/daily_sales_screen.dart';
-import 'package:beben_pos_desktop/sales/datasource/sales_data_source.dart';
 import 'package:beben_pos_desktop/sales/model/sales_model.dart';
 import 'package:beben_pos_desktop/sales/widget/dialog_find_product.dart';
 import 'package:beben_pos_desktop/sales/widget/dialog_list_transaction.dart';
-import 'package:beben_pos_desktop/sales/widget/dialog_save_transaction.dart';
-import 'package:beben_pos_desktop/sales/widget/pdf_invoice.dart';
 import 'package:beben_pos_desktop/sales/widget/pdf_sales.dart';
 import 'package:beben_pos_desktop/service/dio_service.dart';
 import 'package:beben_pos_desktop/utils/global_functions.dart';
-import 'package:beben_pos_desktop/utils/printer/printer_manager.dart';
 import 'package:beben_pos_desktop/utils/printerservice/printer_service_custom.dart';
 import 'package:beben_pos_desktop/utils/size_config.dart';
-import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import 'package:nav_router/nav_router.dart';
 // import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
-
-import '../db/merchant_product_db.dart';
-import 'provider/sales_provider.dart';
 
 class SalesInput extends StatefulWidget {
   static final _formKey = new GlobalKey<FormState>();
@@ -420,67 +407,68 @@ class _SalesInputState extends State<SalesInput> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     StreamBuilder(
-                      stream: salesBloc.streamListProductModel,
-                      builder: (context, AsyncSnapshot<List<ProductModel>> snapshot) {
-                        return ElevatedButton.icon(
-                          focusNode: saveFocusNode,
-                          icon: Icon(
-                            Icons.perm_contact_calendar_rounded,
-                            color: Colors.white,
-                            size: 18.0,
-                          ),
-                          label: Text(
-                            selectedTransactionType == "Return"
-                                ? 'Return Transaksi'
-                                : 'Simpan Transaksi',
-                            style: TextStyle(fontSize: 12),
-                          ),
-                          onPressed: () async {
-                            FocusScope.of(context).unfocus();
-                            allProducts.clear();
-                            allProducts = [];
-                            allProducts.addAll(snapshot.data!);
-                            GlobalFunctions.log('sales_input', ': ${allProducts.length}');
-                            if (selectedTransactionType == "Return") {
-                              if (trxCodeController.text.isNotEmpty) {
-                                if (allProducts.length > 0) {
-                                  dialogSaveReturn();
+                        stream: salesBloc.streamListProductModel,
+                        builder: (context,
+                            AsyncSnapshot<List<ProductModel>> snapshot) {
+                          return ElevatedButton.icon(
+                            focusNode: saveFocusNode,
+                            icon: Icon(
+                              Icons.perm_contact_calendar_rounded,
+                              color: Colors.white,
+                              size: 18.0,
+                            ),
+                            label: Text(
+                              selectedTransactionType == "Return"
+                                  ? 'Return Transaksi'
+                                  : 'Simpan Transaksi',
+                              style: TextStyle(fontSize: 12),
+                            ),
+                            onPressed: () async {
+                              FocusScope.of(context).unfocus();
+                              allProducts.clear();
+                              allProducts = [];
+                              allProducts.addAll(snapshot.data!);
+                              GlobalFunctions.log(
+                                  'sales_input', ': ${allProducts.length}');
+                              if (selectedTransactionType == "Return") {
+                                if (trxCodeController.text.isNotEmpty) {
+                                  if (allProducts.length > 0) {
+                                    dialogSaveReturn();
+                                  } else {
+                                    GlobalFunctions.showSnackBarWarning(
+                                        "Masukan Produk untuk return transaksi");
+                                  }
                                 } else {
                                   GlobalFunctions.showSnackBarWarning(
-                                      "Masukan Produk untuk return transaksi");
+                                      "Masukan kode transaksi untuk return transaksi");
                                 }
                               } else {
-                                GlobalFunctions.showSnackBarWarning(
-                                    "Masukan kode transaksi untuk return transaksi");
+                                if (allProducts.length > 0) {
+                                  dialogSaveConfirmation2();
+                                } else {
+                                  GlobalFunctions.showSnackBarWarning(
+                                      "Masukan Produk untuk transaksi");
+                                }
                               }
-                            } else {
-                              if (allProducts.length > 0){
-                                dialogSaveConfirmation2();
-                              } else {
-                                GlobalFunctions.showSnackBarWarning(
-                                    "Masukan Produk untuk transaksi");
-                              }
-                            }
-                            // showDialog(
-                            //     context: context,
-                            //     barrierDismissible: true,
-                            //     builder: (BuildContext c) {
-                            //       return DialogSaveTransaction("", salesBloc, totalTransactionPrice);
-                            //     });
-                            // BotToast.showLoading();
-                            // GlobalFunctions.showLoading(context);
-                            // await SalesBloc().requestMerchantTransaction();
-                            // salesBloc.deleteAll();
-                          },
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.lightBlue,
-                            shape: new RoundedRectangleBorder(
-                              borderRadius: new BorderRadius.circular(2.0),
+                              // showDialog(
+                              //     context: context,
+                              //     barrierDismissible: true,
+                              //     builder: (BuildContext c) {
+                              //       return DialogSaveTransaction("", salesBloc, totalTransactionPrice);
+                              //     });
+                              // BotToast.showLoading();
+                              // GlobalFunctions.showLoading(context);
+                              // await SalesBloc().requestMerchantTransaction();
+                              // salesBloc.deleteAll();
+                            },
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.lightBlue,
+                              shape: new RoundedRectangleBorder(
+                                borderRadius: new BorderRadius.circular(2.0),
+                              ),
                             ),
-                          ),
-                        );
-                      }
-                    ),
+                          );
+                        }),
                   ],
                 ),
                 // Container(
@@ -720,7 +708,8 @@ class _SalesInputState extends State<SalesInput> {
                               onPressed: () {
                                 Navigator.pop(ctx);
                               },
-                              style: TextButton.styleFrom(shadowColor: Colors.grey),
+                              style: TextButton.styleFrom(
+                                  shadowColor: Colors.grey),
                               child: Container(
                                 width: SizeConfig.blockSizeHorizontal * 12,
                                 height: 30,
@@ -739,16 +728,17 @@ class _SalesInputState extends State<SalesInput> {
                             ElevatedButton(
                               focusNode: dialogSaveFocus,
                               onPressed: () async {
-
                                 if (customerMoney < totalTransactionPrice) {
-                                  double minus = totalTransactionPrice - customerMoney;
+                                  double minus =
+                                      totalTransactionPrice - customerMoney;
                                   GlobalFunctions.showSnackBarWarning(
                                       "Uang Customer Kurang ${Core.converNumeric("$minus")}");
                                 } else {
                                   saveTransaction(ctx);
                                 }
                               },
-                              style: ElevatedButton.styleFrom(primary: Colors.lightBlue),
+                              style: ElevatedButton.styleFrom(
+                                  primary: Colors.lightBlue),
                               child: Container(
                                 width: SizeConfig.blockSizeHorizontal * 12,
                                 height: 30,
@@ -842,7 +832,8 @@ class _SalesInputState extends State<SalesInput> {
                         onPressed: () async {
                           saveReturn(ctx);
                         },
-                        style: ElevatedButton.styleFrom(primary: Colors.lightBlue),
+                        style:
+                            ElevatedButton.styleFrom(primary: Colors.lightBlue),
                         child: Container(
                           width: SizeConfig.blockSizeHorizontal * 12,
                           height: 30,
@@ -934,8 +925,7 @@ class _SalesInputState extends State<SalesInput> {
               "Total Belanja",
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
-            Text(
-                "${Core.converNumeric(salesBloc.totalBelanja.toString())}"),
+            Text("${Core.converNumeric(salesBloc.totalBelanja.toString())}"),
           ],
         ),
         SizedBox(
@@ -963,8 +953,7 @@ class _SalesInputState extends State<SalesInput> {
                 children: [
                   Text(
                     "Total Bayar",
-                    style: TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                   Text("${Core.converNumeric(totalBayar.toString())}"),
                 ],
@@ -988,8 +977,7 @@ class _SalesInputState extends State<SalesInput> {
                 children: [
                   Text(
                     "Kembalian",
-                    style: TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                   Text("${Core.converNumeric(kembalian)}"),
                 ],
@@ -1001,8 +989,7 @@ class _SalesInputState extends State<SalesInput> {
         TextFormField(
           onChanged: (newInput) {
             customerMoney = double.parse(newInput);
-            salesBloc.sumTotalKembalian(
-                salesBloc.totalBelanja, customerMoney);
+            salesBloc.sumTotalKembalian(salesBloc.totalBelanja, customerMoney);
           },
           autofocus: true,
           keyboardType: TextInputType.text,
@@ -1135,7 +1122,8 @@ class _SalesInputState extends State<SalesInput> {
                     allProducts.clear();
                   allProducts = <ProductModel>[];
                   allProducts.addAll(snapshot.data!);
-                  GlobalFunctions.log('sales_input', 'adding data product from stream : ${allProducts.length}');
+                  GlobalFunctions.log('sales_input',
+                      'adding data product from stream : ${allProducts.length}');
                   return DataTable(
                     sortColumnIndex: _currentSortColumn,
                     sortAscending: _isAscending,
@@ -1238,14 +1226,15 @@ class _SalesInputState extends State<SalesInput> {
                 style: TextStyle(fontSize: 12, height: 1),
                 initialValue: "${Core.convertToDouble("${row.quantity ?? 0}")}",
                 onChanged: (String _editQuantity) {
-                  if (_editQuantity.isEmpty){
+                  if (_editQuantity.isEmpty) {
                     salesBloc.updateItem(index, row, double.parse("0"));
                     salesBloc.updateItemTotalPrice(
                         index, row, double.parse("0"), row.price ?? 0);
                   } else {
-                    salesBloc.updateItem(index, row, double.parse(_editQuantity));
-                    salesBloc.updateItemTotalPrice(
-                        index, row, double.parse(_editQuantity), row.price ?? 0);
+                    salesBloc.updateItem(
+                        index, row, double.parse(_editQuantity));
+                    salesBloc.updateItemTotalPrice(index, row,
+                        double.parse(_editQuantity), row.price ?? 0);
                   }
                 },
                 onFieldSubmitted: (value) {
@@ -1493,10 +1482,8 @@ class _SalesInputState extends State<SalesInput> {
   }
 
   onSearchChange(String query) {
-    salesBloc
-        .findProductBarcodeV2(context, query)
-        .then((ProductModelDB value) {
-          print("ProductModelDB ${jsonEncode(value)}");
+    salesBloc.findProductBarcodeV2(context, query).then((ProductModelDB value) {
+      print("ProductModelDB ${jsonEncode(value)}");
       if (value.id == null) {
         GlobalFunctions.showSnackBarWarning("Produk tidak ditemukan");
         return;
@@ -1533,37 +1520,47 @@ class _SalesInputState extends State<SalesInput> {
     Navigator.pop(ctx);
     await salesBloc
         .requestReturnTransaction(trxCodeController.text)
-        .then((value) {
-    });
+        .then((value) {});
     await salesBloc.deleteAll();
   }
 
   Future requestOfflineTransaction() async {
     await salesBloc
-        .addTransactionFailed(
-            totalTransactionPrice, customerMoney, profile.merchantId ?? 0, selectedPriceTransaction)
+        .addTransactionFailed(totalTransactionPrice, customerMoney,
+            profile.merchantId ?? 0, selectedPriceTransaction)
         .then((value) {
       salesBloc.deleteAll();
-      PrinterServiceCustom.printSales(allProducts, totalTransactionPrice, customerMoney, kembalian, "", merchantName);
+      PrinterServiceCustom.printSales(allProducts, totalTransactionPrice,
+          customerMoney, kembalian, "", merchantName);
       // productBloc.refreshProduct();
     });
   }
 
   Future requestOnlineTransaction() async {
     await salesBloc
-        .requestMerchantTransaction(
-            totalTransactionPrice, customerMoney, profile.merchantId ?? 0, selectedPriceTransaction)
+        .requestMerchantTransaction(totalTransactionPrice, customerMoney,
+            profile.merchantId ?? 0, selectedPriceTransaction)
         .then(
       (value) {
         if (value.status!) {
-          GlobalFunctions.log('sales_input','status Transaction : ${value.status}');
-          GlobalFunctions.log('sales_input','status Transaction code : ${value.transactionCode}');
-          GlobalFunctions.log('sales_input','status Request code : ${value.responseCode}');
-          if (value.responseCode == '402'){
+          GlobalFunctions.log(
+              'sales_input', 'status Transaction : ${value.status}');
+          GlobalFunctions.log('sales_input',
+              'status Transaction code : ${value.transactionCode}');
+          GlobalFunctions.log(
+              'sales_input', 'status Request code : ${value.responseCode}');
+          if (value.responseCode == '402') {
             // GlobalFunctions.showSnackBarError('Mohon di check kembali stok produk anda');
           } else {
             salesBloc.deleteAll();
-            PrinterServiceCustom.printSales(allProducts, totalTransactionPrice, customerMoney, kembalian, value.transactionCode ?? "", merchantName).then((value){
+            PrinterServiceCustom.printSales(
+                    allProducts,
+                    totalTransactionPrice,
+                    customerMoney,
+                    kembalian,
+                    value.transactionCode ?? "",
+                    merchantName)
+                .then((value) {
               allProducts = <ProductModel>[];
             });
           }

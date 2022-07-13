@@ -1,9 +1,5 @@
-
-import 'dart:collection';
-
 import 'package:beben_pos_desktop/db/transaction_failed_db.dart';
 import 'package:beben_pos_desktop/sales/bloc/sales_bloc.dart';
-import 'package:beben_pos_desktop/sales/widget/dialog_create_transaction.dart';
 import 'package:beben_pos_desktop/utils/size_config.dart';
 import 'package:flutter/material.dart';
 
@@ -17,7 +13,6 @@ class OfflineSalesInput extends StatefulWidget {
 }
 
 class _OfflineSalesInputState extends State<OfflineSalesInput> {
-
   SalesBloc salesBloc = SalesBloc();
 
   @override
@@ -98,15 +93,18 @@ class _OfflineSalesInputState extends State<OfflineSalesInput> {
             Container(
               child: StreamBuilder(
                   stream: salesBloc.streamTransactionList,
-                  builder: (context, AsyncSnapshot<List<TransactionFailedDB>> snapshot) {
-                    if (!snapshot.hasData) {return Container();}
-                    if (snapshot.hasData){
+                  builder: (context,
+                      AsyncSnapshot<List<TransactionFailedDB>> snapshot) {
+                    if (!snapshot.hasData) {
+                      return Container();
+                    }
+                    if (snapshot.hasData) {
                       print('punya data 2 -> ${snapshot.data!.length}');
                       return ListView.builder(
-                         physics: NeverScrollableScrollPhysics(),
+                          physics: NeverScrollableScrollPhysics(),
                           shrinkWrap: true, //Optional
                           itemCount: snapshot.data!.length,
-                          itemBuilder: (context, int index){
+                          itemBuilder: (context, int index) {
                             return Card(
                               child: Padding(
                                 padding: const EdgeInsets.all(12.0),
@@ -116,27 +114,43 @@ class _OfflineSalesInputState extends State<OfflineSalesInput> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
-                                        Text('Transaksi : ${snapshot.data![index].date}', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),),
+                                        Text(
+                                          'Transaksi : ${snapshot.data![index].date}',
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold),
+                                        ),
                                         Row(
                                           children: [
                                             // snapshot.data![index].status == "Failed" ?
                                             // Text('${snapshot.data![index].status}', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.red)) :
                                             // Text('${snapshot.data![index].status}', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.green)),
                                             Row(
-                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
                                               children: [
                                                 IconButton(
                                                   icon: const Icon(Icons.close),
                                                   color: Colors.red,
                                                   iconSize: 16,
                                                   onPressed: () {
-                                                    salesBloc.deleteTransactionAndProductTransaction(index, snapshot.data![index].id!);
+                                                    salesBloc
+                                                        .deleteTransactionAndProductTransaction(
+                                                            index,
+                                                            snapshot
+                                                                .data![index]
+                                                                .id!);
                                                   },
                                                 ),
-                                                Text('Delete ?', style: TextStyle(color: Colors.red),)
+                                                Text(
+                                                  'Delete ?',
+                                                  style: TextStyle(
+                                                      color: Colors.red),
+                                                )
                                               ],
                                             ),
                                           ],
@@ -146,35 +160,53 @@ class _OfflineSalesInputState extends State<OfflineSalesInput> {
                                     ListView.builder(
                                         shrinkWrap: true,
                                         physics: NeverScrollableScrollPhysics(),
-                                        itemCount: snapshot.data![index].productList!.length,
-                                        itemBuilder: (context, int indexProduct){
+                                        itemCount: snapshot
+                                            .data![index].productList!.length,
+                                        itemBuilder:
+                                            (context, int indexProduct) {
                                           return InkWell(
                                             onTap: () {
-                                              for (final data in snapshot.data![index].productList!){
-                                                print('add to product -> ${snapshot.data![index].productList!.length}');
-                                                print('add to product qty -> ${snapshot.data![index].productList![indexProduct].quantity}');
-                                                MerchantProductDB merchantProduct = MerchantProductDB(
-                                                    id: data.productId,
-                                                    name: data.itemName,
-                                                    barcode: data.item,
-                                                    currentPrice: data.price.toString(),
-                                                    salePrice: data.price.toString(),
-                                                    qty: data.quantity.toString()
-                                                );
-                                                salesBloc.addProduct(merchantProduct);
+                                              for (final data in snapshot
+                                                  .data![index].productList!) {
+                                                print(
+                                                    'add to product -> ${snapshot.data![index].productList!.length}');
+                                                print(
+                                                    'add to product qty -> ${snapshot.data![index].productList![indexProduct].quantity}');
+                                                MerchantProductDB
+                                                    merchantProduct =
+                                                    MerchantProductDB(
+                                                        id: data.productId,
+                                                        name: data.itemName,
+                                                        barcode: data.item,
+                                                        currentPrice: data.price
+                                                            .toString(),
+                                                        salePrice: data.price
+                                                            .toString(),
+                                                        qty: data.quantity
+                                                            .toString());
+                                                salesBloc.addProduct(
+                                                    merchantProduct);
                                               }
                                             },
                                             child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               mainAxisSize: MainAxisSize.min,
                                               children: [
-                                                Text('(${snapshot.data![index].productList![indexProduct].item}) ${snapshot.data![index].productList![indexProduct].itemName} '
+                                                Text(
+                                                    '(${snapshot.data![index].productList![indexProduct].item}) ${snapshot.data![index].productList![indexProduct].itemName} '
                                                     'x ${snapshot.data![index].productList![indexProduct].quantity}',
-                                                    style: TextStyle(fontSize: 12)),
+                                                    style: TextStyle(
+                                                        fontSize: 12)),
                                                 Padding(
-                                                  padding: const EdgeInsets.only(top: 4.0),
-                                                  child: Text('Rp ${snapshot.data![index].productList![indexProduct].total}',
-                                                      style: TextStyle(fontSize: 12)),
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          top: 4.0),
+                                                  child: Text(
+                                                      'Rp ${snapshot.data![index].productList![indexProduct].total}',
+                                                      style: TextStyle(
+                                                          fontSize: 12)),
                                                 ),
                                               ],
                                             ),
@@ -188,8 +220,7 @@ class _OfflineSalesInputState extends State<OfflineSalesInput> {
                     } else {
                       return Text('Kosong');
                     }
-                  }
-              ),
+                  }),
             )
           ],
         ),
