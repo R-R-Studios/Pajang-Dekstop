@@ -1,16 +1,12 @@
-
 import 'package:beben_pos_desktop/utils/global_functions.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:pdf/pdf.dart';
 import 'dart:io';
 import 'package:pdf/widgets.dart';
-import 'package:windows_documents/windows_documents.dart';
 import 'package:path/path.dart' if (dart.library.html) 'src/stub/path.dart'
-as path_helper;
+    as path_helper;
 
 class PdfSales {
-
   static Future<File> saveDocument({
     required String name,
     required Document pdf,
@@ -21,7 +17,7 @@ class PdfSales {
     // GlobalFunctions.showToast("${file.path}");
     try {
       await file.writeAsBytes(await pdf.save(), flush: true);
-    } catch (e){
+    } catch (e) {
       GlobalFunctions.showToast(e.toString());
     }
 

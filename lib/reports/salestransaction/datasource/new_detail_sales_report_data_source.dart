@@ -1,12 +1,10 @@
 import 'package:beben_pos_desktop/core/core.dart';
 import 'package:beben_pos_desktop/reports/salestransaction/model/report_transaction.dart';
-import 'package:beben_pos_desktop/reports/salestransaction/model/report_transaction_model.dart';
 import 'package:flutter/material.dart';
 
 class NewDetailSalesReportDataSource extends DataTableSource {
-
-  NewDetailSalesReportDataSource(this.context,
-      List<TransactionProductList> reportTransactionModels) {
+  NewDetailSalesReportDataSource(
+      this.context, List<TransactionProductList> reportTransactionModels) {
     _rows = reportTransactionModels;
   }
 

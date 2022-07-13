@@ -1,7 +1,5 @@
-
 import 'package:beben_pos_desktop/product/bloc/product_bloc.dart';
 import 'package:beben_pos_desktop/product/model/create_product_model.dart';
-import 'package:beben_pos_desktop/product/model/product_model.dart';
 import 'package:beben_pos_desktop/product/model/units_model.dart';
 import 'package:beben_pos_desktop/utils/global_functions.dart';
 import 'package:flutter/material.dart';
@@ -10,22 +8,24 @@ import 'package:flutter/services.dart';
 import 'dialog_product_units.dart';
 
 class DialogCreateProductData extends StatefulWidget {
-  const DialogCreateProductData({Key? key, this.barcode = ""}) : super(key: key);
+  const DialogCreateProductData({Key? key, this.barcode = ""})
+      : super(key: key);
 
   final String? barcode;
 
   @override
-  _DialogCreateProductDataState createState() => _DialogCreateProductDataState();
+  _DialogCreateProductDataState createState() =>
+      _DialogCreateProductDataState();
 }
 
 class _DialogCreateProductDataState extends State<DialogCreateProductData> {
-
   var _formKey = GlobalKey<FormState>();
   TextEditingController _productNameController = TextEditingController();
   TextEditingController _productCodeController = TextEditingController();
   TextEditingController _productBarCodeController = TextEditingController();
   TextEditingController _productSalePriceController = TextEditingController();
-  TextEditingController _productOriginalPriceController = TextEditingController();
+  TextEditingController _productOriginalPriceController =
+      TextEditingController();
   TextEditingController _productTotalStockController = TextEditingController();
   TextEditingController _productUnitsController = TextEditingController();
   TextEditingController _productDescriptionController = TextEditingController();
@@ -34,7 +34,7 @@ class _DialogCreateProductDataState extends State<DialogCreateProductData> {
   ProductBloc productBloc = ProductBloc();
   CreateProductModel createProductModel = CreateProductModel();
 
-  clearForm(){
+  clearForm() {
     _productNameController.text = "";
     _productCodeController.text = "";
     _productBarCodeController.text = "";
@@ -49,7 +49,7 @@ class _DialogCreateProductDataState extends State<DialogCreateProductData> {
   @override
   void initState() {
     // TODO: implement initState
-    _productBarCodeController.text = widget.barcode??"";
+    _productBarCodeController.text = widget.barcode ?? "";
     super.initState();
   }
 
@@ -75,7 +75,8 @@ class _DialogCreateProductDataState extends State<DialogCreateProductData> {
         ),
         content: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.only(left: 12, right: 12, top: 10, bottom: 10),
+            padding:
+                const EdgeInsets.only(left: 12, right: 12, top: 10, bottom: 10),
             child: Form(
               key: _formKey,
               // autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -109,8 +110,8 @@ class _DialogCreateProductDataState extends State<DialogCreateProductData> {
                                 }
                                 return null;
                               },
-                              onChanged: (newText){
-                                if (newText.length > 0){
+                              onChanged: (newText) {
+                                if (newText.length > 0) {
                                   setState(() {
                                     isDone = true;
                                   });
@@ -272,10 +273,12 @@ class _DialogCreateProductDataState extends State<DialogCreateProductData> {
                               ),
                               controller: _productTotalStockController,
                               enabled: true,
-                              keyboardType: TextInputType.numberWithOptions(decimal: true),
+                              keyboardType: TextInputType.numberWithOptions(
+                                  decimal: true),
                               inputFormatters: [
                                 // FilteringTextInputFormatter.digitsOnly,
-                                FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+                                FilteringTextInputFormatter.allow(
+                                    RegExp(r'^\d+\.?\d{0,2}')),
                               ],
                               validator: (value) {
                                 if (value!.isEmpty) {
@@ -314,7 +317,7 @@ class _DialogCreateProductDataState extends State<DialogCreateProductData> {
                                 }
                                 return null;
                               },
-                              onTap: (){
+                              onTap: () {
                                 openDialogUnits(context);
                               },
                             ),
@@ -361,26 +364,38 @@ class _DialogCreateProductDataState extends State<DialogCreateProductData> {
                             var name = _productNameController.text;
                             var code = _productCodeController.text;
                             var barCode = _productBarCodeController.text;
-                            var originPrice = _productOriginalPriceController.text;
+                            var originPrice =
+                                _productOriginalPriceController.text;
                             var salePrice = _productSalePriceController.text;
                             var totalStock = _productTotalStockController.text;
-                            var description = _productDescriptionController.text;
+                            var description =
+                                _productDescriptionController.text;
                             var unitsName = _productUnitsController.text;
 
                             double totalStockProduct = double.parse(totalStock);
-                            double originPriceProduct = double.parse(originPrice);
+                            double originPriceProduct =
+                                double.parse(originPrice);
                             double salePriceProduct = double.parse(salePrice);
 
                             bool isSuccess = false;
-                            await productBloc.requestCreateMerchantProduct(
-                                name, code, barCode, description, true,
-                                selectedUnits.id!, totalStockProduct, totalStockProduct,
-                                originPriceProduct, salePriceProduct
-                            ).then((value) async {
+                            await productBloc
+                                .requestCreateMerchantProduct(
+                                    name,
+                                    code,
+                                    barCode,
+                                    description,
+                                    true,
+                                    selectedUnits.id!,
+                                    totalStockProduct,
+                                    totalStockProduct,
+                                    originPriceProduct,
+                                    salePriceProduct)
+                                .then((value) async {
                               isSuccess = value;
-                              GlobalFunctions.logPrint("Status Request Create Merchant Transaction", '$value');
+                              GlobalFunctions.logPrint(
+                                  "Status Request Create Merchant Transaction",
+                                  '$value');
                               clearForm();
-
                             });
                             Navigator.pop(context, isSuccess);
                           }
@@ -407,8 +422,7 @@ class _DialogCreateProductDataState extends State<DialogCreateProductData> {
         builder: (BuildContext context) {
           return DialogProductUnits(selectedUnits);
         }).then((value) async {
-      if (value != null)
-        selectedUnits = value;
+      if (value != null) selectedUnits = value;
       _productUnitsController.text = selectedUnits.name!;
     });
   }

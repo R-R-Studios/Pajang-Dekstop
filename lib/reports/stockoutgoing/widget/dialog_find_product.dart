@@ -1,6 +1,3 @@
-
-import 'package:beben_pos_desktop/product/bloc/product_bloc.dart';
-import 'package:beben_pos_desktop/product/model/product_model.dart';
 import 'package:beben_pos_desktop/receivings/bloc/receivings_bloc.dart';
 import 'package:beben_pos_desktop/receivings/model/product_receivings_model.dart';
 import 'package:beben_pos_desktop/utils/size_config.dart';
@@ -102,13 +99,14 @@ class _DialogFindProductState extends State<DialogFindProduct> {
                 width: SizeConfig.screenWidth * 0.49,
                 child: StreamBuilder(
                     stream: receivingsBloc.streamProductReceivings,
-                    builder: (context, AsyncSnapshot<List<ProductReceivingsModel>> snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting){
+                    builder: (context,
+                        AsyncSnapshot<List<ProductReceivingsModel>> snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
                         return Center(child: CupertinoActivityIndicator());
                       } else if (snapshot.hasData) {
-                        if(snapshot.data!.length > 0){
+                        if (snapshot.data!.length > 0) {
                           listProduct = snapshot.data!;
-                        }else{
+                        } else {
                           listProduct = [];
                         }
                         return ListView.builder(
@@ -116,26 +114,32 @@ class _DialogFindProductState extends State<DialogFindProduct> {
                             itemCount: listProduct.length,
                             itemBuilder: (BuildContext context, int index) {
                               return ListTile(
-                                contentPadding: EdgeInsets.only(left: 8, right: 8),
+                                contentPadding:
+                                    EdgeInsets.only(left: 8, right: 8),
                                 title: Row(
                                   mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text("${listProduct[index].name != null ? listProduct[index].name : "Product Tidak Ditemukan"}"),
-                                    Text("${listProduct[index].barcode != null ? listProduct[index].barcode : "-"}"),
+                                    Text(
+                                        "${listProduct[index].name != null ? listProduct[index].name : "Product Tidak Ditemukan"}"),
+                                    Text(
+                                        "${listProduct[index].barcode != null ? listProduct[index].barcode : "-"}"),
                                   ],
                                 ),
                                 onTap: () {
-                                  Navigator.pop(context, listProduct[index].id != null ? listProduct[index] : null);
+                                  Navigator.pop(
+                                      context,
+                                      listProduct[index].id != null
+                                          ? listProduct[index]
+                                          : null);
                                 },
                               );
                             });
-                      }else{
+                      } else {
                         return Center(child: Text("Product Kosong"));
                       }
-                    }
-                )
-            )
+                    }))
           ],
         ),
       ),

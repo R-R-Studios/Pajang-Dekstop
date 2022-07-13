@@ -1,12 +1,10 @@
 import 'package:beben_pos_desktop/model/head_column_model.dart';
 import 'package:beben_pos_desktop/sales/datasource/daily_sales_data_source.dart';
-import 'package:beben_pos_desktop/sales/sales_input.dart';
 import 'package:flutter/material.dart';
 
 import 'model/daily_sales_model.dart';
 
 class DailySalesScreen extends StatefulWidget {
-
   const DailySalesScreen({Key? key}) : super(key: key);
 
   @override
@@ -31,45 +29,44 @@ class _DailySalesScreenState extends State<DailySalesScreen> {
   ];
 
   Widget productPaginateData() => Container(
-    width: double.infinity,
-    child: PaginatedDataTable(
-      sortColumnIndex: _currentSortColumn,
-      sortAscending: _isAscending,
-      columnSpacing: 0,
-      horizontalMargin: 0,
-      rowsPerPage:  5,
-      showCheckboxColumn: false,
-      columns: <DataColumn>[
-        for (final header in _checkboxModel)
-          DataColumn(
-              label: Text(
-                header.name!,
-                style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-              ),
-              tooltip: header.name,
-              onSort: (columnIndex, _sortAscending) {
-                setState(() {
-                  _currentSortColumn = columnIndex;
-                  // if(_currentSortColumn == 0){
-                  //   _sortId();
-                  // }else if(_currentSortColumn == 1){
-                  //   _sortFirstName();
-                  // }else if(_currentSortColumn == 2){
-                  //   _sortLastName();
-                  // }else if(_currentSortColumn == 3){
-                  //   _sortEmail();
-                  // }else if(_currentSortColumn == 4){
-                  //   _sortPhoneNumber();
-                  // }else if(_currentSortColumn == 5){
-                  //   _sortTotalSpent();
-                  // }
-                });
-              }),
-      ],
-      source: DailySalesDataSource(context, _dailySalesList, _formKey),
-    ),
-  );
-
+        width: double.infinity,
+        child: PaginatedDataTable(
+          sortColumnIndex: _currentSortColumn,
+          sortAscending: _isAscending,
+          columnSpacing: 0,
+          horizontalMargin: 0,
+          rowsPerPage: 5,
+          showCheckboxColumn: false,
+          columns: <DataColumn>[
+            for (final header in _checkboxModel)
+              DataColumn(
+                  label: Text(
+                    header.name!,
+                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                  ),
+                  tooltip: header.name,
+                  onSort: (columnIndex, _sortAscending) {
+                    setState(() {
+                      _currentSortColumn = columnIndex;
+                      // if(_currentSortColumn == 0){
+                      //   _sortId();
+                      // }else if(_currentSortColumn == 1){
+                      //   _sortFirstName();
+                      // }else if(_currentSortColumn == 2){
+                      //   _sortLastName();
+                      // }else if(_currentSortColumn == 3){
+                      //   _sortEmail();
+                      // }else if(_currentSortColumn == 4){
+                      //   _sortPhoneNumber();
+                      // }else if(_currentSortColumn == 5){
+                      //   _sortTotalSpent();
+                      // }
+                    });
+                  }),
+          ],
+          source: DailySalesDataSource(context, _dailySalesList, _formKey),
+        ),
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -134,5 +131,3 @@ class _DailySalesScreenState extends State<DailySalesScreen> {
     );
   }
 }
-
-

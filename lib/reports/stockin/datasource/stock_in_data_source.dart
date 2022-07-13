@@ -1,15 +1,12 @@
-
 import 'package:beben_pos_desktop/reports/stockin/model/report_stock_in_model.dart';
-import 'package:beben_pos_desktop/reports/stockoutgoing/model/stock_outgoing_model.dart';
 import 'package:flutter/material.dart';
 
 class StockInDataSource extends DataTableSource {
   var _formKey;
 
-  StockInDataSource(this.context,
-      List<ReportStockInModel> reportStockOutgoing) {
+  StockInDataSource(
+      this.context, List<ReportStockInModel> reportStockOutgoing) {
     _rows = reportStockOutgoing;
-
   }
 
   final BuildContext context;

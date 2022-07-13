@@ -1,5 +1,4 @@
 import 'package:beben_pos_desktop/customer/model/customer_model.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class DialogFormUpdateCustomer extends StatefulWidget {
@@ -7,7 +6,8 @@ class DialogFormUpdateCustomer extends StatefulWidget {
   DialogFormUpdateCustomer({Key? key}) : super(key: key);
 
   @override
-  _DialogFormUpdateCustomerState createState() => _DialogFormUpdateCustomerState();
+  _DialogFormUpdateCustomerState createState() =>
+      _DialogFormUpdateCustomerState();
 }
 
 class _DialogFormUpdateCustomerState extends State<DialogFormUpdateCustomer> {
@@ -25,7 +25,7 @@ class _DialogFormUpdateCustomerState extends State<DialogFormUpdateCustomer> {
             children: [
               Text("Update Customer"),
               IconButton(
-                  onPressed: (){
+                  onPressed: () {
                     Navigator.pop(context);
                   },
                   tooltip: "Close",
@@ -36,7 +36,8 @@ class _DialogFormUpdateCustomerState extends State<DialogFormUpdateCustomer> {
         ),
         content: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 10),
+            padding:
+                const EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 10),
             child: Form(
               key: _formKey,
               autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -89,12 +90,11 @@ class _DialogFormUpdateCustomerState extends State<DialogFormUpdateCustomer> {
                                 border: OutlineInputBorder(),
                               ),
                               initialValue: widget._customerModel.firstName,
-                              validator: (value){
-                                if(value!.isEmpty){
+                              validator: (value) {
+                                if (value!.isEmpty) {
                                   return "First Name is required";
                                 }
-                              }
-                          ),
+                              }),
                         ),
                       ],
                     ),
@@ -118,12 +118,11 @@ class _DialogFormUpdateCustomerState extends State<DialogFormUpdateCustomer> {
                                 border: OutlineInputBorder(),
                               ),
                               initialValue: widget._customerModel.lastName,
-                              validator: (value){
-                                if(value!.isEmpty){
+                              validator: (value) {
+                                if (value!.isEmpty) {
                                   return "Last Name is required";
                                 }
-                              }
-                          ),
+                              }),
                         ),
                       ],
                     ),
@@ -145,7 +144,7 @@ class _DialogFormUpdateCustomerState extends State<DialogFormUpdateCustomer> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               GestureDetector(
-                                onTap: (){
+                                onTap: () {
                                   setState(() {
                                     _rbValue = 1;
                                   });
@@ -164,14 +163,14 @@ class _DialogFormUpdateCustomerState extends State<DialogFormUpdateCustomer> {
                                         },
                                       ),
                                       Text(
-                                          'Male',
-                                        ),
+                                        'Male',
+                                      ),
                                     ],
                                   ),
                                 ),
                               ),
                               GestureDetector(
-                                onTap: (){
+                                onTap: () {
                                   setState(() {
                                     _rbValue = 2;
                                   });
@@ -207,20 +206,17 @@ class _DialogFormUpdateCustomerState extends State<DialogFormUpdateCustomer> {
                     child: ElevatedButton(
                       onPressed: () {
                         var form = _formKey.currentState;
-                        if(form != null && form.validate()){
+                        if (form != null && form.validate()) {
                           form.save();
-
-                        }else{
+                        } else {
                           SnackBar(
                             content: Text("Phone Number is required"),
                           );
                         }
                       },
-                      child: Text(
-                          "Submit"
-                      ),
+                      child: Text("Submit"),
                       style: ElevatedButton.styleFrom(
-                        textStyle: TextStyle(color: Colors.white),
+                          textStyle: TextStyle(color: Colors.white),
                           padding: EdgeInsets.only(
                               left: 20, right: 20, top: 15, bottom: 15),
                           primary: Color(0xff3498db)),
@@ -230,8 +226,7 @@ class _DialogFormUpdateCustomerState extends State<DialogFormUpdateCustomer> {
               ),
             ),
           ),
-        )
-    );
+        ));
     return alertDialog;
   }
 }
