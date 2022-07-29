@@ -1,15 +1,10 @@
-
 import 'dart:convert';
 import 'dart:math';
 import 'dart:typed_data';
 
-
 import 'package:beben_pos_desktop/utils/global_functions.dart';
 import 'package:beben_pos_desktop/utils/global_variable.dart';
-import 'package:nav_router/nav_router.dart';
 import 'package:pointycastle/export.dart';
-import 'package:flutter/material.dart' as prefix;
-import 'package:beben_pos_desktop/core/core.dart';
 import 'fireship_database.dart';
 import 'fireship_utility_box.dart';
 
@@ -21,7 +16,8 @@ class FireshipCrypt {
   static const String URL = "SDDJJ38DUWOJ95JSFUMDUJ9EKRD3EUPZ";
   static const String TOKEN = "Q1BB34N789EWSDUS";
 
-  Uint8List aesCbcEncrypt(Uint8List key, Uint8List iv, Uint8List paddedPlaintext) {
+  Uint8List aesCbcEncrypt(
+      Uint8List key, Uint8List iv, Uint8List paddedPlaintext) {
     if (![128, 192, 256].contains(key.length * 8)) {
       throw ArgumentError.value(key, 'key', 'invalid key length for AES');
     }
@@ -102,14 +98,16 @@ class FireshipCrypt {
   ///
   /// The [bitLength] is the length of key produced. It determines whether
   /// AES-128, AES-192, or AES-256 will be used. It must be one of those values.
-  Uint8List passphraseToKey(String passPhrase, {String salt = '', int iterations = 30000, int bitLength = 265}) {
+  Uint8List passphraseToKey(String passPhrase,
+      {String salt = '', int iterations = 30000, int bitLength = 265}) {
     if (![128, 192, 256].contains(bitLength)) {
       throw ArgumentError.value(bitLength, 'bitLength', 'invalid for AES');
     }
     final numBytes = bitLength ~/ 8;
 
     final kd = KeyDerivator('SHA-1/HMAC/PBKDF2')
-      ..init(Pbkdf2Parameters(utf8.encode(salt) as Uint8List, iterations, numBytes));
+      ..init(Pbkdf2Parameters(
+          utf8.encode(salt) as Uint8List, iterations, numBytes));
 
     return kd.process(utf8.encode(passPhrase) as Uint8List);
   }
@@ -127,41 +125,48 @@ class FireshipCrypt {
     return param;
   }
 
-  Uint8List getPassKey(){
-    return passphraseToKey(GlobalVariable.PASSWORD_KEY, iterations: iteration.toInt(), salt: GlobalVariable.SALT, bitLength: keySize);
+  Uint8List getPassKey() {
+    return passphraseToKey(GlobalVariable.PASSWORD_KEY,
+        iterations: iteration.toInt(),
+        salt: GlobalVariable.SALT,
+        bitLength: keySize);
   }
 
   Future setPassKey() async {
-    var utilityBox = await FireshipDatabase.openBoxDatabase(FireshipUtilityBox.TABEL_NAME);
+    var utilityBox =
+        await FireshipDatabase.openBoxDatabase(FireshipUtilityBox.TABEL_NAME);
     var passKey = getPassKey();
-    utilityBox.put( FireshipUtilityBox.PASSKEY, base64.encode(passKey));
+    utilityBox.put(FireshipUtilityBox.PASSKEY, base64.encode(passKey));
     GlobalFunctions.logPrint("Set Key", "complete");
   }
 
   Future setPrinterAddress(String address) async {
-    var utilityBox = await FireshipDatabase.openBoxDatabase(FireshipUtilityBox.TABEL_NAME);
-    utilityBox.put( FireshipUtilityBox.PRINTER_ADDRESS, address);
+    var utilityBox =
+        await FireshipDatabase.openBoxDatabase(FireshipUtilityBox.TABEL_NAME);
+    utilityBox.put(FireshipUtilityBox.PRINTER_ADDRESS, address);
     GlobalFunctions.logPrint("Set PrinterAddress", "complete");
   }
 
   Future<String> getPrinterAddress() async {
     String printerAddress = "";
-    var utilityBox = await FireshipDatabase.openBoxDatabase(FireshipUtilityBox.TABEL_NAME);
-    var printerAddressDB = await utilityBox.get(FireshipUtilityBox.PRINTER_ADDRESS);
-    if(printerAddressDB != null){
+    var utilityBox =
+        await FireshipDatabase.openBoxDatabase(FireshipUtilityBox.TABEL_NAME);
+    var printerAddressDB =
+        await utilityBox.get(FireshipUtilityBox.PRINTER_ADDRESS);
+    if (printerAddressDB != null) {
       printerAddress = printerAddressDB;
-    }else{
+    } else {
       printerAddress = "192.168.1.168";
     }
     return printerAddress;
   }
 
   Future<Uint8List> getPassKeyPref() async {
-    var utilityBox = await FireshipDatabase.openBoxDatabase(FireshipUtilityBox.TABEL_NAME);
+    var utilityBox =
+        await FireshipDatabase.openBoxDatabase(FireshipUtilityBox.TABEL_NAME);
     var passKey;
     var passKeyDB = await utilityBox.get(FireshipUtilityBox.PASSKEY);
-    if(passKeyDB == null){
-
+    if (passKeyDB == null) {
       //? TODO Dialog Loading
       // AtozDialog.dialogLoading();
 
@@ -175,7 +180,7 @@ class FireshipCrypt {
     return base64.decode(passKey!);
   }
 
-  String decrypt(String input, Uint8List passKey){
+  String decrypt(String input, Uint8List passKey) {
     var result;
     var inputData = input.split("--");
     var iv = base64.decode(inputData[1]);
@@ -185,7 +190,6 @@ class FireshipCrypt {
     result = utf8.decode(decryptedBytes);
     return result;
   }
-
 }
 
 class BodyEncrypt {

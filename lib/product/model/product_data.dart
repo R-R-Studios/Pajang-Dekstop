@@ -1,5 +1,3 @@
-import 'package:beben_pos_desktop/core/core.dart';
-
 class ProductData {
   int? productId;
   String? name;
@@ -19,20 +17,20 @@ class ProductData {
 
   ProductData(
       {this.productId,
-        this.name,
-        this.code,
-        this.barcode,
-        this.description,
-        this.createdAt,
-        this.priceId,
-        this.stockId,
-        this.unit,
-        this.lastStock,
-        this.salePrice,
-        this.originalPrice,
-        this.productStatus,
-        this.priceStatus,
-        this.unitId});
+      this.name,
+      this.code,
+      this.barcode,
+      this.description,
+      this.createdAt,
+      this.priceId,
+      this.stockId,
+      this.unit,
+      this.lastStock,
+      this.salePrice,
+      this.originalPrice,
+      this.productStatus,
+      this.priceStatus,
+      this.unitId});
 
   ProductData.fromJson(Map<String, dynamic> json) {
     productId = json['product_id'];
@@ -40,7 +38,7 @@ class ProductData {
     code = json['code'];
     barcode = json['barcode'];
     description = json['description'];
-    if(json["created_at"] != null){
+    if (json["created_at"] != null) {
       createdAt = json["created_at"];
     }
     priceId = json['price_id'];

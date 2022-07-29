@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'global_functions.dart';
-
 class GlobalWidget {
   Future<bool> dialogProductNotFound(
     BuildContext context,
@@ -31,9 +29,9 @@ class GlobalWidget {
             ),
           );
         }).then((value) {
-          if(value != null){
-            isAddedProduct = value;
-          }
+      if (value != null) {
+        isAddedProduct = value;
+      }
     });
     return isAddedProduct;
   }

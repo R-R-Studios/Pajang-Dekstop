@@ -1,15 +1,7 @@
-import 'dart:convert';
-
-import 'package:beben_pos_desktop/core/core.dart';
-import 'package:beben_pos_desktop/db/product_model_db.dart';
 import 'package:beben_pos_desktop/model/head_column_model.dart';
-import 'package:beben_pos_desktop/product/bloc/product_bloc.dart';
 import 'package:beben_pos_desktop/units/bloc/unit_bloc.dart';
 import 'package:beben_pos_desktop/units/datasource/data_source_units.dart';
 import 'package:beben_pos_desktop/units/model/units_model.dart';
-import 'package:beben_pos_desktop/units/provider/unit_provider.dart';
-import 'package:beben_pos_desktop/utils/global_functions.dart';
-import 'package:hive/hive.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -176,7 +168,6 @@ class _MenuUnitsState extends State<MenuUnits> {
                                         if (!isRefresh) {
                                           isRefresh = true;
                                           unitBloc.getUnitList().then((value) {
-
                                             isRefresh = false;
                                           });
                                         }
@@ -206,8 +197,8 @@ class _MenuUnitsState extends State<MenuUnits> {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Padding(
-                                      padding: EdgeInsets.only(right: 5),
-                                      child: Container(
+                                    padding: EdgeInsets.only(right: 5),
+                                    child: Container(
                                         width: 200,
                                         // child: Autocomplete<UnitsModel>(
                                         //   fieldViewBuilder: (
@@ -239,19 +230,19 @@ class _MenuUnitsState extends State<MenuUnits> {
                                         //     onSearchProduct(units.name!);
                                         //   },
                                         // ),
-                                      // )
-                                      child: TextField(
-                                        controller: _searchController,
-                                        onChanged: (value) {
-                                          onSearchProduct(value);
-                                        },
-                                        style: TextStyle(
-                                            fontSize: 14, color: Colors.blue),
-                                        decoration: InputDecoration(
-                                            border: OutlineInputBorder(),
-                                            labelText: "Search"),
-                                      )),
-                                      ),
+                                        // )
+                                        child: TextField(
+                                          controller: _searchController,
+                                          onChanged: (value) {
+                                            onSearchProduct(value);
+                                          },
+                                          style: TextStyle(
+                                              fontSize: 14, color: Colors.blue),
+                                          decoration: InputDecoration(
+                                              border: OutlineInputBorder(),
+                                              labelText: "Search"),
+                                        )),
+                                  ),
                                   PopupMenuButton(
                                     tooltip: "Filter Field",
                                     icon: Icon(Icons.grid_view_sharp),

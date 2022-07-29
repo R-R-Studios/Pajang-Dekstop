@@ -155,7 +155,7 @@ class _NewSalesReportState extends State<NewSalesReport> {
                           }),
                   ],
                   source: NewSalesReportDataSource(
-                      context, snapshot.data!, salesReportBloc, selectedDateString, selectedToDateString, profile.merchantName ?? "Raja Sembako"),
+                      context, snapshot.data!, salesReportBloc, selectedDateString, selectedToDateString, profile.merchantName ?? "Pajang"),
                 );
               }
             } else {
@@ -347,7 +347,7 @@ class _NewSalesReportState extends State<NewSalesReport> {
             ),
             TextButton(
               onPressed: () async {
-                await PDFTransaction.generatePDFTransaction(startDate, endDate, listTransactionForPDF, profile.merchantName ?? "Raja Sembako");
+                await PDFTransaction.generatePDFTransaction(startDate, endDate, listTransactionForPDF, profile.merchantName ?? "Pajang");
                 Navigator.pop(ctx, 'OK');
               },
               child: const Text('OK'),

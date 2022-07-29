@@ -6,12 +6,9 @@ import 'package:beben_pos_desktop/reports/merchant_transaction_report.dart';
 import 'package:beben_pos_desktop/reports/price_product_history.dart';
 import 'package:beben_pos_desktop/reports/warehouse_product_stock_report.dart';
 import 'package:beben_pos_desktop/utils/global_color_palette.dart';
-import 'package:beben_pos_desktop/utils/global_functions.dart';
 import 'package:beben_pos_desktop/utils/size_config.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'bloc/report_bloc.dart';
-import 'salestransaction/sales_report.dart';
 
 class ReportsMerchant extends StatefulWidget {
   const ReportsMerchant({Key? key}) : super(key: key);
@@ -65,22 +62,22 @@ class _ReportsMerchantState extends State<ReportsMerchant> {
       );
 
   Widget _deliveryOrder() => InkWell(
-    onTap: () {
-      // open report transactions
-      reportBloc.setToReportView('delivery_order');
-    },
-    child: Container(
-        margin: EdgeInsets.all(14),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Text(
-              'Delivery Order',
-              style: TextStyle(),
-            ),
-          ],
-        )),
-  );
+        onTap: () {
+          // open report transactions
+          reportBloc.setToReportView('delivery_order');
+        },
+        child: Container(
+            margin: EdgeInsets.all(14),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  'Delivery Order',
+                  style: TextStyle(),
+                ),
+              ],
+            )),
+      );
 
   Widget _merchantTransactionReports() => InkWell(
         onTap: () {
@@ -101,92 +98,92 @@ class _ReportsMerchantState extends State<ReportsMerchant> {
       );
 
   Widget _cardStockReports() => InkWell(
-    onTap: () {
-      // open report transactions
-      reportBloc.setToReportView('stock_outgoing_report');
-    },
-    child: Container(
-        margin: EdgeInsets.all(14),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Text(
-              'Report Kartu Stock',
-              style: TextStyle(),
-            ),
-          ],
-        )),
-  );
+        onTap: () {
+          // open report transactions
+          reportBloc.setToReportView('stock_outgoing_report');
+        },
+        child: Container(
+            margin: EdgeInsets.all(14),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  'Report Kartu Stock',
+                  style: TextStyle(),
+                ),
+              ],
+            )),
+      );
 
   Widget _warehouseProductStockReport() => InkWell(
-    onTap: () {
-      // open report transactions
-      reportBloc.setToReportView('warehouse_product_stock');
-    },
-    child: Container(
-        margin: EdgeInsets.all(14),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Text(
-              'Warehouse Product Stock',
-              style: TextStyle(),
-            ),
-          ],
-        )),
-  );
+        onTap: () {
+          // open report transactions
+          reportBloc.setToReportView('warehouse_product_stock');
+        },
+        child: Container(
+            margin: EdgeInsets.all(14),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  'Warehouse Product Stock',
+                  style: TextStyle(),
+                ),
+              ],
+            )),
+      );
 
   Widget _priceProductHistory() => InkWell(
-    onTap: () {
-      // open report transactions
-      reportBloc.setToReportView('price_product_history');
-    },
-    child: Container(
-        margin: EdgeInsets.all(14),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Text(
-              'Price Product History',
-              style: TextStyle(),
-            ),
-          ],
-        )),
-  );
+        onTap: () {
+          // open report transactions
+          reportBloc.setToReportView('price_product_history');
+        },
+        child: Container(
+            margin: EdgeInsets.all(14),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  'Price Product History',
+                  style: TextStyle(),
+                ),
+              ],
+            )),
+      );
 
   Widget _inputReportReceivings() => InkWell(
-    onTap: (){
-      reportBloc.setToReportView("input_report_receivings");
-    },
-    child: Container(
-        margin: EdgeInsets.all(14),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Text(
-              'Report Barang Masuk',
-              style: TextStyle(),
-            ),
-          ],
-        )),
-  );
+        onTap: () {
+          reportBloc.setToReportView("input_report_receivings");
+        },
+        child: Container(
+            margin: EdgeInsets.all(14),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  'Report Barang Masuk',
+                  style: TextStyle(),
+                ),
+              ],
+            )),
+      );
 
   Widget _inputReportStockIn() => InkWell(
-    onTap: (){
-      reportBloc.setToReportView("input_report_stock_in");
-    },
-    child: Container(
-        margin: EdgeInsets.all(14),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Text(
-              'Report Stok Masuk',
-              style: TextStyle(),
-            ),
-          ],
-        )),
-  );
+        onTap: () {
+          reportBloc.setToReportView("input_report_stock_in");
+        },
+        child: Container(
+            margin: EdgeInsets.all(14),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  'Report Stok Masuk',
+                  style: TextStyle(),
+                ),
+              ],
+            )),
+      );
 
   @override
   void initState() {
@@ -219,9 +216,9 @@ class _ReportsMerchantState extends State<ReportsMerchant> {
             return WarehouseProductStockReport();
           else if (snapshot.data == 'price_product_history')
             return PriceProductHistory();
-          else if(snapshot.data == 'input_report_receivings')
+          else if (snapshot.data == 'input_report_receivings')
             return ReportInputReceivings(reportBloc);
-          else if(snapshot.data == 'input_report_stock_in')
+          else if (snapshot.data == 'input_report_stock_in')
             return ReportInputStockIn(reportBloc);
           else
             return Container(

@@ -1,13 +1,8 @@
-import 'package:beben_pos_desktop/dashboard.dart';
-import 'package:beben_pos_desktop/main.dart';
-import 'package:beben_pos_desktop/profile/bloc/profile_bloc.dart';
 import 'package:beben_pos_desktop/utils/global_color_palette.dart';
 import 'package:beben_pos_desktop/utils/global_functions.dart';
 import 'package:beben_pos_desktop/utils/size_config.dart';
 import 'package:bot_toast/bot_toast.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:nav_router/nav_router.dart';
 
 import 'bloc/session_bloc.dart';
 
@@ -29,8 +24,7 @@ class _LoginScreenState extends State<LoginScreen> {
   void validateAndSave() {
     if (LoginScreen._formKey.currentState!.validate()) {
       GlobalFunctions.logPrint("Test", "Test");
-      SessionBloc().login(_username, _password, context).then((value) {
-      });
+      SessionBloc().login(_username, _password, context).then((value) {});
     } else {
       BotToast.showText(text: 'Please Check Your input again');
     }
@@ -44,7 +38,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     SizeConfig().init(context);
     return MaterialApp(
       home: Scaffold(
@@ -59,7 +52,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Image.asset('assets/images/ic_logo.png', width: SizeConfig.screenWidth * 0.3,),
+                      Image.asset(
+                        'assets/images/ic_logo.png',
+                        width: SizeConfig.screenWidth * 0.3,
+                      ),
                       Container(
                         margin: EdgeInsets.all(24),
                         child: Form(
@@ -76,12 +72,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                         children: [
                                           Card(
                                             child: Container(
-                                              width: SizeConfig.screenWidth * 0.4,
+                                              width:
+                                                  SizeConfig.screenWidth * 0.4,
                                               child: TextFormField(
                                                 onChanged: (newInput) {
                                                   _username = newInput;
                                                 },
-                                                keyboardType: TextInputType.text,
+                                                keyboardType:
+                                                    TextInputType.text,
                                                 style: TextStyle(
                                                     fontSize: 14, height: 1),
                                                 validator: (value) {
@@ -97,7 +95,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                                   isDense: true,
                                                   prefixIcon: Icon(
                                                     Icons.person,
-                                                    color: Colors.lightBlue[800],
+                                                    color:
+                                                        Colors.lightBlue[800],
                                                   ),
                                                   contentPadding:
                                                       EdgeInsets.fromLTRB(
@@ -121,7 +120,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                           ),
                                           Card(
                                             child: Container(
-                                              width: SizeConfig.screenWidth * 0.4,
+                                              width:
+                                                  SizeConfig.screenWidth * 0.4,
                                               child: TextFormField(
                                                 onChanged: (newInput) {
                                                   _password = newInput;
@@ -133,7 +133,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                                   }
                                                   return null;
                                                 },
-                                                keyboardType: TextInputType.text,
+                                                keyboardType:
+                                                    TextInputType.text,
                                                 obscureText: _obscureText,
                                                 style: TextStyle(
                                                     fontSize: 14, height: 1),
@@ -144,14 +145,19 @@ class _LoginScreenState extends State<LoginScreen> {
                                                   suffixIcon: IconButton(
                                                     icon: Icon(
                                                       // Based on passwordVisible state choose the icon
-                                                      !_obscureText ? Icons.visibility : Icons.visibility_off,
-                                                      color: Theme.of(context).primaryColorDark,
+                                                      !_obscureText
+                                                          ? Icons.visibility
+                                                          : Icons
+                                                              .visibility_off,
+                                                      color: Theme.of(context)
+                                                          .primaryColorDark,
                                                     ),
                                                     onPressed: _toggle,
                                                   ),
                                                   prefixIcon: Icon(
                                                     Icons.lock_open,
-                                                    color: Colors.lightBlue[800],
+                                                    color:
+                                                        Colors.lightBlue[800],
                                                   ),
                                                   contentPadding:
                                                       EdgeInsets.fromLTRB(
@@ -180,16 +186,22 @@ class _LoginScreenState extends State<LoginScreen> {
                                             child: ElevatedButton(
                                               onPressed: validateAndSave,
                                               style: ElevatedButton.styleFrom(
-                                                primary: GlobalColorPalette.colorButtonActive,
-                                                shape: new RoundedRectangleBorder(
+                                                primary: GlobalColorPalette
+                                                    .colorButtonActive,
+                                                shape:
+                                                    new RoundedRectangleBorder(
                                                   borderRadius:
                                                       new BorderRadius.circular(
                                                           4.0),
                                                 ),
-                                              ), child:  Text(
-                                              'Login',
-                                              style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-                                            ),
+                                              ),
+                                              child: Text(
+                                                'Login',
+                                                style: TextStyle(
+                                                    fontSize: 12,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
                                             ),
                                           )
                                         ],

@@ -1,12 +1,11 @@
 import 'package:beben_pos_desktop/core/fireship/fireship_box.dart';
 import 'package:beben_pos_desktop/db/price_list_db.dart';
-import 'package:beben_pos_desktop/receivings/model/price_list_model.dart';
 import 'package:hive/hive.dart';
 
 part 'product_receivings_db.g.dart';
 
 @HiveType(typeId: FireshipBox.HIVE_TYPE_PRODUCT_RECEIVINGS)
-class ProductReceivingsDB extends HiveObject{
+class ProductReceivingsDB extends HiveObject {
   @HiveField(0)
   int? id;
   @HiveField(1)
@@ -22,11 +21,11 @@ class ProductReceivingsDB extends HiveObject{
 
   ProductReceivingsDB(
       {this.id,
-        this.name,
-        this.code,
-        this.barcode,
-        this.description,
-        this.priceList});
+      this.name,
+      this.code,
+      this.barcode,
+      this.description,
+      this.priceList});
 
   ProductReceivingsDB.fromJson(Map<String, dynamic> json) {
     id = json['id'];

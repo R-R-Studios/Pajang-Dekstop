@@ -1,14 +1,7 @@
-import 'dart:convert';
-import 'dart:typed_data';
-
-import 'package:beben_pos_desktop/utils/global_functions.dart';
 import 'package:hive/hive.dart';
 // import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import 'fireship_encrypt.dart';
-
 class FireshipDatabase {
-
   // static Future<Uint8List> generateKey() async {
   //   // final FlutterSecureStorage secureStorage = const FlutterSecureStorage();
   //   var containsEncryptionKey = await secureStorage.containsKey(key: FireshipCrypt.TOKEN);

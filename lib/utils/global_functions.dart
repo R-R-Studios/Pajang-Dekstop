@@ -2,12 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:beben_pos_desktop/session/login_screen.dart';
 import 'package:beben_pos_desktop/utils/global_color_palette.dart';
-import 'package:beben_pos_desktop/utils/loading/CustomDialogLoading.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
-import 'package:nav_router/nav_router.dart';
 
 import 'global_variable.dart';
 
@@ -57,7 +55,7 @@ class GlobalFunctions {
 
   static Future<bool> checkConnectivityApp() async {
     bool result = await InternetConnectionChecker().hasConnection;
-    if(result == true) {
+    if (result == true) {
       print('YAY! Free cute dog pics!');
     } else {
       print('No internet :( Reason:');
@@ -70,10 +68,10 @@ class GlobalFunctions {
       int position = 1,
       Color backgroundColor = GlobalColorPalette.colorPrimary}) {
     BotToast.showText(
-        contentColor: Colors.white,
-        text: message,
-        textStyle: TextStyle(color: Colors.black),
-        backgroundColor: backgroundColor,
+      contentColor: Colors.white,
+      text: message,
+      textStyle: TextStyle(color: Colors.black),
+      backgroundColor: backgroundColor,
     );
     // Flushbar(
     //   margin: EdgeInsets.all(8),
@@ -86,92 +84,103 @@ class GlobalFunctions {
     // ).show(navGK.currentContext!);
   }
 
-  static showSnackBarError(String message){
-    BotToast.showCustomNotification(
-        toastBuilder: (cancel){
-          return Card(
-              color: Colors.red,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(4),
-              ),
-              child: Container(
-                  margin: EdgeInsets.all(8),
-                  width: double.infinity,
-                  child: Row(
-                    children: [
-                      Icon(Icons.error_outline_sharp, color: GlobalColorPalette.white,),
-                      Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Text(message, style: TextStyle(
-                            color: GlobalColorPalette.white,
-                            fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ],
-                  ))
-          );
-        });
+  static showSnackBarError(String message) {
+    BotToast.showCustomNotification(toastBuilder: (cancel) {
+      return Card(
+          color: Colors.red,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(4),
+          ),
+          child: Container(
+              margin: EdgeInsets.all(8),
+              width: double.infinity,
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.error_outline_sharp,
+                    color: GlobalColorPalette.white,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Text(
+                      message,
+                      style: TextStyle(
+                          color: GlobalColorPalette.white,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ],
+              )));
+    });
     BotToast.closeAllLoading();
   }
 
-  static showSnackBarWarning(String message, {Color colors = GlobalColorPalette.colorPrimary}){
-    BotToast.showCustomNotification(
-        toastBuilder: (cancel){
-          return Card(
-              color: colors,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(4),
-              ),
-              child: Container(
-                  margin: EdgeInsets.all(8),
-                  width: double.infinity,
-                  child: Row(
-                    children: [
-                      Icon(Icons.info_rounded, color: GlobalColorPalette.white,),
-                      Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Text(message, style: TextStyle(
-                            color: GlobalColorPalette.white,
-                            fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ],
-                  ))
-          );
-        });
+  static showSnackBarWarning(String message,
+      {Color colors = GlobalColorPalette.colorPrimary}) {
+    BotToast.showCustomNotification(toastBuilder: (cancel) {
+      return Card(
+          color: colors,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(4),
+          ),
+          child: Container(
+              margin: EdgeInsets.all(8),
+              width: double.infinity,
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.info_rounded,
+                    color: GlobalColorPalette.white,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Text(
+                      message,
+                      style: TextStyle(
+                          color: GlobalColorPalette.white,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ],
+              )));
+    });
     BotToast.closeAllLoading();
   }
 
-  static showSnackBarSuccess(String message, {Color colors = GlobalColorPalette.success}){
-    BotToast.showCustomNotification(
-        toastBuilder: (cancel){
-          return Card(
-              color: colors,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(4),
-              ),
-              child: Container(
-                  margin: EdgeInsets.all(8),
-                  width: double.infinity,
-                  child: Row(
-                    children: [
-                      Icon(Icons.info_rounded, color: GlobalColorPalette.white,),
-                      Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Text(message, style: TextStyle(
-                            color: GlobalColorPalette.white,
-                            fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ],
-                  ))
-          );
-        });
+  static showSnackBarSuccess(String message,
+      {Color colors = GlobalColorPalette.success}) {
+    BotToast.showCustomNotification(toastBuilder: (cancel) {
+      return Card(
+          color: colors,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(4),
+          ),
+          child: Container(
+              margin: EdgeInsets.all(8),
+              width: double.infinity,
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.info_rounded,
+                    color: GlobalColorPalette.white,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Text(
+                      message,
+                      style: TextStyle(
+                          color: GlobalColorPalette.white,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ],
+              )));
+    });
     BotToast.closeAllLoading();
   }
 
   static version() {
-      return "1.0.0";
+    return "1.0.0";
   }
 
   // static showLoading(){
@@ -184,14 +193,13 @@ class GlobalFunctions {
   //   customDialogLoading.dismisCustomLoading();
   // }
 
-
   static formatPriceDouble(double price) => '\$ ${price.toStringAsFixed(2)}';
 
   static formatPriceInt(int price) => '\$ ${price.toStringAsFixed(2)}';
 
-  static String myDomainStatus(){
+  static String myDomainStatus() {
     String url;
-    if (GlobalVariable.RELEASE){
+    if (GlobalVariable.RELEASE) {
       url = GlobalVariable.BASIC_URL_PRODUCTION;
     } else {
       url = GlobalVariable.BASIC_URL_STAGGING;

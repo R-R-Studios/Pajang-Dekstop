@@ -1,4 +1,3 @@
-import 'package:beben_pos_desktop/core/core.dart';
 import 'package:beben_pos_desktop/core/fireship/fireship_box.dart';
 import 'package:beben_pos_desktop/db/parent_child_unit_conversion_db.dart';
 import 'package:hive/hive.dart';
@@ -20,17 +19,21 @@ class UnitConversionDB {
 
   UnitConversionDB(
       {this.id,
-        this.valueUnitParent,
-        this.valueUnitChild,
-        this.child,
-        this.parent});
+      this.valueUnitParent,
+      this.valueUnitChild,
+      this.child,
+      this.parent});
 
   UnitConversionDB.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     valueUnitParent = json['value_unit_parent'];
     valueUnitChild = json['value_unit_child'];
-    child = json['child'] != null ? new ParentChildUnitDB.fromJson(json['child']) : null;
-    parent = json['parent'] != null ? new ParentChildUnitDB.fromJson(json['parent']) : null;
+    child = json['child'] != null
+        ? new ParentChildUnitDB.fromJson(json['child'])
+        : null;
+    parent = json['parent'] != null
+        ? new ParentChildUnitDB.fromJson(json['parent'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {

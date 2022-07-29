@@ -1,17 +1,12 @@
-import 'dart:convert';
-
 import 'package:beben_pos_desktop/reports/bloc/report_bloc.dart';
 import 'package:beben_pos_desktop/reports/receivings/model/product_report_receivings_model.dart';
-import 'package:beben_pos_desktop/reports/receivings/model/report_data_receivings_model.dart';
-import 'package:beben_pos_desktop/reports/receivings/model/report_receivings_list_model.dart';
 import 'package:beben_pos_desktop/reports/receivings/model/report_receivings_model.dart';
-import 'package:beben_pos_desktop/reports/receivings/model/report_unit_receivings_model.dart';
 import 'package:beben_pos_desktop/reports/receivings/model/search_report_receivings.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ReportReceivings extends StatefulWidget {
-  ReportReceivings(this.searchReportReceivings, this.reportBloc, this.listReport);
+  ReportReceivings(
+      this.searchReportReceivings, this.reportBloc, this.listReport);
 
   final SearchReportReceivings searchReportReceivings;
   final ReportBloc reportBloc;
@@ -30,7 +25,9 @@ class _ReportReceivingsState extends State<ReportReceivings> {
     // TODO: implement initState
     super.initState();
     listReport = widget.listReport;
-    listReport.sort((a,b) => a.detail!.tanggal!.toLowerCase().compareTo(b.detail!.tanggal!.toLowerCase()));
+    listReport.sort((a, b) => a.detail!.tanggal!
+        .toLowerCase()
+        .compareTo(b.detail!.tanggal!.toLowerCase()));
     print("widget.listReport ${widget.listReport.length}");
     print("listReport ${listReport.length}");
   }
@@ -113,8 +110,7 @@ class _ReportReceivingsState extends State<ReportReceivings> {
                 children: [
                   Row(
                     children: [
-                      Text(
-                          "PERIODE : ${report.detail?.tanggal}",
+                      Text("PERIODE : ${report.detail?.tanggal}",
                           textAlign: TextAlign.start),
                     ],
                   ),
@@ -123,7 +119,7 @@ class _ReportReceivingsState extends State<ReportReceivings> {
                     child: Row(
                       children: [
                         Text("Nama Barang : "),
-                        Text("${report.detail?.productName??"-"}"),
+                        Text("${report.detail?.productName ?? "-"}"),
                       ],
                     ),
                   ),
@@ -132,11 +128,11 @@ class _ReportReceivingsState extends State<ReportReceivings> {
                     child: Row(
                       children: [
                         Text("Satuan : "),
-                        Text(report.detail?.unitName??"-"),
+                        Text(report.detail?.unitName ?? "-"),
                       ],
                     ),
                   ),
-                  tableReport(report.product??[]),
+                  tableReport(report.product ?? []),
                 ],
               ),
             ),
@@ -147,10 +143,11 @@ class _ReportReceivingsState extends State<ReportReceivings> {
   }
 
   Widget tableReport(List<ProductReportReceicingsModel> list) {
-    list.sort((a,b)=> a.tanggalAwal!.toLowerCase().compareTo(b.tanggalAwal!.toLowerCase()));
+    list.sort((a, b) =>
+        a.tanggalAwal!.toLowerCase().compareTo(b.tanggalAwal!.toLowerCase()));
     int totalReceivings = 0;
     for (ProductReportReceicingsModel product in list) {
-      totalReceivings += product.trxStock??0;
+      totalReceivings += product.trxStock ?? 0;
     }
     return Padding(
       padding: const EdgeInsets.only(top: 8.0),
@@ -160,10 +157,10 @@ class _ReportReceivingsState extends State<ReportReceivings> {
           for (int i = 0; i < list.length; i++)
             DataRow(
               cells: <DataCell>[
-                DataCell(Text(list[i].tanggalAwal??"-")),
-                DataCell(Text("${list[i].merchantProductStocks??0}")),
-                DataCell(Text("${list[i].trxStock??0}")),
-                DataCell(Text("${list[i].lastStock??0}")),
+                DataCell(Text(list[i].tanggalAwal ?? "-")),
+                DataCell(Text("${list[i].merchantProductStocks ?? 0}")),
+                DataCell(Text("${list[i].trxStock ?? 0}")),
+                DataCell(Text("${list[i].lastStock ?? 0}")),
               ],
             ),
           DataRow(
@@ -175,9 +172,7 @@ class _ReportReceivingsState extends State<ReportReceivings> {
                 ),
               ),
               DataCell(
-                Text(
-                  ""
-                ),
+                Text(""),
               ),
               DataCell(
                 Text(
@@ -186,9 +181,7 @@ class _ReportReceivingsState extends State<ReportReceivings> {
                 ),
               ),
               DataCell(
-                Text(
-                  ""
-                ),
+                Text(""),
               ),
             ],
           ),

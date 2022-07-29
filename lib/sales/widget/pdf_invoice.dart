@@ -1,16 +1,14 @@
-
 import 'dart:io';
 import 'package:beben_pos_desktop/core/core.dart';
 import 'package:beben_pos_desktop/reports/salestransaction/model/report_transaction_model.dart';
 import 'package:beben_pos_desktop/sales/widget/pdf_sales.dart';
-import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:pdf/widgets.dart';
 
 class PdfInvoiceSales {
-
-  static Future<File> generate(String startDate, String endDate, List<SalesTransactionModel> transactions, String merchantName) async {
+  static Future<File> generate(String startDate, String endDate,
+      List<SalesTransactionModel> transactions, String merchantName) async {
     final pdf = Document();
     pdf.addPage(MultiPage(
       build: (context) => [
@@ -28,23 +26,26 @@ class PdfInvoiceSales {
       footer: (context) => buildFooter(),
     ));
 
-    return await PdfSales.saveDocument(name: "SALES_"+startDate+"_"+endDate+".pdf", pdf: pdf);
+    return await PdfSales.saveDocument(
+        name: "SALES_" + startDate + "_" + endDate + ".pdf", pdf: pdf);
   }
 
   static Widget buildTotal(List<SalesTransactionModel> transactions) {
     double subtotal = 0;
     double total = 0;
 
-    for (int a = 0; a<transactions.length;a++){
+    for (int a = 0; a < transactions.length; a++) {
       // double sale = double.parse(transactions[a].salePrice!);
       // double qty = double.parse(transactions[a].qty!);
-      double allTotalSalePrice = double.parse(transactions[a].totalSalePrice ?? "0");
+      double allTotalSalePrice =
+          double.parse(transactions[a].totalSalePrice ?? "0");
       subtotal += allTotalSalePrice;
     }
-    for (int a = 0; a<transactions.length;a++){
+    for (int a = 0; a < transactions.length; a++) {
       // int sale = double.parse(transactions[a].salePrice!).toInt();
       // int qty = double.parse(transactions[a].qty!).toInt();
-      double allTotalSalePrice = double.parse(transactions[a].totalSalePrice ?? "0");
+      double allTotalSalePrice =
+          double.parse(transactions[a].totalSalePrice ?? "0");
       total += allTotalSalePrice;
     }
 
@@ -94,19 +95,22 @@ class PdfInvoiceSales {
     );
   }
 
-  static Widget buildHeader({required String merchantName, required String startDate, required String endDate}) =>
-  Container(
-    width: double.infinity,
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: pw.MainAxisAlignment.center,
-      children: [
-        buildCustomerAddress(merchantName, startDate, endDate),
-      ],
-    )
-  );
+  static Widget buildHeader(
+          {required String merchantName,
+          required String startDate,
+          required String endDate}) =>
+      Container(
+          width: double.infinity,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: pw.MainAxisAlignment.center,
+            children: [
+              buildCustomerAddress(merchantName, startDate, endDate),
+            ],
+          ));
 
-  static Widget buildCustomerAddress(String name, String startDate, String endDate) {
+  static Widget buildCustomerAddress(
+      String name, String startDate, String endDate) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: pw.MainAxisAlignment.center,
@@ -147,7 +151,7 @@ class PdfInvoiceSales {
       headers: headers,
       data: data,
       border: null,
-      headerStyle: TextStyle(fontWeight: FontWeight.bold,fontSize: 10),
+      headerStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 10),
       headerDecoration: BoxDecoration(color: PdfColors.grey300),
       cellStyle: TextStyle(fontSize: 8),
       cellHeight: 30,
@@ -164,12 +168,12 @@ class PdfInvoiceSales {
   }
 
   static Widget buildFooter() => Column(
-    crossAxisAlignment: CrossAxisAlignment.center,
-    children: [
-      Divider(),
-      SizedBox(height: 2 * PdfPageFormat.mm),
-    ],
-  );
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Divider(),
+          SizedBox(height: 2 * PdfPageFormat.mm),
+        ],
+      );
 
   static buildSimpleText({
     required String title,

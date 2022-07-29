@@ -1,5 +1,4 @@
 import 'package:beben_pos_desktop/product/model/product_model.dart';
-import 'package:beben_pos_desktop/utils/size_config.dart';
 import 'package:flutter/material.dart';
 
 class DataSourceReceivings extends DataTableSource {
@@ -40,13 +39,13 @@ class DataSourceReceivings extends DataTableSource {
         DataCell(
           Container(
             width: MediaQuery.of(context).size.width * 0.1,
-            child: Text(row.product?.barcode??"-"),
+            child: Text(row.product?.barcode ?? "-"),
           ),
         ),
         DataCell(
           Container(
             width: MediaQuery.of(context).size.width * 0.12,
-            child: Text(row.product?.name??"-"),
+            child: Text(row.product?.name ?? "-"),
           ),
         ),
         DataCell(

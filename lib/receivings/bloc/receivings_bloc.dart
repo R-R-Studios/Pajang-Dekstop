@@ -1,24 +1,17 @@
 import 'dart:convert';
 
-import 'package:beben_pos_desktop/core/core.dart';
-import 'package:beben_pos_desktop/core/fireship/fireship_box.dart';
 import 'package:beben_pos_desktop/core/fireship/fireship_encrypt.dart';
 import 'package:beben_pos_desktop/db/product_model_db.dart';
 import 'package:beben_pos_desktop/db/product_receivings_db.dart';
-import 'package:beben_pos_desktop/product/bloc/product_bloc.dart';
-import 'package:beben_pos_desktop/product/model/product_model.dart';
-import 'package:beben_pos_desktop/product/provider/product_provider.dart';
 import 'package:beben_pos_desktop/receivings/model/DetailPreviewTransactionPO.dart';
 import 'package:beben_pos_desktop/receivings/model/body_search_po_model.dart';
 import 'package:beben_pos_desktop/receivings/model/cart_receivings_model.dart';
 import 'package:beben_pos_desktop/receivings/model/create_product_receivings_model.dart';
 import 'package:beben_pos_desktop/receivings/model/create_receivings_model.dart';
 import 'package:beben_pos_desktop/receivings/model/preview_transaction_po.dart';
-import 'package:beben_pos_desktop/receivings/model/price_list_model.dart';
 import 'package:beben_pos_desktop/receivings/model/product_receivings_model.dart';
 import 'package:beben_pos_desktop/receivings/provider/receivings_provider.dart';
 import 'package:beben_pos_desktop/service/model/core_model.dart';
-import 'package:beben_pos_desktop/units/model/units_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:hive/hive.dart';
 import 'package:rxdart/rxdart.dart';
@@ -104,9 +97,10 @@ class ReceivingsBloc {
   sumTotalPricePayment() {
     total = 0;
     for (int a = 0; a < listCartReceivings.length; a++) {
-      print("qty ${listCartReceivings[a].qty??0}, price ${listCartReceivings[a].originalPrice??0}");
-      double price = listCartReceivings[a].originalPrice??0;
-      double qty = listCartReceivings[a].qty??0;
+      print(
+          "qty ${listCartReceivings[a].qty ?? 0}, price ${listCartReceivings[a].originalPrice ?? 0}");
+      double price = listCartReceivings[a].originalPrice ?? 0;
+      double qty = listCartReceivings[a].qty ?? 0;
       total += price * qty;
     }
     print("TOTAL $total");
@@ -151,7 +145,7 @@ class ReceivingsBloc {
 
   updateTotalPriceProduct(int index, double qty, double price) async {
     listCartReceivings[index].total = "${qty * price}";
-    listTotal[index] = double.parse(listCartReceivings[index].total??"0");
+    listTotal[index] = double.parse(listCartReceivings[index].total ?? "0");
     listTotalPriceController.sink.add(listTotal);
     sumTotalQtyData();
     sumTotalProductItem();
@@ -195,7 +189,7 @@ class ReceivingsBloc {
       cartReceivings.focusRaw = FocusNode();
       listCartReceivings.add(cartReceivings);
       listCartController.sink.add(listCartReceivings);
-      listTotal.add(double.parse(cartReceivings.total??"0"));
+      listTotal.add(double.parse(cartReceivings.total ?? "0"));
       listTotalPriceController.sink.add(listTotal);
       print("new");
     }
@@ -246,7 +240,8 @@ class ReceivingsBloc {
     dbProductController.sink.add(listDbProductModel);
   }
 
-  Future<CoreModel> requestSaveReceivings(List<CartReceivingsModel> cartRecevings, String trxCode) async {
+  Future<CoreModel> requestSaveReceivings(
+      List<CartReceivingsModel> cartRecevings, String trxCode) async {
     List<CreateProductReceivingsModel> listProductReceivings = [];
     for (CartReceivingsModel cart in cartRecevings) {
       listProductReceivings.add(CreateProductReceivingsModel(
@@ -257,28 +252,33 @@ class ReceivingsBloc {
           originalPrice: cart.salePrice.toString()));
     }
     var isFromPO = cartRecevings.any((element) => element.isFromPO == true);
-    var body = CreateRecevingsModel(product: listProductReceivings, trxCode: trxCode);
-    if(!isFromPO){
+    var body =
+        CreateRecevingsModel(product: listProductReceivings, trxCode: trxCode);
+    if (!isFromPO) {
       body.act = "not_po";
     }
     print("CreateRecevingsModel ${jsonEncode(body)}");
     var key = FireshipCrypt()
         .encrypt(jsonEncode(body), await FireshipCrypt().getPassKeyPref());
     print("KEY ENCY $key");
-    return await ReceivingsProvider.createReceivings(BodyEncrypt(key, key).toJson());
+    return await ReceivingsProvider.createReceivings(
+        BodyEncrypt(key, key).toJson());
   }
 
-  Future<List<ProductReceivingsModel>> futureProductReceivings({String? typePrice}) async {
+  Future<List<ProductReceivingsModel>> futureProductReceivings(
+      {String? typePrice}) async {
     List<ProductReceivingsModel> list = [];
     var box = await Hive.openBox<ProductReceivingsDB>("product_receivings_db");
     if (box.values.length > 0) {
       List<ProductReceivingsDB> listDB = box.values.toList();
       for (ProductReceivingsDB productDB in listDB) {
-        list.add(ProductReceivingsModel.fromJson(jsonDecode(jsonEncode(productDB))));
+        list.add(
+            ProductReceivingsModel.fromJson(jsonDecode(jsonEncode(productDB))));
       }
       productReceivings = list;
     } else {
-      list.addAll(await ReceivingsProvider.listProductReceivings(typePrice??"0"));
+      list.addAll(
+          await ReceivingsProvider.listProductReceivings(typePrice ?? "0"));
       productReceivings = list;
     }
     productReceivingsController.sink.add(productReceivings);
@@ -286,9 +286,11 @@ class ReceivingsBloc {
     return list;
   }
 
-  Future<List<ProductReceivingsModel>> refreshProduct({String? typePrice}) async {
+  Future<List<ProductReceivingsModel>> refreshProduct(
+      {String? typePrice}) async {
     List<ProductReceivingsModel> list = [];
-    list.addAll(await ReceivingsProvider.listProductReceivings(typePrice??"0"));
+    list.addAll(
+        await ReceivingsProvider.listProductReceivings(typePrice ?? "0"));
     productReceivings = list;
     productReceivingsController.sink.add(productReceivings);
     print("productReceivingsDB ${list.length}");
@@ -301,7 +303,8 @@ class ReceivingsBloc {
     if (box.values.length > 0) {
       List<ProductReceivingsDB> listDB = box.values.toList();
       for (ProductReceivingsDB productDB in listDB) {
-        list.add(ProductReceivingsModel.fromJson(jsonDecode(jsonEncode(productDB))));
+        list.add(
+            ProductReceivingsModel.fromJson(jsonDecode(jsonEncode(productDB))));
       }
     }
     // }else{
@@ -313,7 +316,8 @@ class ReceivingsBloc {
 
   saveProductReceivingsToDB(ProductReceivingsModel productReceivings) async {
     var box = await Hive.openBox<ProductReceivingsDB>("product_receivings_db");
-    var db = ProductReceivingsDB.fromJson(jsonDecode(jsonEncode(productReceivings)));
+    var db =
+        ProductReceivingsDB.fromJson(jsonDecode(jsonEncode(productReceivings)));
     box.add(db);
   }
 
@@ -321,7 +325,8 @@ class ReceivingsBloc {
     var box = await Hive.openBox<ProductReceivingsDB>("product_receivings_db");
     List<ProductReceivingsDB> list = box.values.toList();
     int i = list.indexWhere((element) => element.id == productReceivings.id);
-    var product = ProductReceivingsDB.fromJson(jsonDecode(jsonEncode(productReceivings)));
+    var product =
+        ProductReceivingsDB.fromJson(jsonDecode(jsonEncode(productReceivings)));
     box.putAt(i, product);
     print("Update Product ${jsonEncode(box.getAt(i))}");
   }
@@ -331,11 +336,13 @@ class ReceivingsBloc {
     List<ProductReceivingsDB> listDB = box.values.toList();
     print("ProductReceivingsDB ${jsonEncode(listDB)}");
     List<ProductReceivingsModel> list = [];
-    for(ProductReceivingsDB products in listDB){
-      list.add(ProductReceivingsModel.fromJson(jsonDecode(jsonEncode(products))));
+    for (ProductReceivingsDB products in listDB) {
+      list.add(
+          ProductReceivingsModel.fromJson(jsonDecode(jsonEncode(products))));
     }
     list = list.where((element) {
-      return element.name!.toLowerCase().contains(search.toLowerCase()) || element.barcode!.toLowerCase().contains(search.toLowerCase());
+      return element.name!.toLowerCase().contains(search.toLowerCase()) ||
+          element.barcode!.toLowerCase().contains(search.toLowerCase());
     }).toList();
     productReceivings = list;
     productReceivingsController.sink.add(productReceivings);
@@ -349,24 +356,24 @@ class ReceivingsBloc {
     var key = FireshipCrypt()
         .encrypt(jsonEncode(body), await FireshipCrypt().getPassKeyPref());
     print("KEY ENCY $key");
-    await ReceivingsProvider.searchTransactionPO(BodyEncrypt(key, key).toJson()).then((value) {
+    await ReceivingsProvider.searchTransactionPO(BodyEncrypt(key, key).toJson())
+        .then((value) {
       PreviewTransactionPO transactionPO = value;
-      if(transactionPO.total != null){
-        for(DetailPreviewTransactionPO detail in transactionPO.detail?? []){
-          double origPrice = detail.origPrice??0;
-          double qty = detail.qty??0;
+      if (transactionPO.total != null) {
+        for (DetailPreviewTransactionPO detail in transactionPO.detail ?? []) {
+          double origPrice = detail.origPrice ?? 0;
+          double qty = detail.qty ?? 0;
           double total = origPrice * qty;
           listCart.add(CartReceivingsModel(
-            barcode: detail.barcode,
-            name: detail.productName,
-            originalPrice: origPrice,
-            salePrice: origPrice,
-            id: detail.productId,
-            qty: qty,
-            unitName: detail.unitName,
-            unitId: detail.unitId,
-            total: "$total"
-          ));
+              barcode: detail.barcode,
+              name: detail.productName,
+              originalPrice: origPrice,
+              salePrice: origPrice,
+              id: detail.productId,
+              qty: qty,
+              unitName: detail.unitName,
+              unitId: detail.unitId,
+              total: "$total"));
         }
       }
     });

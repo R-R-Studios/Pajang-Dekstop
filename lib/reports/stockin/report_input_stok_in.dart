@@ -10,7 +10,6 @@ import 'package:beben_pos_desktop/reports/stockin/datasource/stock_in_data_sourc
 import 'package:beben_pos_desktop/reports/stockin/model/report_stock_in_model.dart';
 import 'package:beben_pos_desktop/utils/global_functions.dart';
 import 'package:beben_pos_desktop/utils/size_config.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ReportInputStockIn extends StatefulWidget {
@@ -85,15 +84,16 @@ class _ReportInputStockInState extends State<ReportInputStockIn> {
             child: Row(
               children: [
                 ElevatedButton(
-                  onPressed: (){
-                  setState(() {
-                    reportBloc.setToReportView("");
-                  });
-                }, child: Icon(
-        Icons.arrow_back,
-        color: Colors.white,
-        size: 16.0,
-      ),
+                  onPressed: () {
+                    setState(() {
+                      reportBloc.setToReportView("");
+                    });
+                  },
+                  child: Icon(
+                    Icons.arrow_back,
+                    color: Colors.white,
+                    size: 16.0,
+                  ),
                   style: ElevatedButton.styleFrom(
                       textStyle: TextStyle(color: Colors.white),
                       padding: EdgeInsets.only(
@@ -119,8 +119,7 @@ class _ReportInputStockInState extends State<ReportInputStockIn> {
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(
-                      left: 6, right: 6),
+                  padding: const EdgeInsets.only(left: 6, right: 6),
                   child: Container(
                       width: SizeConfig.screenWidth * 0.125,
                       child: GestureDetector(
@@ -128,22 +127,17 @@ class _ReportInputStockInState extends State<ReportInputStockIn> {
                         child: AbsorbPointer(
                           child: TextFormField(
                             controller: _dateController,
-                            keyboardType:
-                            TextInputType.datetime,
-                            style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.black),
+                            keyboardType: TextInputType.datetime,
+                            style: TextStyle(fontSize: 14, color: Colors.black),
                             decoration: InputDecoration(
                                 filled: true,
                                 fillColor: Colors.white,
                                 isDense: true,
                                 contentPadding:
-                                EdgeInsets.fromLTRB(
-                                    8, 14.0, 8, 14.0),
+                                    EdgeInsets.fromLTRB(8, 14.0, 8, 14.0),
                                 // labelStyle: TextStyle(color: Colors.black87),
                                 //   focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: GlobalColorPalette.colorButtonActive)),
-                                border:
-                                OutlineInputBorder()),
+                                border: OutlineInputBorder()),
                           ),
                         ),
                       )),
@@ -239,22 +233,13 @@ class _ReportInputStockInState extends State<ReportInputStockIn> {
                       filled: true,
                       fillColor: Colors.white,
                       isDense: true,
-                      contentPadding:
-                      EdgeInsets.fromLTRB(
-                          8, 14.0, 8, 14.0),
+                      contentPadding: EdgeInsets.fromLTRB(8, 14.0, 8, 14.0),
                       // labelStyle: TextStyle(color: Colors.black87),
                       //   focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: GlobalColorPalette.colorButtonActive)),
                       border: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Colors.black
-                          )
-                      ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Colors.black
-                      )
-                    )
-                  ),
+                          borderSide: BorderSide(color: Colors.black)),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black))),
                 );
               },
               displayStringForOption: (ProductReceivingsModel product) =>
@@ -375,54 +360,55 @@ class _ReportInputStockInState extends State<ReportInputStockIn> {
     return Container(
       width: SizeConfig.blockSizeHorizontal * 100,
       child: FutureBuilder(
-          future: stockInBloc.searchReportStockIn(profile.merchantId.toString(), startDate, endDate),
+          future: stockInBloc.searchReportStockIn(
+              profile.merchantId.toString(), startDate, endDate),
           builder: (context, AsyncSnapshot<List<ReportStockInModel>> snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.hasData) {
-            if (snapshot.data!.length == 0) {
-              return _emptyReportStockIn(title: "Data Tidak Ditemukan");
-            } else {
-              print("snapshot.data ${jsonEncode(snapshot.data)}");
-              return PaginatedDataTable(
-                // sortColumnIndex: _currentSortColumn,
-                // sortAscending: _isAscending,
-                // columnSpacing: 0,
-                // horizontalMargin: 0,
-                rowsPerPage: 5,
-                showCheckboxColumn: false,
-                columns: <DataColumn>[
-                  for (final header in _headColumnModel)
-                    DataColumn(
-                        label: Expanded(
-                          child: Text(
-                            header.name!,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 12, fontWeight: FontWeight.bold),
+            if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.hasData) {
+                if (snapshot.data!.length == 0) {
+                  return _emptyReportStockIn(title: "Data Tidak Ditemukan");
+                } else {
+                  print("snapshot.data ${jsonEncode(snapshot.data)}");
+                  return PaginatedDataTable(
+                    // sortColumnIndex: _currentSortColumn,
+                    // sortAscending: _isAscending,
+                    // columnSpacing: 0,
+                    // horizontalMargin: 0,
+                    rowsPerPage: 5,
+                    showCheckboxColumn: false,
+                    columns: <DataColumn>[
+                      for (final header in _headColumnModel)
+                        DataColumn(
+                          label: Expanded(
+                            child: Text(
+                              header.name!,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 12, fontWeight: FontWeight.bold),
+                            ),
                           ),
+                          tooltip: header.name,
                         ),
-                        tooltip: header.name,
-                        ),
-                ],
-                source: StockInDataSource(context, snapshot.data!),
+                    ],
+                    source: StockInDataSource(context, snapshot.data!),
+                  );
+                }
+              } else {
+                return _emptyReportStockIn();
+              }
+            } else {
+              return Container(
+                height: SizeConfig.blockSizeVertical * 40,
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CircularProgressIndicator(),
+                  ],
+                ),
               );
             }
-          } else {
-            return _emptyReportStockIn();
-          }
-        }
-        else {
-          return Container(
-            height: SizeConfig.blockSizeVertical * 40,
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [CircularProgressIndicator(),
-              ],
-            ),
-          );
-        }
-      }),
+          }),
     );
   }
 }

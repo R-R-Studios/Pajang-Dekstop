@@ -1,13 +1,11 @@
 import 'dart:convert';
 
 import 'package:beben_pos_desktop/core/fireship/fireship_box.dart';
-import 'package:beben_pos_desktop/customer/model/customer_model.dart';
 import 'package:beben_pos_desktop/db/product_model_db.dart';
 import 'package:beben_pos_desktop/db/unit_conversions_db.dart';
 import 'package:beben_pos_desktop/product/bloc/product_bloc.dart';
 import 'package:beben_pos_desktop/product/model/product_model.dart';
 import 'package:beben_pos_desktop/utils/global_functions.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
@@ -134,8 +132,8 @@ class _DialogFormConversionUnitState extends State<DialogFormConversionUnit> {
                   ),
                   Padding(
                     padding: EdgeInsets.only(bottom: 30),
-                    child:
-                        Text("Stock Sisa : ${productModel.product?.lastStock ?? "0"}"),
+                    child: Text(
+                        "Stock Sisa : ${productModel.product?.lastStock ?? "0"}"),
                   ),
                   Padding(
                     padding: EdgeInsets.only(bottom: 15),
@@ -162,7 +160,8 @@ class _DialogFormConversionUnitState extends State<DialogFormConversionUnit> {
                           child: TextFormField(
                               controller: controllerChildUnit,
                               inputFormatters: [
-                                FilteringTextInputFormatter.allow(RegExp('[0-9.]')),
+                                FilteringTextInputFormatter.allow(
+                                    RegExp('[0-9.]')),
                               ],
                               decoration: InputDecoration(
                                 labelText: "Unit yang di konversi",
@@ -172,10 +171,10 @@ class _DialogFormConversionUnitState extends State<DialogFormConversionUnit> {
                                 if (value!.isEmpty) {
                                   return "${unit.valueUnitParent ?? 0} ${unit.parent?.name ?? "-"} = ${unit.valueUnitChild ?? 0} ${unit.child?.name ?? "-"}";
                                 } else {
-                                  if(value != "."){
+                                  if (value != ".") {
                                     double val = double.parse(value);
-                                    double lastStock =
-                                    double.parse(productModel.product?.lastStock ?? "0");
+                                    double lastStock = double.parse(
+                                        productModel.product?.lastStock ?? "0");
                                     if (val > lastStock) {
                                       return "Maksimal konversi stock adalah ${productModel.product?.lastStock ?? "0"}";
                                     }
@@ -187,7 +186,7 @@ class _DialogFormConversionUnitState extends State<DialogFormConversionUnit> {
                           flex: 1,
                           child: Padding(
                             padding: const EdgeInsets.only(left: 8.0),
-                            child: Text("/ ${unit.parent?.name??"-"}"),
+                            child: Text("/ ${unit.parent?.name ?? "-"}"),
                           ),
                         ),
                       ],
@@ -228,7 +227,9 @@ class _DialogFormConversionUnitState extends State<DialogFormConversionUnit> {
                     child: ElevatedButton(
                       onPressed: () async {
                         await ProductBloc().procesUnitConversionV2(
-                            productModel, double.parse(controllerChildUnit.text), double.parse(controllerHargaJual.text));
+                            productModel,
+                            double.parse(controllerChildUnit.text),
+                            double.parse(controllerHargaJual.text));
                         Navigator.pop(context);
                       },
                       child: Text("Simpan Konversi"),

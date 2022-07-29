@@ -1,16 +1,10 @@
-import 'dart:convert';
-
 import 'package:beben_pos_desktop/core/fireship/error_handling_response.dart';
-import 'package:beben_pos_desktop/core/fireship/fireship_box.dart';
 import 'package:beben_pos_desktop/core/fireship/fireship_converter.dart';
 import 'package:beben_pos_desktop/core/fireship/fireship_database.dart';
 import 'package:beben_pos_desktop/core/fireship/fireship_utility_box.dart';
-import 'package:beben_pos_desktop/dashboard.dart';
-import 'package:beben_pos_desktop/main.dart';
 import 'package:beben_pos_desktop/utils/global_functions.dart';
 import 'package:beben_pos_desktop/utils/global_variable.dart';
 import 'package:beben_pos_desktop/utils/size_config.dart';
-import 'package:beben_pos_desktop/widget/core_bottom_sheet.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
@@ -77,7 +71,8 @@ class DioService {
 
         if (fireship.code! > 200 && fireship.code! < 600) {
           print("ErrorHandlingResponse");
-          ErrorHandlingResponse(fireship: fireship, showMessage: showMessage).checkErrror();
+          ErrorHandlingResponse(fireship: fireship, showMessage: showMessage)
+              .checkErrror();
         } else {
           if (isLoading) {
             GlobalFunctions.showSnackBarSuccess(fireship.message!);
@@ -174,34 +169,34 @@ class DioService {
 
   static void dialogLoading() {
     showDialog(
-      context: navGK.currentContext!,
-      barrierDismissible: false,
-      builder: (BuildContext buildContext) {
-        return Scaffold(
-          backgroundColor: Colors.transparent,
-          body: Center(
-            child: Card(
-              color: Colors.white,
-              child: Container(
-                width: SizeConfig.screenWidth * 0.3,
-                height: SizeConfig.screenHeight * 0.3,
-                child: Center(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        CupertinoActivityIndicator(radius: 30,),
-                        Text("Mohon Tunggu...")
-                      ],
-                    )
+        context: navGK.currentContext!,
+        barrierDismissible: false,
+        builder: (BuildContext buildContext) {
+          return Scaffold(
+            backgroundColor: Colors.transparent,
+            body: Center(
+              child: Card(
+                color: Colors.white,
+                child: Container(
+                  width: SizeConfig.screenWidth * 0.3,
+                  height: SizeConfig.screenHeight * 0.3,
+                  child: Center(
+                      child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      CupertinoActivityIndicator(
+                        radius: 30,
+                      ),
+                      Text("Mohon Tunggu...")
+                    ],
+                  )),
                 ),
               ),
             ),
-          ),
-        );
-      }
-    );
+          );
+        });
   }
 
   static void showTimeOut(message, title, {params, tryAgainMethod}) {

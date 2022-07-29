@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:beben_pos_desktop/core/core.dart';
 import 'package:beben_pos_desktop/core/fireship/fireship_box.dart';
 import 'package:beben_pos_desktop/core/fireship/fireship_encrypt.dart';
 import 'package:beben_pos_desktop/db/product_model_db.dart';
@@ -13,30 +12,23 @@ import 'package:beben_pos_desktop/product/model/units_model.dart';
 import 'package:beben_pos_desktop/product/provider/product_provider.dart';
 import 'package:beben_pos_desktop/units/provider/unit_provider.dart';
 import 'package:beben_pos_desktop/utils/global_functions.dart';
-import 'package:beben_pos_desktop/utils/printer/printer_manager.dart';
-import 'package:beben_pos_desktop/utils/printerservice/printer_service_custom.dart';
 import 'package:hive/hive.dart';
-import 'package:nav_router/nav_router.dart';
-import 'package:provider/provider.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:beben_pos_desktop/db/product_db.dart' as pm;
 
 class ProductBloc {
   List<ProductModel> listProduct = [];
   List<UnitsModel> unitsModelList = [];
 
   BehaviorSubject<List<ProductModel>> listProductController =
-  new BehaviorSubject<List<ProductModel>>();
+      new BehaviorSubject<List<ProductModel>>();
 
   Stream<List<ProductModel>> get streamListProduct =>
       listProductController.stream;
 
-  BehaviorSubject<List<UnitsModel>> listUnitsController = new BehaviorSubject<
-      List<UnitsModel>>();
+  BehaviorSubject<List<UnitsModel>> listUnitsController =
+      new BehaviorSubject<List<UnitsModel>>();
 
-  Stream<List<UnitsModel>> get streamUnitsList =>
-      listUnitsController.stream;
+  Stream<List<UnitsModel>> get streamUnitsList => listUnitsController.stream;
 
   Future<List<UnitsModel>> initUnits() async => await getListUnitsData();
 
@@ -85,28 +77,28 @@ class ProductBloc {
   initProductList() async {
     // List<ProductModelDB> productDB = await getProductListDB();
     // if (productDB.length > 0) {
-      // for (ProductModelDB products in productDB) {
-      //   print("initProductList ${products.createdAt}");
-      //   print("initProductList ${products.toJson()}");
-      //   listProduct.add(
-      //     ProductModel(
-      //         product: ProductData(
-      //             productId: products.productId,
-      //             name: products.name,
-      //             code: products.code,
-      //             barcode: products.barcode,
-      //             description: products.description,
-      //             createdAt: products.createdAt,
-      //             originalPrice: products.originalPrice,
-      //             salePrice: products.salePrice,
-      //             lastStock: products.stock,
-      //             unit: products.unitsName,
-      //             unitId: products.unitsId
-      //         )
-      //     ),
-      //   );
-      // }
-      await refreshProduct();
+    // for (ProductModelDB products in productDB) {
+    //   print("initProductList ${products.createdAt}");
+    //   print("initProductList ${products.toJson()}");
+    //   listProduct.add(
+    //     ProductModel(
+    //         product: ProductData(
+    //             productId: products.productId,
+    //             name: products.name,
+    //             code: products.code,
+    //             barcode: products.barcode,
+    //             description: products.description,
+    //             createdAt: products.createdAt,
+    //             originalPrice: products.originalPrice,
+    //             salePrice: products.salePrice,
+    //             lastStock: products.stock,
+    //             unit: products.unitsName,
+    //             unitId: products.unitsId
+    //         )
+    //     ),
+    //   );
+    // }
+    await refreshProduct();
     //   print("GET UNITS FROM DB ${listProduct.length}");
     // } else {
     //   listProduct.addAll(await ProductProvider.listProduct());
@@ -130,8 +122,8 @@ class ProductBloc {
     print("updateProductToDB ${productModel.product?.createdAt}");
     var box = await Hive.openBox<ProductModelDB>("product_db");
     List<ProductModelDB> list = box.values.toList();
-    int i = list.indexWhere((element) =>
-    element.id == productModel.product?.productId);
+    int i = list
+        .indexWhere((element) => element.id == productModel.product?.productId);
     var product = ProductModelDB(
         id: productModel.product?.productId,
         name: productModel.product?.name,
@@ -139,14 +131,16 @@ class ProductBloc {
         barcode: productModel.product?.barcode,
         description: productModel.product?.description,
         createdAt: productModel.product?.createdAt,
-        stock: productModel.product?.lastStock == null ? "0" : productModel
-            .product?.lastStock.toString(),
+        stock: productModel.product?.lastStock == null
+            ? "0"
+            : productModel.product?.lastStock.toString(),
         originalPrice: productModel.product?.originalPrice == null
             ? "0"
             : productModel.product?.originalPrice.toString(),
         unitsName: productModel.product?.unit,
-        salePrice: productModel.product?.salePrice == null ? "0" : productModel
-            .salePrice.toString());
+        salePrice: productModel.product?.salePrice == null
+            ? "0"
+            : productModel.salePrice.toString());
     box.putAt(i, product);
     print("Update Product ${jsonEncode(box.getAt(i))}");
   }
@@ -161,14 +155,16 @@ class ProductBloc {
         barcode: productModel.product?.barcode,
         description: productModel.product?.description,
         createdAt: productModel.product?.createdAt,
-        stock: productModel.product?.lastStock == null ? "0" : productModel
-            .product?.lastStock.toString(),
+        stock: productModel.product?.lastStock == null
+            ? "0"
+            : productModel.product?.lastStock.toString(),
         originalPrice: productModel.product?.originalPrice == null
             ? "0"
             : productModel.product?.originalPrice.toString(),
         unitsName: productModel.product?.unit,
-        salePrice: productModel.salePrice == null ? "0" : productModel.salePrice
-            .toString());
+        salePrice: productModel.salePrice == null
+            ? "0"
+            : productModel.salePrice.toString());
     box.add(product);
   }
 
@@ -177,8 +173,8 @@ class ProductBloc {
     final box = await Hive.openBox<ProductModelDB>("product_db");
     _productListDB = box.values.toList();
     if (_productListDB.length > 0) {
-      _productListDB.sort((idA, idB) =>
-      idA.productId ?? 0.compareTo(idB.productId ?? 0));
+      _productListDB
+          .sort((idA, idB) => idA.productId ?? 0.compareTo(idB.productId ?? 0));
     }
     return _productListDB;
   }
@@ -186,7 +182,7 @@ class ProductBloc {
   searchProduct(String search) async {
     List<ProductModel> list = listProduct;
     list = list.where(
-          (element) {
+      (element) {
         return jsonEncode(element).toLowerCase().contains(search.toLowerCase());
       },
     ).toList();
@@ -288,11 +284,11 @@ class ProductBloc {
   Future<bool> checkUnitConversionV2(ProductModel productModel) async {
     bool canUnitConversion = false;
     var boxProduct = await Hive.openBox<ProductModelDB>("product_db");
-    var boxUnitConv = await Hive.openBox<UnitConversionDB>(
-        FireshipBox.BOX_UNIT_CONVERSION);
+    var boxUnitConv =
+        await Hive.openBox<UnitConversionDB>(FireshipBox.BOX_UNIT_CONVERSION);
     List<UnitConversionDB> unitConv = boxUnitConv.values.toList();
-    ProductModelDB productToDb = ProductModelDB.fromJson(
-        jsonDecode(jsonEncode(productModel.product)));
+    ProductModelDB productToDb =
+        ProductModelDB.fromJson(jsonDecode(jsonEncode(productModel.product)));
     productToDb.unitsName = productModel.product?.unit;
     productToDb.unitsId = productModel.product?.unitId;
     var productListDB = boxProduct.values.toList();
@@ -301,8 +297,8 @@ class ProductBloc {
       bool unitIdCheck = element.unitsId == productToDb.unitsId;
       var unitName = element.unitsName ?? "";
       var dbUnitName = productToDb.unitsName ?? "";
-      bool unitNameCheck = unitName.toLowerCase().contains(
-          dbUnitName.toLowerCase());
+      bool unitNameCheck =
+          unitName.toLowerCase().contains(dbUnitName.toLowerCase());
       return productIdCheck && unitIdCheck && unitNameCheck;
     });
     var product = productListDB.elementAt(indexProduct);
@@ -326,11 +322,11 @@ class ProductBloc {
       double convertPerParent, double hargaJual) async {
     print("========= procesUnitConversion =========");
     var boxProduct = await Hive.openBox<ProductModelDB>("product_db");
-    var boxUnitConv = await Hive.openBox<UnitConversionDB>(
-        FireshipBox.BOX_UNIT_CONVERSION);
+    var boxUnitConv =
+        await Hive.openBox<UnitConversionDB>(FireshipBox.BOX_UNIT_CONVERSION);
     List<UnitConversionDB> unitConv = boxUnitConv.values.toList();
-    ProductModelDB productToDb = ProductModelDB.fromJson(
-        jsonDecode(jsonEncode(productModel.product)));
+    ProductModelDB productToDb =
+        ProductModelDB.fromJson(jsonDecode(jsonEncode(productModel.product)));
     productToDb.unitsName = productModel.product?.unit;
     productToDb.unitsId = productModel.product?.unitId;
 
@@ -340,8 +336,8 @@ class ProductBloc {
       bool unitIdCheck = element.unitsId == productToDb.unitsId;
       var unitName = element.unitsName ?? "";
       var dbUnitName = productToDb.unitsName ?? "";
-      bool unitNameCheck = unitName.toLowerCase().contains(
-          dbUnitName.toLowerCase());
+      bool unitNameCheck =
+          unitName.toLowerCase().contains(dbUnitName.toLowerCase());
       return productIdCheck && unitIdCheck && unitNameCheck;
     });
 
@@ -414,8 +410,7 @@ class ProductBloc {
           code: product.code,
           originalPrice: "$originPrice",
           salePrice: salePrice,
-          createdAt: product.createdAt
-      );
+          createdAt: product.createdAt);
       var isHaveProduct = productListDB.where((element) {
         var checkProductId = element.productId == newChildProduct.productId;
         var checkUnitsId = element.unitsId == newChildProduct.unitsId;
@@ -430,8 +425,8 @@ class ProductBloc {
           return checkProductId && checkUnitsId && checkUnitsName;
         });
         var updateProduct = productListDB.elementAt(index);
-        double lastStock = double.parse(updateProduct.stock ?? "0") +
-            qtyConvert;
+        double lastStock =
+            double.parse(updateProduct.stock ?? "0") + qtyConvert;
         updateProduct.stock = "$lastStock";
         updateProduct.salePrice = "$salePrice";
         boxProduct.put(index, updateProduct);
@@ -448,42 +443,45 @@ class ProductBloc {
     listUnitsController.close();
   }
 
-  Future<bool> requestCreateMerchantProduct(String productName,
-      String productCode, String productBarcode, String productDesc,
+  Future<bool> requestCreateMerchantProduct(
+      String productName,
+      String productCode,
+      String productBarcode,
+      String productDesc,
       bool isActive,
-      int productUnitId, double productStock, double productCurrentStock,
-      double currentPrice, double salePrice) async {
+      int productUnitId,
+      double productStock,
+      double productCurrentStock,
+      double currentPrice,
+      double salePrice) async {
     bool isSuccess = false;
     CreateProduct createProduct = CreateProduct(
         name: productName,
         code: productCode,
         barcode: productBarcode,
         description: productDesc,
-        isActive: isActive
-    );
+        isActive: isActive);
 
     CreateProductStock createProductStock = CreateProductStock(
         unitId: productUnitId,
         trxStock: productStock,
-        currentStock: productCurrentStock
-    );
+        currentStock: productCurrentStock);
 
-    CreateProductPrice createProductPrice = CreateProductPrice(
-        currentPrice: currentPrice,
-        salePrice: salePrice
-    );
+    CreateProductPrice createProductPrice =
+        CreateProductPrice(currentPrice: currentPrice, salePrice: salePrice);
 
-    RequestCreateMerchantProduct requestCreateMerchantProduct = RequestCreateMerchantProduct(
-        product: createProduct,
-        productStock: createProductStock,
-        productPrice: createProductPrice
-    );
+    RequestCreateMerchantProduct requestCreateMerchantProduct =
+        RequestCreateMerchantProduct(
+            product: createProduct,
+            productStock: createProductStock,
+            productPrice: createProductPrice);
     GlobalFunctions.logPrint(
         "requestMerchantTransaction", jsonEncode(requestCreateMerchantProduct));
     var key = FireshipCrypt().encrypt(jsonEncode(requestCreateMerchantProduct),
         await FireshipCrypt().getPassKeyPref());
     await ProductProvider.requestCreateMerchantProduct(
-        BodyEncrypt(key, key).toJson()).then((value) async {
+            BodyEncrypt(key, key).toJson())
+        .then((value) async {
       GlobalFunctions.logPrint(
           "Return Status from provider RequestCreateMerchantProduct", '$value');
       if (value) {

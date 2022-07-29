@@ -1,8 +1,4 @@
-import 'package:beben_pos_desktop/dashboard.dart';
-import 'package:beben_pos_desktop/main.dart';
 import 'package:beben_pos_desktop/utils/global_functions.dart';
-import 'package:bot_toast/bot_toast.dart';
-import 'package:flutter/material.dart';
 import 'package:nav_router/nav_router.dart';
 import 'fireship_converter.dart';
 
@@ -12,14 +8,17 @@ class ErrorHandlingResponse {
   final bool isPPOB;
   final bool showMessage;
 
-  ErrorHandlingResponse({required this.fireship, this.isPage = false, this.isPPOB = false, this.showMessage = true});
+  ErrorHandlingResponse(
+      {required this.fireship,
+      this.isPage = false,
+      this.isPPOB = false,
+      this.showMessage = true});
 
   void checkErrror() {
     GlobalFunctions.logPrint("fireship Code", fireship.code.toString());
     GlobalFunctions.logPrint("fireship Message", fireship.message.toString());
     if (fireship.code! >= 400 && fireship.code! < 500) {
       if (fireship.code == 400) {
-
       } else if (fireship.code == 401) {
         GlobalFunctions.logPrint('Unauthorize', fireship.code);
         GlobalFunctions.showSnackBarError(fireship.message!);
@@ -27,7 +26,7 @@ class ErrorHandlingResponse {
         // CoreFunction.onLogout();
       } else if (fireship.code == 402) {
         print('Error 402');
-        if(showMessage){
+        if (showMessage) {
           GlobalFunctions.showSnackBarError(fireship.message!);
         }
       } else if (fireship.code == 403) {
