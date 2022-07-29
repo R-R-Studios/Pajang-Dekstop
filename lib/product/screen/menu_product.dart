@@ -285,7 +285,7 @@ class _MenuProductState extends State<MenuProduct> {
       columnSpacing: 0,
       horizontalMargin: 30,
       showCheckboxColumn: false,
-      rowsPerPage: productModel.length > 5 ? 5 : productModel.length,
+      rowsPerPage: productModel.length > 10 ? 10 : productModel.length,
       columns: <DataColumn>[
         for (final header in _headColumnModel)
           DataColumn(
