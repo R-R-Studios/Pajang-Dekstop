@@ -1,8 +1,10 @@
 import 'dart:io';
 
+import 'package:beben_pos_desktop/bank/bank_screen.dart';
 import 'package:beben_pos_desktop/commingsoon/menu_comming_soon.dart';
 import 'package:beben_pos_desktop/dashboard_bloc.dart';
 import 'package:beben_pos_desktop/db/profile_db.dart';
+import 'package:beben_pos_desktop/gift/gift_screen.dart';
 import 'package:beben_pos_desktop/product/screen/menu_product.dart';
 import 'package:beben_pos_desktop/receivings/menu_receivings.dart';
 import 'package:beben_pos_desktop/reports/reports_merchant.dart';
@@ -246,7 +248,8 @@ class _DashboardScreenState extends State<DashboardScreen>
                     ReportsMerchant()
                   else if (tab.key == "sales")
                     SalesInput()
-                  // else if (tab.name == "Gift Card") GiftScreen()
+                  else if (tab.key == "gift_card")
+                    BankScreen()
                   else if (tab.key == "product")
                     MenuProduct(dashboardBloc)
                   else if (tab.key == "receivings")
