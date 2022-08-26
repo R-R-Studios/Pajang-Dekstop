@@ -9,18 +9,17 @@ import 'package:beben_pos_desktop/db/transaction_failed_db.dart';
 import 'package:beben_pos_desktop/db/transaction_failed_product_db.dart';
 import 'package:beben_pos_desktop/product/provider/product_provider.dart';
 import 'package:beben_pos_desktop/profile/bloc/profile_bloc.dart';
-import 'package:beben_pos_desktop/sales/model/example_product.dart';
 import 'package:beben_pos_desktop/db/merchant_product_db.dart';
 import 'package:beben_pos_desktop/sales/model/merchant_transaction_model.dart';
+import 'package:beben_pos_desktop/sales/model/payment_method.dart';
 import 'package:beben_pos_desktop/sales/model/request_transaction_model.dart';
 import 'package:beben_pos_desktop/sales/model/response_status_transaction.dart';
 import 'package:beben_pos_desktop/sales/model/return_transaction_model.dart';
-import 'package:beben_pos_desktop/sales/model/sales_model.dart';
+import 'package:beben_pos_desktop/sales/model/tax.dart';
 import 'package:beben_pos_desktop/sales/provider/sales_provider.dart';
 import 'package:beben_pos_desktop/utils/global_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:pdf/widgets.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:uuid/uuid.dart';
 
@@ -42,8 +41,11 @@ class SalesBloc {
   int totalProduct = 0;
   double subtotal = 0;
   double totalBelanja = 0;
+  double totalTax = 0;
   int totalBayar = 0;
   String kembalian = "0";
+  late Tax tax;
+  List<PaymentMethod> listPayment = [];
 
   BehaviorSubject<double> controllerTotalBayar = new BehaviorSubject<double>();
 
@@ -127,6 +129,14 @@ class SalesBloc {
 
   Stream<bool> get streamEnableTrxCode => enableTrxCodeController.stream;
 
+  //? Controller
+  BehaviorSubject<double> taxController = new BehaviorSubject<double>();
+  // BehaviorSubject<List<PaymentMethod>> paymentMethodController = new BehaviorSubject<List<PaymentMethod>>();
+
+  //? Stream
+  Stream<double> get streamTax => taxController.stream;
+  // Stream<List<PaymentMethod>> get streamPaymentMethod => paymentMethodController.stream;
+
   init() async {
     var box = await Hive.openBox(FireshipBox.BOX_PRODUCT);
     var productModel = box.values.toList();
@@ -135,6 +145,8 @@ class SalesBloc {
       listTotal.add(product.total ?? 0);
     }
     GlobalFunctions.log('init', listTotal);
+    getTax();
+    getPaymentMethod();
     listProductController.sink.add(productList);
     listTotalPriceController.sink.add(listTotal);
     enableTrxCodeController.sink.add(isEnableTrxCode);
@@ -236,9 +248,14 @@ class SalesBloc {
 
   sumTotalPricePayment() {
     totalBelanja = 0;
+    totalTax = 0;
+    double total = 0;
     for (int a = 0; a < productList.length; a++) {
-      totalBelanja += productList[a].quantity! * productList[a].price!;
+      total += productList[a].quantity! * productList[a].price!;
     }
+    totalTax = (total * tax.value!.toDouble()) / 100;
+    totalBelanja = total + totalTax;
+    taxController.sink.add(totalTax);
     sumTotalPayment.sink.add(totalBelanja);
   }
 
@@ -285,6 +302,7 @@ class SalesBloc {
     listProductController.sink.add(productList);
     checkAllSumDataInputSales();
   }
+
   addProductV2(ProductModelDB merchantProduct) async {
     var box = await Hive.openBox(FireshipBox.BOX_PRODUCT);
     double salePrice = double.parse("${merchantProduct.salePrice??"0"}");
@@ -520,6 +538,8 @@ class SalesBloc {
     listTotalPriceController.close();
     enableTrxCodeController.close();
     controllerProductModelDB.close();
+    taxController.close();
+    // paymentMethodController.close();
   }
 
   getMerchantProductDB() async {
@@ -566,10 +586,7 @@ class SalesBloc {
   }
 
   // for api /api/pos/salestransaction
-  Future<ResponseStatusTransaction> requestMerchantTransaction(
-      double totalPriceTransaction,
-      double totalPaymentCustomer,
-      int merchantId, String type) async {
+  Future<ResponseStatusTransaction> requestMerchantTransaction(double totalPriceTransaction, double totalPaymentCustomer, int merchantId, String type, PaymentMethod paymentMethod) async {
     ResponseStatusTransaction responseStatusTransaction = ResponseStatusTransaction(
       transactionCode: "",
       status: false,
@@ -591,10 +608,15 @@ class SalesBloc {
           );
       merchantTransactionList.add(merchantTransaction);
     }
-    ProductTransaction producTransaction =
-        ProductTransaction(
-          type: type,
-            merchantTransaction: merchantTransactionList);
+
+    ProductTransaction producTransaction = ProductTransaction(
+      paymentMethodId: paymentMethod.id!,
+      bankId: paymentMethod.bankId,
+      cardNumber: paymentMethod.cardNumber,
+      type: type,
+      merchantTransaction: merchantTransactionList
+    );
+
     GlobalFunctions.logPrint("requestMerchantTransaction", jsonEncode(producTransaction));
     var key = FireshipCrypt().encrypt(jsonEncode(producTransaction), await FireshipCrypt().getPassKeyPref());
     await SalesProvider.requestTransaction(BodyEncrypt(key, key).toJson())
@@ -656,10 +678,11 @@ class SalesBloc {
         );
         merchantTransactionList.add(merchantTransaction);
       }
-      ProductTransaction producTransaction =
-          ProductTransaction(
-            type: transaction.type ?? "",
-              merchantTransaction: merchantTransactionList);
+      ProductTransaction producTransaction = ProductTransaction(
+        type: transaction.type ?? "",
+        merchantTransaction: merchantTransactionList,
+        paymentMethodId: transaction.paymentMethodId ?? 1
+      );
       GlobalFunctions.logPrint(
           "requestMerchantTransaction", jsonEncode(producTransaction));
       var key = FireshipCrypt().encrypt(jsonEncode(producTransaction),
@@ -720,4 +743,13 @@ class SalesBloc {
     await SalesProvider.requestReturnTransaction(
         BodyEncrypt(key, key).toJson());
   }
+
+  Future getTax() async {
+    tax = await SalesProvider.tax();
+  }
+
+  Future getPaymentMethod () async {
+    listPayment = await SalesProvider.paymentMethod();
+  }
+
 }

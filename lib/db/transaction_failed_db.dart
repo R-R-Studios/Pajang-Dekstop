@@ -25,12 +25,17 @@ class TransactionFailedDB extends HiveObject {
   int? merchantId;
   @HiveField(8)
   String? type;
+  
+  @HiveField(9)
+  int? paymentMethodId;
 
-  TransactionFailedDB({this.id, this.date, this.productList, this.status, this.totalPriceTransaction, this.totalPaymentCustomer, this.totalMoneyChanges,
-    this.merchantId, this.type});
+  TransactionFailedDB({
+    this.id, this.date, this.productList, this.status, this.totalPriceTransaction, this.totalPaymentCustomer, this.totalMoneyChanges,
+    this.merchantId, this.type, this.paymentMethodId});
 
   factory TransactionFailedDB.fromProductModel(TransactionFailedDB productModel){
     return TransactionFailedDB(
+      paymentMethodId: productModel.paymentMethodId,
       id: productModel.id,
       date: productModel.date,
       productList: productModel.productList,
@@ -52,6 +57,7 @@ class TransactionFailedDB extends HiveObject {
     totalMoneyChanges = json['total_money_changes'];
     merchantId = json['merchant_id'];
     type = json['type'];
+    paymentMethodId = json['payment_method_id'];
   }
 
   Map<String, dynamic> toJson() {
@@ -65,6 +71,7 @@ class TransactionFailedDB extends HiveObject {
     data['total_money_changes'] = this.totalMoneyChanges;
     data['merchant_id'] = this.merchantId;
     data['type'] = this.type;
+    data['payment_method_id'] = this.paymentMethodId;
     return data;
   }
 

@@ -1,32 +1,23 @@
-import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:beben_pos_desktop/commingsoon/menu_comming_soon.dart';
+import 'package:beben_pos_desktop/content/cubit/content_cubit.dart';
+import 'package:beben_pos_desktop/content/view/content_screen.dart';
 import 'package:beben_pos_desktop/dashboard_bloc.dart';
 import 'package:beben_pos_desktop/db/profile_db.dart';
 import 'package:beben_pos_desktop/product/screen/menu_product.dart';
-import 'package:beben_pos_desktop/profile/bloc/profile_bloc.dart';
 import 'package:beben_pos_desktop/receivings/menu_receivings.dart';
 import 'package:beben_pos_desktop/reports/reports_merchant.dart';
-import 'package:beben_pos_desktop/sales/offline_sales_input.dart';
 import 'package:beben_pos_desktop/sales/sales_input.dart';
-import 'package:beben_pos_desktop/session/login_screen.dart';
+import 'package:beben_pos_desktop/ui/delivery/view/delivery_view.dart';
 import 'package:beben_pos_desktop/utils/global_functions.dart';
 import 'package:beben_pos_desktop/utils/size_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:hive/hive.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
-import 'package:nav_router/nav_router.dart';
-import 'core/fireship/fireship_box.dart';
-import 'core/fireship/fireship_database.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'core/fireship/fireship_encrypt.dart';
-import 'core/fireship/fireship_utility_box.dart';
-import 'customer/menu_customer.dart';
-import 'gift/gift_screen.dart';
 import 'model/navigation_model.dart';
+import 'ui/delivery/cubit/delivery_cubit.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -35,8 +26,8 @@ class DashboardScreen extends StatefulWidget {
   _DashboardScreenState createState() => _DashboardScreenState();
 }
 
-class _DashboardScreenState extends State<DashboardScreen>
-    with SingleTickerProviderStateMixin {
+class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProviderStateMixin {
+  
   List<NavigationModel> _navModel = [
     // NavigationModel(
     //     name: "Customer", icon: "assets/images/ic_dashboard_customer.png"),
@@ -55,8 +46,8 @@ class _DashboardScreenState extends State<DashboardScreen>
     NavigationModel(
         key: "reports", name: "Laporan", icon: "assets/images/ic_reports.png"),
     NavigationModel(
-        key: "gift_card",
-        name: "Gift Card",
+        key: "content",
+        name: "Content",
         icon: "assets/images/ic_gift_cards.png"),
     NavigationModel(
         key: "messages", name: "Pesan", icon: "assets/images/ic_messages.png"),
@@ -65,8 +56,8 @@ class _DashboardScreenState extends State<DashboardScreen>
         name: "Pengeluaran",
         icon: "assets/images/ic_expenses.png"),
     NavigationModel(
-        key: "expenses categories",
-        name: "Kategori Pengeluaran",
+        key: "delivery",
+        name: "Pengiriman",
         icon: "assets/images/ic_expenses_category.png"),
     NavigationModel(
         key: "cashups",
@@ -251,6 +242,7 @@ class _DashboardScreenState extends State<DashboardScreen>
             ),
             body: TabBarView(
               controller: _tabController,
+              physics: NeverScrollableScrollPhysics(),
               children: [
                 // for (final tab in _navModel)
                 //   tab.name == "Customer" ? MenuCustomer() :  Container()
@@ -266,6 +258,16 @@ class _DashboardScreenState extends State<DashboardScreen>
                   else if (tab.key == "receivings")
                     MenuReceivings(dashboardBloc)
                   // else if (tab.name == "Units") MenuUnits()
+                  else if (tab.key == "content")
+                    BlocProvider(
+                      create: (context) => ContentCubit(),
+                      child: ContentScreen(),
+                    )
+                  else if (tab.key == "delivery")  
+                    BlocProvider(
+                      create: (context) => DeliveryCubit(),
+                      child: DeliveryView()
+                    )
                   else
                     MenuCommingSoon(tab)
               ],

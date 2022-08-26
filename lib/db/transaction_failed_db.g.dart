@@ -26,6 +26,7 @@ class TransactionFailedDBAdapter extends TypeAdapter<TransactionFailedDB> {
       totalMoneyChanges: fields[6] as double?,
       merchantId: fields[7] as int?,
       type: fields[8] as String?,
+      paymentMethodId: fields[9] as int?,
     );
   }
 
@@ -50,7 +51,9 @@ class TransactionFailedDBAdapter extends TypeAdapter<TransactionFailedDB> {
       ..writeByte(7)
       ..write(obj.merchantId)
       ..writeByte(8)
-      ..write(obj.type);
+      ..write(obj.type)
+      ..writeByte(9)
+      ..write(obj.paymentMethodId);
   }
 
   @override

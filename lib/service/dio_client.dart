@@ -1,5 +1,8 @@
+import 'package:beben_pos_desktop/content/model/bank_create.dart';
+import 'package:beben_pos_desktop/content/model/banner_create.dart';
 import 'package:beben_pos_desktop/core/fireship/fireship_endpoint.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:retrofit/http.dart';
 
 import 'model/core_model.dart';
@@ -85,4 +88,43 @@ abstract class DioClient {
 
   @POST(FireshipEndpoint.CREATE_MERCHANT_PRODUCT)
   Future<CoreModel> requestCreateMerchantProduct(@Body() Map<String, dynamic> body);
+
+  @GET(FireshipEndpoint.MERCHANT_BANNER)
+  Future<CoreModel> bannerList();
+
+  @POST(FireshipEndpoint.MERCHANT_BANNER)
+  Future<CoreModel> bannerCreate(
+    @Body() BannerCreate body
+  );
+
+  @GET(FireshipEndpoint.MERCHANT_BANK)
+  Future<CoreModel> bankList();
+
+  @POST(FireshipEndpoint.MERCHANT_BANK)
+  Future<CoreModel> bankCreate(
+    @Body() BankCreate body
+  );
+
+  @GET(FireshipEndpoint.MERCHANT_EMPLOYEES)
+  Future<CoreModel> employeeList();
+
+  @POST(FireshipEndpoint.MERCHANT_EMPLOYEES)
+  Future<CoreModel> employeeCreate(
+    @Body() BankCreate body
+  );
+
+  @GET(FireshipEndpoint.TAXES)
+  Future<CoreModel> taxes();
+
+  @GET(FireshipEndpoint.PAYMENT_METHOD)
+  Future<CoreModel> paymentMethod();
+
+  @GET(FireshipEndpoint.BANK)
+  Future<CoreModel> bank();
+
+  @GET(FireshipEndpoint.MERCHANT_DELIVERY_ORDER_OPERATION_LIST)
+  Future<CoreModel> transactionList();
+
+  @GET(FireshipEndpoint.CUSTOMER_LIST)
+  Future<CoreModel> customerList();
 }

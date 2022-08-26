@@ -1,12 +1,19 @@
 import 'package:beben_pos_desktop/sales/model/merchant_transaction_model.dart';
 
 class ProductTransaction {
+
+  late int paymentMethodId;
   late List<MerchantTransactionModel> merchantTransaction;
   late String type;
+  int? bankId;
+  String? cardNumber;
 
   ProductTransaction({
+    required this.paymentMethodId,
     required this.merchantTransaction,
-    required this.type
+    required this.type,
+    this.bankId,
+    this.cardNumber
   }
   );
 
@@ -26,11 +33,15 @@ class ProductTransaction {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['payment_method_id'] = this.paymentMethodId;
+    data['bank_id'] = this.bankId;
+    data['card_number'] = this.cardNumber;
     data['type'] = this.type;
     if (this.merchantTransaction != null) {
       data['merchant_transaction'] =
           this.merchantTransaction.map((v) => v.toJson()).toList();
     }
+    data.removeWhere((key, value) => value == null);
     return data;
   }
 }

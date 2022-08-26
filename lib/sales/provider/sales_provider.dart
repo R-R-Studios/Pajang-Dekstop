@@ -6,7 +6,10 @@ import 'package:beben_pos_desktop/db/product_db.dart';
 import 'package:beben_pos_desktop/db/transaction_failed_db.dart';
 import 'package:beben_pos_desktop/db/transaction_failed_product_db.dart';
 import 'package:beben_pos_desktop/db/merchant_product_db.dart';
+import 'package:beben_pos_desktop/sales/model/bank.dart';
+import 'package:beben_pos_desktop/sales/model/payment_method.dart';
 import 'package:beben_pos_desktop/sales/model/response_status_transaction.dart';
+import 'package:beben_pos_desktop/sales/model/tax.dart';
 import 'package:beben_pos_desktop/service/dio_client.dart';
 import 'package:beben_pos_desktop/service/dio_service.dart';
 import 'package:beben_pos_desktop/utils/global_functions.dart';
@@ -102,6 +105,40 @@ class SalesProvider {
 
       }
     });
-
   }
+
+  static Future<Tax> tax() async {
+    late Tax taxs;
+    await DioService.checkConnection(tryAgainMethod: tax, isUseBearer: true, isLoading: false).then((value) async {
+      var dio = DioClient(value);
+      var response = await dio.taxes();
+      taxs = Tax.fromJson(response.data);
+    });
+    return taxs;
+  }
+
+  static Future<List<PaymentMethod>> paymentMethod() async {
+    List<PaymentMethod> list = [];
+    await DioService.checkConnection(tryAgainMethod: paymentMethod, isUseBearer: true, isLoading: false).then((value) async {
+      var dio = DioClient(value);
+      var response = await dio.paymentMethod();
+      for (var i = 0; i < response.data.length; i++) {
+        list.add(PaymentMethod.fromJson(response.data[i]));
+      }
+    });
+    return list;
+  }
+
+  static Future<List<Bank>> bank() async {
+    List<Bank> list = [];
+    await DioService.checkConnection(tryAgainMethod: bank, isUseBearer: true, isLoading: false).then((value) async {
+      var dio = DioClient(value);
+      var response = await dio.bank();
+      for (var i = 0; i < response.data.length; i++) {
+        list.add(Bank.fromJson(response.data[i]));
+      }
+    });
+    return list;
+  }
+
 }

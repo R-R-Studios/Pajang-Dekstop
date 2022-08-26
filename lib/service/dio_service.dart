@@ -71,9 +71,9 @@ class DioService {
       if (!isGeocode) {
         GlobalFunctions.logPrint("============= onResponse =============", "");
         FireshipConverter fireship = FireshipConverter();
+        GlobalFunctions.logPrint("response", "${response}");
         fireship.toAtozObject(response!.data['meta']);
 
-        // GlobalFunctions.logPrint("response", "${response.data}");
 
         if (fireship.code! > 200 && fireship.code! < 600) {
           print("ErrorHandlingResponse");

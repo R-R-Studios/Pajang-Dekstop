@@ -777,20 +777,22 @@ class _MenuReceivingsState extends State<MenuReceivings> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           StreamBuilder(
-                              stream: receivingsBloc.streamSumTotalProduct,
-                              builder: (context, snapshot) {
-                                if (snapshot.hasData) {
-                                  return Expanded(
-                                      child: Text(
-                                          "Jumlah ${snapshot.data} Produk"));
-                                } else {
-                                  return Text("Kosong");
-                                }
-                              }),
+                            stream: receivingsBloc.streamSumTotalProduct,
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                return Expanded(
+                                  child: Text("Jumlah ${snapshot.data} Produk")
+                                );
+                              } else {
+                                return Text("Kosong");
+                              }
+                            }),
                           Expanded(
-                              child: Align(
-                                  alignment: Alignment.centerRight,
-                                  child: Text("${snapshot.data}")))
+                            child: Align(
+                              alignment: Alignment.centerRight,
+                              child: Text("${snapshot.data}")
+                            )
+                          )
                         ],
                       );
                     } else {

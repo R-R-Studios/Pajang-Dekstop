@@ -1,41 +1,32 @@
 import 'dart:convert';
-import 'dart:io';
-import 'dart:math';
 import 'package:beben_pos_desktop/core/core.dart';
 import 'package:beben_pos_desktop/core/fireship/fireship_box.dart';
-import 'package:beben_pos_desktop/dashboard_bloc.dart';
+import 'package:beben_pos_desktop/core/util/core_function.dart';
 import 'package:beben_pos_desktop/db/product_db.dart';
 import 'package:beben_pos_desktop/db/product_model_db.dart';
 import 'package:beben_pos_desktop/db/profile_db.dart';
-import 'package:beben_pos_desktop/db/transaction_failed_db.dart';
-import 'package:beben_pos_desktop/db/transaction_failed_product_db.dart';
 import 'package:beben_pos_desktop/model/head_column_model.dart';
 import 'package:beben_pos_desktop/product/bloc/product_bloc.dart';
 import 'package:beben_pos_desktop/profile/bloc/profile_bloc.dart';
 import 'package:beben_pos_desktop/sales/bloc/sales_bloc.dart';
 import 'package:beben_pos_desktop/sales/daily_sales_screen.dart';
-import 'package:beben_pos_desktop/sales/datasource/sales_data_source.dart';
+import 'package:beben_pos_desktop/sales/model/payment_method.dart';
 import 'package:beben_pos_desktop/sales/model/sales_model.dart';
 import 'package:beben_pos_desktop/sales/widget/dialog_find_product.dart';
 import 'package:beben_pos_desktop/sales/widget/dialog_list_transaction.dart';
-import 'package:beben_pos_desktop/sales/widget/dialog_save_transaction.dart';
-import 'package:beben_pos_desktop/sales/widget/pdf_invoice.dart';
+import 'package:beben_pos_desktop/sales/widget/dialog_payment_method.dart';
+import 'package:beben_pos_desktop/sales/widget/dialog_transaction.dart';
 import 'package:beben_pos_desktop/sales/widget/pdf_sales.dart';
 import 'package:beben_pos_desktop/service/dio_service.dart';
 import 'package:beben_pos_desktop/utils/global_functions.dart';
-import 'package:beben_pos_desktop/utils/printer/printer_manager.dart';
 import 'package:beben_pos_desktop/utils/printerservice/printer_service_custom.dart';
 import 'package:beben_pos_desktop/utils/size_config.dart';
-import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
-import 'package:nav_router/nav_router.dart';
-// import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
+import 'dart:async';
 
-import '../db/merchant_product_db.dart';
-import 'provider/sales_provider.dart';
+import 'package:nav_router/nav_router.dart';
 
 class SalesInput extends StatefulWidget {
   static final _formKey = new GlobalKey<FormState>();
@@ -102,88 +93,88 @@ class _SalesInputState extends State<SalesInput> {
   bool isEnabledTrxCode = false;
 
   Widget layoutTransactionType(context) => Card(
-        color: Colors.grey[300],
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                "Tipe Transaksi : ",
-                style: TextStyle(fontSize: 14),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8.0),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Radio<String>(
-                      value: listTransactionType[0],
-                      groupValue: selectedTransactionType,
-                      onChanged: (String? value) {
-                        onChangeRadioTypeTransaction(
-                            value ?? listTransactionType[0]);
-                      },
-                    ),
-                    Text(listTransactionType[0]),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8.0),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Radio<String>(
-                        value: listTransactionType[1],
-                        groupValue: selectedTransactionType,
-                        onChanged: (String? value) {
-                          setState(() {
-                            onChangeRadioTypeTransaction(
-                                value ?? listTransactionType[1]);
-                          });
-                        }),
-                    Text(listTransactionType[1]),
-                    Container(
-                        margin: EdgeInsets.only(left: 8),
-                        width: MediaQuery.of(context).size.width * 0.20,
-                        child: TextFormField(
-                          enabled: isEnabledTrxCode,
-                          autofocus: true,
-                          style: TextStyle(fontSize: 12, height: 1),
-                          focusNode: trxCodeFocus,
-                          controller: trxCodeController,
-                          onFieldSubmitted: (value) {
-                            FocusScope.of(context).unfocus();
-                            FocusScope.of(context).requestFocus(scanFocusNode);
-                          },
-                          decoration: new InputDecoration(
-                            fillColor: Colors.white,
-                            filled: true,
-                            isDense: true,
-                            contentPadding:
-                                EdgeInsets.fromLTRB(6.0, 18.0, 6.0, 18.0),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.black, width: 1.0),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.grey, width: 1.0),
-                            ),
-                            hintText: 'Kode Transaksi',
-                          ),
-                        ))
-                  ],
-                ),
-              ),
-            ],
+    color: Colors.grey[300],
+    child: Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            "Tipe Transaksi : ",
+            style: TextStyle(fontSize: 14),
           ),
-        ),
-      );
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8.0),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Radio<String>(
+                  value: listTransactionType[0],
+                  groupValue: selectedTransactionType,
+                  onChanged: (String? value) {
+                    onChangeRadioTypeTransaction(
+                        value ?? listTransactionType[0]);
+                  },
+                ),
+                Text(listTransactionType[0]),
+              ],
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8.0),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Radio<String>(
+                    value: listTransactionType[1],
+                    groupValue: selectedTransactionType,
+                    onChanged: (String? value) {
+                      setState(() {
+                        onChangeRadioTypeTransaction(
+                            value ?? listTransactionType[1]);
+                      });
+                    }),
+                Text(listTransactionType[1]),
+                Container(
+                    margin: EdgeInsets.only(left: 8),
+                    width: MediaQuery.of(context).size.width * 0.20,
+                    child: TextFormField(
+                      enabled: isEnabledTrxCode,
+                      autofocus: true,
+                      style: TextStyle(fontSize: 12, height: 1),
+                      focusNode: trxCodeFocus,
+                      controller: trxCodeController,
+                      onFieldSubmitted: (value) {
+                        FocusScope.of(context).unfocus();
+                        FocusScope.of(context).requestFocus(scanFocusNode);
+                      },
+                      decoration: new InputDecoration(
+                        fillColor: Colors.white,
+                        filled: true,
+                        isDense: true,
+                        contentPadding:
+                            EdgeInsets.fromLTRB(6.0, 18.0, 6.0, 18.0),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.black, width: 1.0),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.grey, width: 1.0),
+                        ),
+                        hintText: 'Kode Transaksi',
+                      ),
+                    ))
+              ],
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
 
   onChangeRadioTypePrice(String value) {
     setState(() {
@@ -206,6 +197,21 @@ class _SalesInputState extends State<SalesInput> {
       FocusScope.of(context).requestFocus(scanFocusNode);
       selectedTransactionType = value;
     }
+  }
+
+  void saveTransaction(PaymentMethod paymentMethod) async {
+    DioService.dialogLoading();
+    bool isConnect = await GlobalFunctions.checkConnectivityApp();
+    for (int i = 0; i < 1; i++) {
+      print("saveTransaction ${i + 1}");
+      if (isConnect) {
+        await requestOnlineTransaction(paymentMethod);
+      } else {
+        await requestOfflineTransaction();
+      }
+    }
+    Navigator.pop(navGK.currentContext!);
+    await salesBloc.deleteAll();
   }
 
   Widget layoutPriceTransaction(context) => Card(
@@ -300,268 +306,293 @@ class _SalesInputState extends State<SalesInput> {
   Widget _spacer() => SizedBox(height: 8);
 
   Widget _selectCustomer() => Container(
-        child: Card(
-          color: Colors.grey[500],
-          child: Padding(
-            padding: const EdgeInsets.all(18.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+    child: Card(
+      color: Colors.grey[500],
+      child: Padding(
+        padding: const EdgeInsets.all(18.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            StreamBuilder(
+              stream: salesBloc.streamSumTotalQty,
+              builder: (context, AsyncSnapshot<double> snapshot) {
+                if (snapshot.hasData) {
+                  if (snapshot.data! > 0) {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        StreamBuilder(
+                            stream: salesBloc.streamSumTotalProduct,
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                return Expanded(
+                                    child: Text(
+                                        "Jumlah ${snapshot.data} Produk"));
+                              } else {
+                                return Text("Kosong");
+                              }
+                            }),
+                        Expanded(
+                            child: Align(
+                                alignment: Alignment.centerRight,
+                                child: Text("${snapshot.data}")))
+                      ],
+                    );
+                  } else {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Expanded(child: Text("Jumlah 0 Produk")),
+                        Expanded(
+                            child: Align(
+                                alignment: Alignment.centerRight,
+                                child: Text("0")))
+                      ],
+                    );
+                  }
+                } else {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Expanded(child: Text("Jumlah 0 Produk")),
+                      Expanded(
+                          child: Align(
+                              alignment: Alignment.centerRight,
+                              child: Text("0")))
+                    ],
+                  );
+                }
+              },
+            ),
+            _spacer(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                StreamBuilder(
-                  stream: salesBloc.streamSumTotalQty,
-                  builder: (context, AsyncSnapshot<double> snapshot) {
+                Expanded(child: Text("Tax")),
+                Expanded(
+                  child: StreamBuilder(
+                  stream: salesBloc.streamTax,
+                  builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      if (snapshot.data! > 0) {
-                        return Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            StreamBuilder(
-                                stream: salesBloc.streamSumTotalProduct,
-                                builder: (context, snapshot) {
-                                  if (snapshot.hasData) {
-                                    return Expanded(
-                                        child: Text(
-                                            "Jumlah ${snapshot.data} Produk"));
-                                  } else {
-                                    return Text("Kosong");
-                                  }
-                                }),
-                            Expanded(
-                                child: Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Text("${snapshot.data}")))
-                          ],
-                        );
-                      } else {
-                        return Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Expanded(child: Text("Jumlah 0 Produk")),
-                            Expanded(
-                                child: Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Text("0")))
-                          ],
-                        );
-                      }
+                      String tax = Core.converNumeric("${Core.convertToDouble("${snapshot.data ?? "0"}")}");
+                      return Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(tax)
+                      );
                     } else {
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Expanded(child: Text("Jumlah 0 Produk")),
-                          Expanded(
-                              child: Align(
-                                  alignment: Alignment.centerRight,
-                                  child: Text("0")))
-                        ],
+                      return Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(Core.converNumeric("0"))
                       );
                     }
                   },
-                ),
-                _spacer(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Expanded(child: Text("Subtotal")),
-                    Expanded(
-                        child: StreamBuilder(
-                      stream: salesBloc.streamSumSubTotal,
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          String subtotal = Core.converNumeric(
-                              "${Core.convertToDouble("${snapshot.data ?? "0"}")}");
-                          return Align(
-                              alignment: Alignment.centerRight,
-                              child: Text(subtotal));
-                        } else {
-                          return Align(
-                              alignment: Alignment.centerRight,
-                              child: Text(Core.converNumeric("0")));
-                        }
-                      },
-                    ))
-                  ],
-                ),
-                _spacer(),
-                Divider(
-                  height: 1,
-                  color: Colors.black,
-                ),
-                _spacer(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Expanded(
-                        child: Text(
-                      "Total",
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    )),
-                    Expanded(
-                        child: StreamBuilder(
-                            stream: salesBloc.streamSumTotalPayment,
-                            builder: (context, AsyncSnapshot<double> snapshot) {
-                              if (snapshot.hasData) {
-                                totalTransactionPrice = snapshot.data!;
-                                return Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Text(Core.converNumeric(
-                                        "${Core.convertToDouble("$totalTransactionPrice")}")));
-                              } else {
-                                return Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Text(Core.converNumeric("0")));
-                              }
-                            }))
-                  ],
-                ),
-                _spacer(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    StreamBuilder(
-                      stream: salesBloc.streamListProductModel,
-                      builder: (context, AsyncSnapshot<List<ProductModel>> snapshot) {
-                        return ElevatedButton.icon(
-                          focusNode: saveFocusNode,
-                          icon: Icon(
-                            Icons.perm_contact_calendar_rounded,
-                            color: Colors.white,
-                            size: 18.0,
-                          ),
-                          label: Text(
-                            selectedTransactionType == "Return"
-                                ? 'Return Transaksi'
-                                : 'Simpan Transaksi',
-                            style: TextStyle(fontSize: 12),
-                          ),
-                          onPressed: () async {
-                            FocusScope.of(context).unfocus();
-                            allProducts.clear();
-                            allProducts = [];
-                            allProducts.addAll(snapshot.data!);
-                            GlobalFunctions.log('sales_input', ': ${allProducts.length}');
-                            if (selectedTransactionType == "Return") {
-                              if (trxCodeController.text.isNotEmpty) {
-                                if (allProducts.length > 0) {
-                                  dialogSaveReturn();
-                                } else {
-                                  GlobalFunctions.showSnackBarWarning(
-                                      "Masukan Produk untuk return transaksi");
-                                }
-                              } else {
-                                GlobalFunctions.showSnackBarWarning(
-                                    "Masukan kode transaksi untuk return transaksi");
-                              }
-                            } else {
-                              if (allProducts.length > 0){
-                                dialogSaveConfirmation2();
-                              } else {
-                                GlobalFunctions.showSnackBarWarning(
-                                    "Masukan Produk untuk transaksi");
-                              }
-                            }
-                            // showDialog(
-                            //     context: context,
-                            //     barrierDismissible: true,
-                            //     builder: (BuildContext c) {
-                            //       return DialogSaveTransaction("", salesBloc, totalTransactionPrice);
-                            //     });
-                            // BotToast.showLoading();
-                            // GlobalFunctions.showLoading(context);
-                            // await SalesBloc().requestMerchantTransaction();
-                            // salesBloc.deleteAll();
-                          },
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.lightBlue,
-                            shape: new RoundedRectangleBorder(
-                              borderRadius: new BorderRadius.circular(2.0),
-                            ),
-                          ),
-                        );
-                      }
-                    ),
-                  ],
-                ),
-                // Container(
-                //   height: SizeConfig.screenHeight * 0.5,
-                //   child: StreamBuilder(
-                //     stream: salesBloc.streamTransactionList,
-                //     builder: (context, AsyncSnapshot<List<TransactionFailedDB>> snapshot) {
-                //       if (snapshot.hasData){
-                //         print('load view transaction List');
-                //         return ListView.builder(
-                //             shrinkWrap: true, //Optional
-                //             itemCount: snapshot.data!.length,
-                //             itemBuilder: (context, int index){
-                //               return Card(
-                //                 child: Padding(
-                //                   padding: const EdgeInsets.all(12.0),
-                //                   child: Column(
-                //                     mainAxisSize: MainAxisSize.max,
-                //                     mainAxisAlignment: MainAxisAlignment.start,
-                //                     crossAxisAlignment: CrossAxisAlignment.start,
-                //                     children: [
-                //                       Text('Transaksi : ${snapshot.data![index].date}', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),),
-                //                       ListView.builder(
-                //                           shrinkWrap: true,
-                //                           physics: NeverScrollableScrollPhysics(),
-                //                           itemCount: snapshot.data![index].productList!.length,
-                //                           itemBuilder: (context, int indexProduct){
-                //                         return InkWell(
-                //                           onTap: () {
-                //                             for (final data in snapshot.data![index].productList!){
-                //                               print('add to product -> ${snapshot.data![index].productList!.length}');
-                //                               print('add to product qty -> ${snapshot.data![index].productList![indexProduct].quantity}');
-                //                               MerchantProduct merchantProduct = MerchantProduct(
-                //                                   id: data.productId,
-                //                                   name: data.itemName,
-                //                                   barcode: data.item,
-                //                                   currentPrice: data.price.toString(),
-                //                                   salePrice: data.price.toString(),
-                //                                   qty: data.quantity.toString()
-                //                               );
-                //                               salesBloc.addProduct(merchantProduct);
-                //                             }
-                //                           },
-                //                           child: Row(
-                //                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //                             mainAxisSize: MainAxisSize.min,
-                //                             children: [
-                //                               Text('(${snapshot.data![index].productList![indexProduct].item}) ${snapshot.data![index].productList![indexProduct].itemName} '
-                //                                   'x ${snapshot.data![index].productList![indexProduct].quantity}',
-                //                                 style: TextStyle(fontSize: 10)),
-                //                               Text('${snapshot.data![index].productList![indexProduct].total}',
-                //                                 style: TextStyle(fontSize: 10)),
-                //                               Center(
-                //                                 child: IconButton(
-                //                                   icon: const Icon(Icons.send),
-                //                                   color: Colors.lightBlue,
-                //                                   onPressed: () {
-                //                                     salesBloc.deleteTransactionAndProductTransaction(index, snapshot.data![index].productList![indexProduct].idTransaction!);
-                //                                   },
-                //                                 ),
-                //                               ),
-                //                             ],
-                //                           ),
-                //                         );
-                //                       })
-                //                     ],
-                //                   ),
-                //                 ),
-                //               );
-                //             });
-                //       } else {
-                //         return Text('Kosong');
-                //       }
-                //     }
-                //   ),
-                // )
+                ))
               ],
             ),
-          ),
+            _spacer(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Expanded(child: Text("Subtotal")),
+                Expanded(
+                  child: StreamBuilder(
+                  stream: salesBloc.streamSumSubTotal,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      String subtotal = Core.converNumeric(
+                          "${Core.convertToDouble("${snapshot.data ?? "0"}")}");
+                      return Align(
+                          alignment: Alignment.centerRight,
+                          child: Text(subtotal));
+                    } else {
+                      return Align(
+                          alignment: Alignment.centerRight,
+                          child: Text(Core.converNumeric("0")));
+                    }
+                  },
+                ))
+              ],
+            ),
+            _spacer(),
+            Divider(
+              height: 1,
+              color: Colors.black,
+            ),
+            _spacer(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Expanded(
+                    child: Text(
+                  "Total",
+                  style:
+                      TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                )),
+                Expanded(
+                    child: StreamBuilder(
+                        stream: salesBloc.streamSumTotalPayment,
+                        builder: (context, AsyncSnapshot<double> snapshot) {
+                          if (snapshot.hasData) {
+                            totalTransactionPrice = snapshot.data!;
+                            return Align(
+                                alignment: Alignment.centerRight,
+                                child: Text(Core.converNumeric(
+                                    "${Core.convertToDouble("$totalTransactionPrice")}")));
+                          } else {
+                            return Align(
+                                alignment: Alignment.centerRight,
+                                child: Text(Core.converNumeric("0")));
+                          }
+                        }))
+              ],
+            ),
+            _spacer(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                StreamBuilder(
+                  stream: salesBloc.streamListProductModel,
+                  builder: (context, AsyncSnapshot<List<ProductModel>> snapshot) {
+                    return ElevatedButton.icon(
+                      focusNode: saveFocusNode,
+                      icon: Icon(
+                        Icons.perm_contact_calendar_rounded,
+                        color: Colors.white,
+                        size: 18.0,
+                      ),
+                      label: Text(
+                        selectedTransactionType == "Return"
+                            ? 'Return Transaksi'
+                            : 'Proses Transaksi',
+                        style: TextStyle(fontSize: 12),
+                      ),
+                      onPressed: () async {
+                        FocusScope.of(context).unfocus();
+                        allProducts.clear();
+                        allProducts = [];
+                        allProducts.addAll(snapshot.data!);
+                        GlobalFunctions.log('sales_input', ': ${allProducts.length}');
+                        if (selectedTransactionType == "Return") {
+                          if (trxCodeController.text.isNotEmpty) {
+                            if (allProducts.length > 0) {
+                              dialogSaveReturn();
+                            } else {
+                              GlobalFunctions.showSnackBarWarning(
+                                  "Masukan Produk untuk return transaksi");
+                            }
+                          } else {
+                            GlobalFunctions.showSnackBarWarning(
+                                "Masukan kode transaksi untuk return transaksi");
+                          }
+                        } else {
+                          if (allProducts.length > 0){
+                            dialogSaveConfirmation2();
+                          } else {
+                            GlobalFunctions.showSnackBarWarning(
+                                "Masukan Produk untuk transaksi");
+                          }
+                        }
+                        // showDialog(
+                        //     context: context,
+                        //     barrierDismissible: true,
+                        //     builder: (BuildContext c) {
+                        //       return DialogSaveTransaction("", salesBloc, totalTransactionPrice);
+                        //     });
+                        // BotToast.showLoading();
+                        // GlobalFunctions.showLoading(context);
+                        // await SalesBloc().requestMerchantTransaction();
+                        // salesBloc.deleteAll();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.lightBlue,
+                        shape: new RoundedRectangleBorder(
+                          borderRadius: new BorderRadius.circular(2.0),
+                        ),
+                      ),
+                    );
+                  }
+                ),
+              ],
+            ),
+            // Container(
+            //   height: SizeConfig.screenHeight * 0.5,
+            //   child: StreamBuilder(
+            //     stream: salesBloc.streamTransactionList,
+            //     builder: (context, AsyncSnapshot<List<TransactionFailedDB>> snapshot) {
+            //       if (snapshot.hasData){
+            //         print('load view transaction List');
+            //         return ListView.builder(
+            //             shrinkWrap: true, //Optional
+            //             itemCount: snapshot.data!.length,
+            //             itemBuilder: (context, int index){
+            //               return Card(
+            //                 child: Padding(
+            //                   padding: const EdgeInsets.all(12.0),
+            //                   child: Column(
+            //                     mainAxisSize: MainAxisSize.max,
+            //                     mainAxisAlignment: MainAxisAlignment.start,
+            //                     crossAxisAlignment: CrossAxisAlignment.start,
+            //                     children: [
+            //                       Text('Transaksi : ${snapshot.data![index].date}', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),),
+            //                       ListView.builder(
+            //                           shrinkWrap: true,
+            //                           physics: NeverScrollableScrollPhysics(),
+            //                           itemCount: snapshot.data![index].productList!.length,
+            //                           itemBuilder: (context, int indexProduct){
+            //                         return InkWell(
+            //                           onTap: () {
+            //                             for (final data in snapshot.data![index].productList!){
+            //                               print('add to product -> ${snapshot.data![index].productList!.length}');
+            //                               print('add to product qty -> ${snapshot.data![index].productList![indexProduct].quantity}');
+            //                               MerchantProduct merchantProduct = MerchantProduct(
+            //                                   id: data.productId,
+            //                                   name: data.itemName,
+            //                                   barcode: data.item,
+            //                                   currentPrice: data.price.toString(),
+            //                                   salePrice: data.price.toString(),
+            //                                   qty: data.quantity.toString()
+            //                               );
+            //                               salesBloc.addProduct(merchantProduct);
+            //                             }
+            //                           },
+            //                           child: Row(
+            //                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //                             mainAxisSize: MainAxisSize.min,
+            //                             children: [
+            //                               Text('(${snapshot.data![index].productList![indexProduct].item}) ${snapshot.data![index].productList![indexProduct].itemName} '
+            //                                   'x ${snapshot.data![index].productList![indexProduct].quantity}',
+            //                                 style: TextStyle(fontSize: 10)),
+            //                               Text('${snapshot.data![index].productList![indexProduct].total}',
+            //                                 style: TextStyle(fontSize: 10)),
+            //                               Center(
+            //                                 child: IconButton(
+            //                                   icon: const Icon(Icons.send),
+            //                                   color: Colors.lightBlue,
+            //                                   onPressed: () {
+            //                                     salesBloc.deleteTransactionAndProductTransaction(index, snapshot.data![index].productList![indexProduct].idTransaction!);
+            //                                   },
+            //                                 ),
+            //                               ),
+            //                             ],
+            //                           ),
+            //                         );
+            //                       })
+            //                     ],
+            //                   ),
+            //                 ),
+            //               );
+            //             });
+            //       } else {
+            //         return Text('Kosong');
+            //       }
+            //     }
+            //   ),
+            // )
+          ],
         ),
-      );
+      ),
+    ),
+  );
 
   @override
   void initState() {
@@ -580,198 +611,39 @@ class _SalesInputState extends State<SalesInput> {
   }
 
   void dialogSaveConfirmation2() {
-    FocusNode dialogSaveFocus = FocusNode();
-    customerMoney = 0;
-    salesBloc.sumTotalKembalian(salesBloc.totalBelanja, customerMoney);
     showCupertinoDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (BuildContext ctx) {
-          // return AlertDialog(
-          //   actionsAlignment: MainAxisAlignment.spaceEvenly,
-          //   actionsPadding: EdgeInsets.zero,
-          //   contentPadding: EdgeInsets.zero,
-          //   titlePadding: EdgeInsets.zero,
-          //   title: Column(
-          //     mainAxisSize: MainAxisSize.min,
-          //     children: [
-          //       Container(
-          //         color: Colors.lightBlue,
-          //         child: Padding(
-          //           padding: const EdgeInsets.all(12.0),
-          //           child: Row(
-          //             mainAxisSize: MainAxisSize.max,
-          //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //             children: [
-          //               Text(
-          //                 "Masukan Pembayaran",
-          //                 style: TextStyle(
-          //                     fontSize: 14,
-          //                     fontWeight: FontWeight.bold,
-          //                     color: Colors.white),
-          //               ),
-          //               IconButton(
-          //                 onPressed: () {
-          //                   Navigator.pop(ctx);
-          //                 },
-          //                 tooltip: "Close",
-          //                 icon: Icon(Icons.close),
-          //                 color: Colors.white,
-          //               ),
-          //             ],
-          //           ),
-          //         ),
-          //       ),
-          //     ],
-          //   ),
-          //   content: dialogViewTotal(ctx, dialogSaveFocus),
-          //   actions: [
-          //     TextButton(
-          //       onPressed: () {
-          //         Navigator.pop(ctx);
-          //       },
-          //       style: TextButton.styleFrom(shadowColor: Colors.grey),
-          //       child: Container(
-          //         width: SizeConfig.blockSizeHorizontal * 12,
-          //         height: 30,
-          //         child: Center(
-          //           child: Text(
-          //             "Batal",
-          //             textAlign: TextAlign.center,
-          //             style: TextStyle(color: Colors.lightBlue),
-          //           ),
-          //         ),
-          //       ),
-          //     ),
-          //     ElevatedButton(
-          //       focusNode: dialogSaveFocus,
-          //       onPressed: () async {
-          //         if (customerMoney < totalTransactionPrice) {
-          //           double minus = totalTransactionPrice - customerMoney;
-          //           GlobalFunctions.showSnackBarWarning(
-          //               "Uang Customer Kurang ${Core.converNumeric("$minus")}");
-          //         } else {
-          //           saveTransaction(ctx);
-          //         }
-          //       },
-          //       style: ElevatedButton.styleFrom(primary: Colors.lightBlue),
-          //       child: Container(
-          //         width: SizeConfig.blockSizeHorizontal * 12,
-          //         height: 30,
-          //         child: Center(
-          //           child: Text(
-          //             "Simpan",
-          //             textAlign: TextAlign.center,
-          //             style: TextStyle(color: Colors.white),
-          //           ),
-          //         ),
-          //       ),
-          //     ),
-          //   ],
-          // );
-          return Dialog(
-            backgroundColor: Colors.lightBlue,
-            child: Container(
-              width: SizeConfig.screenWidth * 0.35,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Masukan Pembayaran",
-                          style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white),
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            Navigator.pop(ctx);
-                          },
-                          tooltip: "Close",
-                          icon: Icon(Icons.close),
-                          color: Colors.white,
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.all(18),
-                    color: Colors.white,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        dialogViewTotal(ctx, dialogSaveFocus),
-                        SizedBox(
-                          height: 16,
-                        ),
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.pop(ctx);
-                              },
-                              style: TextButton.styleFrom(shadowColor: Colors.grey),
-                              child: Container(
-                                width: SizeConfig.blockSizeHorizontal * 12,
-                                height: 30,
-                                child: Center(
-                                  child: Text(
-                                    "Batal",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(color: Colors.lightBlue),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 12,
-                            ),
-                            ElevatedButton(
-                              focusNode: dialogSaveFocus,
-                              onPressed: () async {
-
-                                if (customerMoney < totalTransactionPrice) {
-                                  double minus = totalTransactionPrice - customerMoney;
-                                  GlobalFunctions.showSnackBarWarning(
-                                      "Uang Customer Kurang ${Core.converNumeric("$minus")}");
-                                } else {
-                                  saveTransaction(ctx);
-                                }
-                              },
-                              style: ElevatedButton.styleFrom(primary: Colors.lightBlue),
-                              child: Container(
-                                width: SizeConfig.blockSizeHorizontal * 12,
-                                height: 30,
-                                child: Center(
-                                  child: Text(
-                                    "Simpan",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        }).then((value) {
-      FocusScope.of(context).requestFocus(scanFocusNode);
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext ctx) {
+        return DialogPaymentMethod(
+          listPayment: salesBloc.listPayment,
+        );
+      }).then((value) {
+       FocusScope.of(context).requestFocus(scanFocusNode);
+       if(value != null) {
+        showCupertinoDialog(
+          context: context,
+          barrierDismissible: true,
+          builder: (BuildContext ctx) {
+            return Dialog(
+              backgroundColor: Colors.lightBlue,
+              child: DialogTransaction(
+                paymentMethod: value,
+                totalAmount: salesBloc.totalBelanja,
+                totalProduct: salesBloc.totalProduct,
+                totalQuantity: salesBloc.totalQty,
+                totalTax: salesBloc.totalTax,
+                subTotal: salesBloc.subtotal,
+              )
+            );
+          }).then((value) {
+            if(value != null) {
+              value as PaymentMethod;
+              FocusScope.of(context).requestFocus(scanFocusNode);
+              saveTransaction(value);
+            }
+        });
+       }
     });
   }
 
@@ -909,136 +781,6 @@ class _SalesInputState extends State<SalesInput> {
         }).then((value) {
       FocusScope.of(context).requestFocus(scanFocusNode);
     });
-  }
-
-  Widget dialogViewTotal(BuildContext ctx, FocusNode dialogSaveFocus) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text("Jumlah ${salesBloc.totalProduct} Produk"),
-            Text("${salesBloc.totalQty} Qty"),
-          ],
-        ),
-        SizedBox(
-          height: 16,
-        ),
-        Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              "Total Belanja",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-            Text(
-                "${Core.converNumeric(salesBloc.totalBelanja.toString())}"),
-          ],
-        ),
-        SizedBox(
-          height: 16,
-        ),
-        Divider(
-          height: 1,
-          color: Colors.grey,
-        ),
-        SizedBox(
-          height: 16,
-        ),
-        StreamBuilder<double>(
-            stream: salesBloc.streamTotalBayar,
-            builder: (context, snapshot) {
-              double totalBayar = 0;
-              if (snapshot.hasData) {
-                totalBayar = snapshot.data ?? 0;
-              } else {
-                totalBayar = 0;
-              }
-              return Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Total Bayar",
-                    style: TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
-                  Text("${Core.converNumeric(totalBayar.toString())}"),
-                ],
-              );
-            }),
-        SizedBox(
-          height: 16,
-        ),
-        StreamBuilder<String>(
-            stream: salesBloc.streamKembalian,
-            builder: (context, snapshot) {
-              kembalian = "0";
-              if (snapshot.hasData) {
-                kembalian = "${snapshot.data ?? 0}";
-              } else {
-                kembalian = "0";
-              }
-              return Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Kembalian",
-                    style: TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
-                  Text("${Core.converNumeric(kembalian)}"),
-                ],
-              );
-            }),
-        SizedBox(
-          height: 16,
-        ),
-        TextFormField(
-          onChanged: (newInput) {
-            customerMoney = double.parse(newInput);
-            salesBloc.sumTotalKembalian(
-                salesBloc.totalBelanja, customerMoney);
-          },
-          autofocus: true,
-          keyboardType: TextInputType.text,
-          style: TextStyle(fontSize: 14, height: 1),
-          onFieldSubmitted: (String value) {
-            dialogSaveFocus.requestFocus();
-          },
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'Mohon isi pembayaran terlebih dahulu';
-            }
-            return null;
-          },
-          inputFormatters: [
-            FilteringTextInputFormatter.allow(RegExp('[0-9.,]+')),
-          ],
-          decoration: new InputDecoration(
-            fillColor: Colors.white,
-            filled: true,
-            isDense: true,
-            prefixIcon: Icon(
-              Icons.shopping_cart,
-              color: Colors.lightBlue[800],
-            ),
-            contentPadding: EdgeInsets.fromLTRB(6.0, 18.0, 6.0, 18.0),
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.black, width: 0.0),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.grey, width: 1.0),
-            ),
-            hintText: 'Total Bayar',
-          ),
-        ),
-      ],
-    );
   }
 
   void updateView(String nameContainer) {
@@ -1238,15 +980,17 @@ class _SalesInputState extends State<SalesInput> {
                 style: TextStyle(fontSize: 12, height: 1),
                 initialValue: "${Core.convertToDouble("${row.quantity ?? 0}")}",
                 onChanged: (String _editQuantity) {
-                  if (_editQuantity.isEmpty){
-                    salesBloc.updateItem(index, row, double.parse("0"));
-                    salesBloc.updateItemTotalPrice(
-                        index, row, double.parse("0"), row.price ?? 0);
-                  } else {
-                    salesBloc.updateItem(index, row, double.parse(_editQuantity));
-                    salesBloc.updateItemTotalPrice(
-                        index, row, double.parse(_editQuantity), row.price ?? 0);
-                  }
+                  CoreFunction.debouncer.debounce(() {       
+                    if (_editQuantity.isEmpty){
+                      salesBloc.updateItem(index, row, double.parse("0"));
+                      salesBloc.updateItemTotalPrice(
+                          index, row, double.parse("0"), row.price ?? 0);
+                    } else {
+                      salesBloc.updateItem(index, row, double.parse(_editQuantity));
+                      salesBloc.updateItemTotalPrice(
+                          index, row, double.parse(_editQuantity), row.price ?? 0);
+                    }
+                  });
                 },
                 onFieldSubmitted: (value) {
                   FocusScope.of(ctx).unfocus();
@@ -1513,22 +1257,6 @@ class _SalesInputState extends State<SalesInput> {
     // });
   }
 
-  void saveTransaction(ctx) async {
-    Navigator.pop(ctx);
-    DioService.dialogLoading();
-    bool isConnect = await GlobalFunctions.checkConnectivityApp();
-    for (int i = 0; i < 1; i++) {
-      print("saveTransaction ${i + 1}");
-      if (isConnect) {
-        await requestOnlineTransaction();
-      } else {
-        await requestOfflineTransaction();
-      }
-    }
-    Navigator.pop(navGK.currentContext!);
-    // await salesBloc.deleteAll();
-  }
-
   void saveReturn(ctx) async {
     Navigator.pop(ctx);
     await salesBloc
@@ -1549,12 +1277,8 @@ class _SalesInputState extends State<SalesInput> {
     });
   }
 
-  Future requestOnlineTransaction() async {
-    await salesBloc
-        .requestMerchantTransaction(
-            totalTransactionPrice, customerMoney, profile.merchantId ?? 0, selectedPriceTransaction)
-        .then(
-      (value) {
+  Future requestOnlineTransaction(PaymentMethod paymentMethod) async {
+    await salesBloc.requestMerchantTransaction(totalTransactionPrice, customerMoney, profile.merchantId ?? 0, selectedPriceTransaction, paymentMethod).then((value) {
         if (value.status!) {
           GlobalFunctions.log('sales_input','status Transaction : ${value.status}');
           GlobalFunctions.log('sales_input','status Transaction code : ${value.transactionCode}');
@@ -1567,21 +1291,6 @@ class _SalesInputState extends State<SalesInput> {
               allProducts = <ProductModel>[];
             });
           }
-          // productBloc.refreshProduct();
-          // PrinterManager()
-          //     .printTransactionStruct(allProducts, totalTransactionPrice,
-          //         customerMoney, kembalian, "")
-          //     .then(
-          //   (value) async {
-          //     File file = File(value);
-          //     bool isExists = await file.exists();
-          //     print("file.exists $isExists");
-          //     print("file.path ${file.path}");
-          //     if (isExists) {
-          //       PrinterManager().printerCommand(file.path);
-          //     }
-          //   },
-          // );
         }
       },
     );

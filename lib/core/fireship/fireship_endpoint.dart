@@ -35,4 +35,27 @@ class FireshipEndpoint {
   static const String GET_PROFILE = "/api/pos/v1/users";
 
   static const String GET_UNIT_CONVERSION = "/api/pos/v1/unit_conversions";
+
+  //? Content
+  static const String MERCHANT_BANNER = "/api/pos/v1/merchant_banners";
+  static const String MERCHANT_BANK = "/api/pos/v1/merchant_banks";
+  static const String MERCHANT_EMPLOYEES = "/api/pos/v1/merchant_employees";
+
+  //? Taxes
+  static const String TAXES = "/api/v1/taxes";
+
+  //? Payment Method
+  static const String PAYMENT_METHOD = "/api/pos/v1/payment_methods";
+
+  //? Bank
+  static const String BANK = "/api/pos/v1/banks";
+
+  //? Customer
+  static const String CUSTOMER_LIST = "/api/pos/v1/list_enduser";
+
+  //? Merchant Delivery Order
+  static const String MERCHANT_DELIVERY_ORDER_TRANSACTION_LIST = "/api/pos/v1/transaction/merchant_delivery_orders/transaction_lists";
+  static const String MERCHANT_DELIVERY_ORDER_VEHICLE_LIST = "/api/pos/v1/transaction/merchant_delivery_orders/vehicle_lists";
+  static const String MERCHANT_DELIVERY_ORDER_EMPLOYEE_LIST = "/api/pos/v1/transaction/merchant_delivery_orders/employee_lists";
+  static const String MERCHANT_DELIVERY_ORDER_OPERATION_LIST = "/api/pos/v1/transaction/merchant_delivery_orders/operation_lists";
 }
