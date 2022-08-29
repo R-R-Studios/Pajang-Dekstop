@@ -1,14 +1,15 @@
 import 'package:beben_pos_desktop/model/head_column_model.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class HeaderCustomer extends StatefulWidget {
+
   final List<HeadColumnModel> checkboxModel;
   final List<String> exportMap;
   HeaderCustomer(this.checkboxModel, this.exportMap);
 
   @override
   _HeaderCustomerState createState() => _HeaderCustomerState();
+  
 }
 
 class _HeaderCustomerState extends State<HeaderCustomer> {

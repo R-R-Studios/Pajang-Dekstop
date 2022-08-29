@@ -12,6 +12,8 @@ import 'package:beben_pos_desktop/sales/bloc/sales_bloc.dart';
 import 'package:beben_pos_desktop/sales/daily_sales_screen.dart';
 import 'package:beben_pos_desktop/sales/model/payment_method.dart';
 import 'package:beben_pos_desktop/sales/model/sales_model.dart';
+import 'package:beben_pos_desktop/sales/model/tax.dart';
+import 'package:beben_pos_desktop/sales/widget/dialog_find_customer.dart';
 import 'package:beben_pos_desktop/sales/widget/dialog_find_product.dart';
 import 'package:beben_pos_desktop/sales/widget/dialog_list_transaction.dart';
 import 'package:beben_pos_desktop/sales/widget/dialog_payment_method.dart';
@@ -368,7 +370,18 @@ class _SalesInputState extends State<SalesInput> {
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Expanded(child: Text("Tax")),
+                Expanded(
+                  child: StreamBuilder<Tax>(
+                    stream: salesBloc.streamTaxValue,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return Text("PPN (${snapshot.data?.value})%");
+                      } else {
+                        return Container();
+                      }
+                    },
+                  )
+                ),
                 Expanded(
                   child: StreamBuilder(
                   stream: salesBloc.streamTax,
@@ -611,39 +624,49 @@ class _SalesInputState extends State<SalesInput> {
   }
 
   void dialogSaveConfirmation2() {
-    showCupertinoDialog(
+    showDialog(
       context: context,
       barrierDismissible: true,
-      builder: (BuildContext ctx) {
-        return DialogPaymentMethod(
-          listPayment: salesBloc.listPayment,
-        );
-      }).then((value) {
-       FocusScope.of(context).requestFocus(scanFocusNode);
-       if(value != null) {
-        showCupertinoDialog(
-          context: context,
-          barrierDismissible: true,
-          builder: (BuildContext ctx) {
-            return Dialog(
-              backgroundColor: Colors.lightBlue,
-              child: DialogTransaction(
-                paymentMethod: value,
-                totalAmount: salesBloc.totalBelanja,
-                totalProduct: salesBloc.totalProduct,
-                totalQuantity: salesBloc.totalQty,
-                totalTax: salesBloc.totalTax,
-                subTotal: salesBloc.subtotal,
-              )
-            );
-          }).then((value) {
+      builder: (BuildContext c) {
+        return DialogFindCustomer();
+      }).then((user) {
+        if (user != null) {
+          showCupertinoDialog(
+            context: context,
+            barrierDismissible: true,
+            builder: (BuildContext ctx) {
+              return DialogPaymentMethod(
+                listPayment: salesBloc.listPayment,
+              );
+            }).then((value) {
+            FocusScope.of(context).requestFocus(scanFocusNode);
             if(value != null) {
-              value as PaymentMethod;
-              FocusScope.of(context).requestFocus(scanFocusNode);
-              saveTransaction(value);
+              showCupertinoDialog(
+                context: context,
+                barrierDismissible: true,
+                builder: (BuildContext ctx) {
+                  return Dialog(
+                    backgroundColor: Colors.lightBlue,
+                    child: DialogTransaction(
+                      paymentMethod: value,
+                      totalAmount: salesBloc.totalBelanja,
+                      totalProduct: salesBloc.totalProduct,
+                      totalQuantity: salesBloc.totalQty,
+                      totalTax: salesBloc.totalTax,
+                      subTotal: salesBloc.subtotal,
+                    )
+                  );
+                }).then((value) {
+                  if(value != null) {
+                    value as PaymentMethod;
+                    value.endUser = user;
+                    FocusScope.of(context).requestFocus(scanFocusNode);
+                    saveTransaction(value);
+                  }
+              });
             }
-        });
-       }
+          });
+        }
     });
   }
 

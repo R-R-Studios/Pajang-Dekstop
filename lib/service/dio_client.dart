@@ -97,11 +97,21 @@ abstract class DioClient {
     @Body() BannerCreate body
   );
 
+  @DELETE(FireshipEndpoint.MERCHANT_BANNER)
+  Future<CoreModel> bannerDelete(
+    @Body() BannerCreate body
+  );
+
   @GET(FireshipEndpoint.MERCHANT_BANK)
   Future<CoreModel> bankList();
 
   @POST(FireshipEndpoint.MERCHANT_BANK)
   Future<CoreModel> bankCreate(
+    @Body() BankCreate body
+  );
+
+  @DELETE(FireshipEndpoint.MERCHANT_BANK)
+  Future<CoreModel> bankDelete(
     @Body() BankCreate body
   );
 

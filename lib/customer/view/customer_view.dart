@@ -1,9 +1,9 @@
 import 'package:beben_pos_desktop/component/component.dart';
-import 'package:beben_pos_desktop/content/cubit/bank_cubit.dart';
-import 'package:beben_pos_desktop/content/datasource/data_source_bank.dart';
-import 'package:beben_pos_desktop/content/model/merchant_bank.dart';
 import 'package:beben_pos_desktop/core/app/constant.dart';
+import 'package:beben_pos_desktop/customer/cubit/customer_cubit.dart';
+import 'package:beben_pos_desktop/customer/datasource/data_source_delivery.dart';
 import 'package:beben_pos_desktop/model/head_column_model.dart';
+import 'package:beben_pos_desktop/ui/delivery/model/delivery.dart';
 import 'package:beben_pos_desktop/utils/size_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,18 +11,16 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nav_router/nav_router.dart';
 
-class BankScreen extends StatelessWidget {
-
-  final VoidCallback callback;
-
-  BankScreen({ required this.callback, Key? key }) : super(key: key);
+class CustomerView extends StatelessWidget {
+  
+  CustomerView({ Key? key }) : super(key: key);
 
   final List<HeadColumnModel> _headColumnModel = [
     HeadColumnModel(key: "1", name: "No", ischecked: false),
-    HeadColumnModel(key: "2", name: "Nama Bank", ischecked: false),
-    HeadColumnModel(key: "3", name: "Nama Pemilik Rekening", ischecked: false),
-    HeadColumnModel(key: "4", name: "No Rekening", ischecked: false),
-    HeadColumnModel(key: "5", name: "Aksi", ischecked: false),
+    HeadColumnModel(key: "2", name: "id", ischecked: false),
+    HeadColumnModel(key: "3", name: "Nama", ischecked: false),
+    HeadColumnModel(key: "4", name: "Phone Number", ischecked: false),
+    HeadColumnModel(key: "5", name: "Action", ischecked: false),
   ];
 
   dialogCreate(currentContext){
@@ -39,7 +37,7 @@ class BankScreen extends StatelessWidget {
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("Buat Bank"),
+                Text("Tambah Customer"),
                 IconButton(
                   onPressed: () {
                     Navigator.pop(context, false);
@@ -55,76 +53,77 @@ class BankScreen extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Component.text("Bank"),
+              Component.text("Customer"),
               const SizedBox(height: 10,),
               TextFormField(
                 decoration: InputDecoration(
-                  labelText: 'Bank',
+                  labelText: 'Nama',
                   border: OutlineInputBorder(),
                 ),
                 controller: bankController,
                 enabled: true,
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'Masukan Bank';
+                    return 'Masukan Nama';
                   }
                   return null;
                 },
               ),
               const SizedBox(height: 20,),
-              Component.text("Nama Pemilik Rekening"),
+              Component.text("No Telepon"),
               const SizedBox(height: 10,),
               TextFormField(
                 decoration: InputDecoration(
-                  labelText: 'Pemilik Rekening',
+                  labelText: 'No Telepon',
                   border: OutlineInputBorder(),
                 ),
-                controller: nameAccountController,
-                enabled: true,
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Masukan Nama Pemilik Rekening';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 20,),
-              Component.text("No Rekening"),
-              const SizedBox(height: 10,),
-              TextFormField(
                 keyboardType: TextInputType.number,
                 inputFormatters: [
                   FilteringTextInputFormatter.digitsOnly
                 ],
+                controller: nameAccountController,
+                enabled: true,
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Masukan No Telepon';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 20,),
+              Component.text("Alamat"),
+              const SizedBox(height: 10,),
+              TextFormField(
+                keyboardType: TextInputType.text,
                 decoration: InputDecoration(
-                  labelText: 'No Rekening',
+                  labelText: 'Alamat',
                   border: OutlineInputBorder(),
                 ),
                 controller: noAccountController,
                 enabled: true,
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'Masukan No Rekening';
+                    return 'Masukan Alamat';
                   }
                   return null;
                 },
               ),
               const SizedBox(height: 20,),
               InkWell(
-                  onTap: (){
-                    Navigator.of(context).pop();
-                    BlocProvider.of<BankCubit>(currentContext).creteBank(bankController.text, nameAccountController.text, noAccountController.text);
-                  },
-                  child: Card(
-                    color: Colors.green,
-                    child: Container(
-                      alignment: Alignment.center,
-                      width: SizeConfig.blockSizeHorizontal * 60,
-                      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-                      child: Component.text("Tambah", colors: Colors.white,),
-                    ),
+                onTap: (){
+                  Navigator.of(context).pop();
+                  // BlocProvider.of<BankCubit>(currentContext).creteBank(bankController.text, nameAccountController.text, noAccountController.text);
+                },
+                child: Card(
+                  color: Colors.green,
+                  child: Container(
+                    alignment: Alignment.center,
+                    width: SizeConfig.blockSizeHorizontal * 60,
+                    padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+                    child: Component.text("Tambah", colors: Colors.white,),
                   ),
                 ),
+              ),
             ],
           ),
         );
@@ -134,39 +133,39 @@ class BankScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<BankCubit, BankState>(
+    return BlocBuilder<CustomerCubit, CustomerState>(
       builder: (context, state) {
-        if (state is BankLoading) {
+        if (state is CustomerLoading) {
           return Center(child: CupertinoActivityIndicator());
-        } else if (state is BankLoaded) {
+        } else if (state is CustomerLoaded) {
           return Padding(
             padding: Constant.paddingScreen,
             child: ListView(
               children: [
                 const SizedBox(height: 20,),
-                Row(
-                  children: [
-                    ElevatedButton.icon(
-                      onPressed: callback,
-                      icon: Icon(
-                        Icons.arrow_back,
-                        color: Colors.white,
-                        size: 16.0,
-                      ),
-                      label: Text("Back"),
-                      style: ElevatedButton.styleFrom(
-                        textStyle: TextStyle(color: Colors.white),
-                        padding: EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 15),
-                        primary: Color(0xff3498db)
-                      ),
-                    ),
-                  ],
-                ),
+                // Row(
+                //   children: [
+                //     ElevatedButton.icon(
+                //       onPressed: callback,
+                //       icon: Icon(
+                //         Icons.arrow_back,
+                //         color: Colors.white,
+                //         size: 16.0,
+                //       ),
+                //       label: Text("Back"),
+                //       style: ElevatedButton.styleFrom(
+                //         textStyle: TextStyle(color: Colors.white),
+                //         padding: EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 15),
+                //         primary: Color(0xff3498db)
+                //       ),
+                //     ),
+                //   ],
+                // ),
                 const SizedBox(height: 20,),
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Component.text("Bank Anda", fontSize: 17, colors: Colors.black),
+                    Component.text("Data User", fontSize: 17, colors: Colors.black),
                     const Spacer(),
                     InkWell(
                       onTap: (){
@@ -186,11 +185,25 @@ class BankScreen extends StatelessWidget {
                         ),
                       ),
                     ),
+                    const SizedBox(width: 10,),
+                    Card(
+                      color: Colors.red,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            Icon(Icons.delete, color: Colors.white),
+                            const SizedBox(width: 5,),
+                            Component.text("Hapus", colors: Colors.white),
+                          ],
+                        ),
+                      ),
+                    )
                   ],
                 ),
                 const SizedBox(height: 20,),
                 PaginatedDataTable(
-                  header: Text("Bank"),
+                  header: Text("List Customer Downline"),
                   columnSpacing: 0,
                   horizontalMargin: 30,
                   showCheckboxColumn: false,
@@ -201,7 +214,7 @@ class BankScreen extends StatelessWidget {
                         tooltip: header.name,
                       ),
                   ],
-                  source: DataSourceBank(list: state.listBank),
+                  source: DataSourceCustomer(list: state.listCustomer),
                 )
               ],
             ),

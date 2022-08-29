@@ -123,7 +123,7 @@ class _DialogTransactionState extends State<DialogTransaction> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "Total Pajak",
+                      "Total PPN",
                       style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                     Text("${Core.converNumeric(widget.totalTax.toString())}"),

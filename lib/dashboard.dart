@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:beben_pos_desktop/commingsoon/menu_comming_soon.dart';
 import 'package:beben_pos_desktop/content/cubit/content_cubit.dart';
 import 'package:beben_pos_desktop/content/view/content_screen.dart';
+import 'package:beben_pos_desktop/customer/cubit/customer_cubit.dart';
+import 'package:beben_pos_desktop/customer/view/customer_view.dart';
 import 'package:beben_pos_desktop/dashboard_bloc.dart';
 import 'package:beben_pos_desktop/db/profile_db.dart';
 import 'package:beben_pos_desktop/product/screen/menu_product.dart';
@@ -32,7 +34,9 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
     // NavigationModel(
     //     name: "Customer", icon: "assets/images/ic_dashboard_customer.png"),
     NavigationModel(
-        key: "product", name: "Produk", icon: "assets/images/ic_items.png"),
+      key: "product", 
+      name: "Produk", 
+      icon: "assets/images/ic_items.png"),
     // NavigationModel(
     //     name: "Units", icon: "assets/images/ic_dashboard_item_kits.png"),
     // NavigationModel(
@@ -60,8 +64,8 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
         name: "Pengiriman",
         icon: "assets/images/ic_expenses_category.png"),
     NavigationModel(
-        key: "cashups",
-        name: "Pendapatan",
+        key: "customer",
+        name: "Customer",
         icon: "assets/images/ic_cashups.png"),
     NavigationModel(
         key: "office", name: "Kantor", icon: "assets/images/ic_office.png"),
@@ -267,6 +271,11 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
                     BlocProvider(
                       create: (context) => DeliveryCubit(),
                       child: DeliveryView()
+                    )
+                  else if (tab.key == "customer")  
+                    BlocProvider(
+                      create: (context) => CustomerCubit(),
+                      child: CustomerView()
                     )
                   else
                     MenuCommingSoon(tab)

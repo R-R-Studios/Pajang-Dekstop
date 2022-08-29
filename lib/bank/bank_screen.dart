@@ -1,9 +1,6 @@
 import 'package:beben_pos_desktop/bank/dialog_add_bank.dart';
-import 'package:beben_pos_desktop/customer/datasource/data_source_customer.dart';
 import 'package:beben_pos_desktop/utils/global_functions.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:beben_pos_desktop/utils/size_config.dart';
 
 class BankScreen extends StatefulWidget {

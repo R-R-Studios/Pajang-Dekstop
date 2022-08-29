@@ -24,6 +24,7 @@ import 'package:rxdart/rxdart.dart';
 import 'package:uuid/uuid.dart';
 
 class SalesBloc {
+
   List<ProductModel> productList = [];
   List<MerchantProductDB> merchantProductList = [];
   List<TransactionFailedDB> transactionList = [];
@@ -127,7 +128,11 @@ class SalesBloc {
   bool isEnableTrxCode = false;
   BehaviorSubject<bool> enableTrxCodeController = new BehaviorSubject<bool>();
 
+  BehaviorSubject<Tax> taxValueController = new BehaviorSubject<Tax>();
+
   Stream<bool> get streamEnableTrxCode => enableTrxCodeController.stream;
+
+  Stream<Tax> get streamTaxValue => taxValueController.stream;
 
   //? Controller
   BehaviorSubject<double> taxController = new BehaviorSubject<double>();
@@ -539,6 +544,7 @@ class SalesBloc {
     enableTrxCodeController.close();
     controllerProductModelDB.close();
     taxController.close();
+    taxValueController.close();
     // paymentMethodController.close();
   }
 
@@ -614,6 +620,7 @@ class SalesBloc {
       bankId: paymentMethod.bankId,
       cardNumber: paymentMethod.cardNumber,
       type: type,
+      userId: paymentMethod.endUser?.id,
       merchantTransaction: merchantTransactionList
     );
 
@@ -746,6 +753,7 @@ class SalesBloc {
 
   Future getTax() async {
     tax = await SalesProvider.tax();
+    taxValueController.sink.add(tax);
   }
 
   Future getPaymentMethod () async {

@@ -2,7 +2,6 @@ import 'package:beben_pos_desktop/component/component.dart';
 import 'package:beben_pos_desktop/content/cubit/banner_cubit.dart';
 import 'package:beben_pos_desktop/content/view/dialog_banner.dart';
 import 'package:beben_pos_desktop/core/app/constant.dart';
-import 'package:beben_pos_desktop/utils/global_functions.dart';
 import 'package:beben_pos_desktop/utils/size_config.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -101,20 +100,6 @@ final VoidCallback callback;
                         ),
                       ),
                     ),
-                    const SizedBox(width: 10,),
-                    Card(
-                      color: Colors.red,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          children: [
-                            Icon(Icons.delete, color: Colors.white),
-                            const SizedBox(width: 5,),
-                            Component.text("Hapus", colors: Colors.white),
-                          ],
-                        ),
-                      ),
-                    )
                   ],
                 ),
                 const SizedBox(height: 20,),

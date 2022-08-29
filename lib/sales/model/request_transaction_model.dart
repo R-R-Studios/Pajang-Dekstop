@@ -7,13 +7,15 @@ class ProductTransaction {
   late String type;
   int? bankId;
   String? cardNumber;
+  int? userId;
 
   ProductTransaction({
     required this.paymentMethodId,
     required this.merchantTransaction,
     required this.type,
     this.bankId,
-    this.cardNumber
+    this.cardNumber,
+    this.userId
   }
   );
 
@@ -29,6 +31,7 @@ class ProductTransaction {
     } else {
       type = "";
     }
+    userId = json['user_id'];
   }
 
   Map<String, dynamic> toJson() {
@@ -42,6 +45,7 @@ class ProductTransaction {
           this.merchantTransaction.map((v) => v.toJson()).toList();
     }
     data.removeWhere((key, value) => value == null);
+    data['user_id'] = this.userId;
     return data;
   }
 }

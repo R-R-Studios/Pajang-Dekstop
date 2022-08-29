@@ -378,6 +378,22 @@ class _DioClient implements DioClient {
   }
 
   @override
+  Future<CoreModel> bannerDelete(body) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(body.toJson());
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<CoreModel>(
+            Options(method: 'DELETE', headers: <String, dynamic>{}, extra: _extra)
+                .compose(_dio.options, '/api/pos/v1/merchant_banners',
+                    queryParameters: queryParameters, data: _data)
+                .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = CoreModel.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
   Future<CoreModel> bankList() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -401,6 +417,22 @@ class _DioClient implements DioClient {
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<CoreModel>(
             Options(method: 'POST', headers: <String, dynamic>{}, extra: _extra)
+                .compose(_dio.options, '/api/pos/v1/merchant_banks',
+                    queryParameters: queryParameters, data: _data)
+                .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = CoreModel.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<CoreModel> bankDelete(body) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(body.toJson());
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<CoreModel>(
+            Options(method: 'DELETE', headers: <String, dynamic>{}, extra: _extra)
                 .compose(_dio.options, '/api/pos/v1/merchant_banks',
                     queryParameters: queryParameters, data: _data)
                 .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));

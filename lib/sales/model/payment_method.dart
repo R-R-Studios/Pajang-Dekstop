@@ -1,3 +1,5 @@
+import 'package:beben_pos_desktop/customer/model/end_user.dart';
+
 class PaymentMethod {
   int? id;
   String? name;
@@ -6,8 +8,9 @@ class PaymentMethod {
   String? updatedAt;
   String? cardNumber;
   int? bankId;
+  EndUser? endUser;
 
-  PaymentMethod({this.id, this.name, this.isActive, this.createdAt, this.updatedAt, this.cardNumber, this.bankId});
+  PaymentMethod({this.id, this.name, this.isActive, this.createdAt, this.updatedAt, this.cardNumber, this.bankId, this.endUser});
 
   PaymentMethod.fromJson(Map<String, dynamic> json) {
     id = json['id'];
