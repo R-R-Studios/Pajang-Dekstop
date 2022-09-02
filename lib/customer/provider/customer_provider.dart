@@ -1,6 +1,9 @@
+import 'package:beben_pos_desktop/core/fireship/fireship_encrypt.dart';
 import 'package:beben_pos_desktop/customer/model/end_user.dart';
 import 'package:beben_pos_desktop/service/dio_client.dart';
 import 'package:beben_pos_desktop/service/dio_service.dart';
+
+import '../model/customer_create.dart';
 
 class CustomerProvider {
 
@@ -14,5 +17,12 @@ class CustomerProvider {
       }
     });
     return list;
+  }
+
+  static Future customerCreate(BodyEncrypt bodyEncrypt) async {
+    await DioService.checkConnection(tryAgainMethod: customerCreate, isUseBearer: true, showMessage: true, isLoading: true).then((value) async {
+      DioClient dioClient = DioClient(value);
+      var response = await dioClient.customerCreate(bodyEncrypt.toJson());
+    });
   }
 }

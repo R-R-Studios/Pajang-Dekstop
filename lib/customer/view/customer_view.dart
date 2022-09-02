@@ -3,7 +3,6 @@ import 'package:beben_pos_desktop/core/app/constant.dart';
 import 'package:beben_pos_desktop/customer/cubit/customer_cubit.dart';
 import 'package:beben_pos_desktop/customer/datasource/data_source_delivery.dart';
 import 'package:beben_pos_desktop/model/head_column_model.dart';
-import 'package:beben_pos_desktop/ui/delivery/model/delivery.dart';
 import 'package:beben_pos_desktop/utils/size_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -24,9 +23,10 @@ class CustomerView extends StatelessWidget {
   ];
 
   dialogCreate(currentContext){
-    final TextEditingController bankController = TextEditingController();
-    final TextEditingController nameAccountController = TextEditingController();
-    final TextEditingController noAccountController = TextEditingController();
+    final TextEditingController nameController = TextEditingController();
+    final TextEditingController phoneController = TextEditingController();
+    final TextEditingController addressController = TextEditingController();
+    final TextEditingController emailController = TextEditingController();
     showDialog(
       context: navGK.currentContext!, 
       builder: (BuildContext context){
@@ -60,7 +60,7 @@ class CustomerView extends StatelessWidget {
                   labelText: 'Nama',
                   border: OutlineInputBorder(),
                 ),
-                controller: bankController,
+                controller: nameController,
                 enabled: true,
                 validator: (value) {
                   if (value!.isEmpty) {
@@ -81,7 +81,7 @@ class CustomerView extends StatelessWidget {
                 inputFormatters: [
                   FilteringTextInputFormatter.digitsOnly
                 ],
-                controller: nameAccountController,
+                controller: phoneController,
                 enabled: true,
                 validator: (value) {
                   if (value!.isEmpty) {
@@ -91,15 +91,35 @@ class CustomerView extends StatelessWidget {
                 },
               ),
               const SizedBox(height: 20,),
+              Component.text("Email"),
+              const SizedBox(height: 10,),
+              TextFormField(
+                keyboardType: TextInputType.text,
+                decoration: InputDecoration(
+                  labelText: 'Email',
+                  border: OutlineInputBorder(),
+                ),
+                controller: addressController,
+                enabled: true,
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Masukan Email';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 20,),
               Component.text("Alamat"),
               const SizedBox(height: 10,),
               TextFormField(
+                maxLines: 5,
+                minLines: 5,
                 keyboardType: TextInputType.text,
                 decoration: InputDecoration(
                   labelText: 'Alamat',
                   border: OutlineInputBorder(),
                 ),
-                controller: noAccountController,
+                controller: emailController,
                 enabled: true,
                 validator: (value) {
                   if (value!.isEmpty) {
@@ -112,7 +132,12 @@ class CustomerView extends StatelessWidget {
               InkWell(
                 onTap: (){
                   Navigator.of(context).pop();
-                  // BlocProvider.of<BankCubit>(currentContext).creteBank(bankController.text, nameAccountController.text, noAccountController.text);
+                  BlocProvider.of<CustomerCubit>(currentContext).createCustomer(
+                    nameController.text, 
+                    phoneController.text, 
+                    addressController.text,
+                    emailController.text
+                  );
                 },
                 child: Card(
                   color: Colors.green,

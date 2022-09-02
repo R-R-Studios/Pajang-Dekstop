@@ -1,22 +1,26 @@
 import 'package:beben_pos_desktop/content/model/merchant_bank.dart';
 import 'package:beben_pos_desktop/content/model/bank_create.dart';
 import 'package:beben_pos_desktop/content/model/banner_create.dart';
+import 'package:beben_pos_desktop/content/model/merchant_banner.dart';
 import 'package:beben_pos_desktop/service/dio_client.dart';
 import 'package:beben_pos_desktop/service/dio_service.dart';
 import 'package:beben_pos_desktop/utils/global_functions.dart';
 
 class ContentProvider {
 
-  static Future bannerList() async {
+  static Future<List<MerchantBanner>> bannerList() async {
+    List<MerchantBanner> list = [];
     await DioService.checkConnection(tryAgainMethod: bannerList, isUseBearer: true, showMessage: true).then((value) async {
       DioClient dioClient = DioClient(value);
-      var respose = await dioClient.bannerList();
-      GlobalFunctions.log("response", respose);
+      var response = await dioClient.bannerList();
+      var banner = ResponseBanner.fromJson(response.data);
+      list.addAll(banner.banners!);
     });
+    return list;
   }
 
   static Future bannerCreate(BannerCreate bannerCreate) async {
-    await DioService.checkConnection(tryAgainMethod: bannerCreate, isUseBearer: true, showMessage: true).then((value) async {
+    await DioService.checkConnection(tryAgainMethod: bannerCreate, isUseBearer: true, showMessage: true, isLoading: true).then((value) async {
       DioClient dioClient = DioClient(value);
       var respose = await dioClient.bannerCreate(bannerCreate);
       GlobalFunctions.log("response", respose);

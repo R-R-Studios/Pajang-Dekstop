@@ -137,4 +137,9 @@ abstract class DioClient {
 
   @GET(FireshipEndpoint.CUSTOMER_LIST)
   Future<CoreModel> customerList();
+
+  @POST(FireshipEndpoint.CUSTOMER)
+  Future<CoreModel> customerCreate(
+    @Body() Map<String, dynamic> body
+  );
 }

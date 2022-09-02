@@ -1,5 +1,6 @@
 import 'package:beben_pos_desktop/component/component.dart';
 import 'package:beben_pos_desktop/core/app/constant.dart';
+import 'package:beben_pos_desktop/delivery/view/delivery_form_view.dart';
 import 'package:beben_pos_desktop/model/head_column_model.dart';
 import 'package:beben_pos_desktop/ui/delivery/cubit/delivery_cubit.dart';
 import 'package:beben_pos_desktop/ui/delivery/datasource/data_source_delivery.dart';
@@ -7,6 +8,7 @@ import 'package:beben_pos_desktop/ui/delivery/model/delivery.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nav_router/nav_router.dart';
 
 class DeliveryView extends StatelessWidget {
   
@@ -180,7 +182,7 @@ class DeliveryView extends StatelessWidget {
                     const Spacer(),
                     InkWell(
                       onTap: (){
-                        // dialogCreate(context);
+                        routePush(DeliveryFormView(), RouterType.material);
                       },
                       child: Card(
                         color: Colors.green,

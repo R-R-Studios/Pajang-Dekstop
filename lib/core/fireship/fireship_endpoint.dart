@@ -1,5 +1,6 @@
 
 class FireshipEndpoint {
+  
   static const String SIMPLE = "";
   static const String TEST = "v1/banner_advertises";
 
@@ -58,4 +59,8 @@ class FireshipEndpoint {
   static const String MERCHANT_DELIVERY_ORDER_VEHICLE_LIST = "/api/pos/v1/transaction/merchant_delivery_orders/vehicle_lists";
   static const String MERCHANT_DELIVERY_ORDER_EMPLOYEE_LIST = "/api/pos/v1/transaction/merchant_delivery_orders/employee_lists";
   static const String MERCHANT_DELIVERY_ORDER_OPERATION_LIST = "/api/pos/v1/transaction/merchant_delivery_orders/operation_lists";
+
+  //? User
+  static const String CUSTOMER = "pos/v1/users";
+
 }
