@@ -165,7 +165,7 @@ class EmployeeView extends StatelessWidget {
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Component.text("Bank Anda", fontSize: 17, colors: Colors.black),
+                    Component.text("Pegawai Anda", fontSize: 17, colors: Colors.black),
                     const Spacer(),
                     InkWell(
                       onTap: (){

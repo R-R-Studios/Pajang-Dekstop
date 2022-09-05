@@ -54,7 +54,6 @@ class DeliveryFormView extends StatelessWidget {
       total: "900000",
       transactionCode: "SEL-200000"
     ),
-    OrderDelivery(),
   ];
 
   @override
@@ -101,8 +100,35 @@ class DeliveryFormView extends StatelessWidget {
               const SizedBox(height: 20,),
               Container(
                 width: SizeConfig.blockSizeHorizontal * 100,
-                child: PaginatedDataTable(
-                  header: Text("Daftar Transaksi"),
+                child: DataTable(
+                  rows: listTransaction.map((book) => DataRow(
+                    cells: [
+                      DataCell(Text(book.transactionCode.toString())),
+                      DataCell(Text(book.transactionCode.toString())),
+                      DataCell(Text(book.total.toString())),
+                      DataCell(Text(book.total.toString())),
+                      DataCell(Text(book.date.toString())),
+                      DataCell(
+                        ElevatedButton.icon(
+                          onPressed: (){
+                            Navigator.of(context).pop();
+                          },
+                          icon: Icon(
+                            Icons.delete,
+                            color: Colors.white,
+                            size: 16.0,
+                          ),
+                          label: Text("Hapus"),
+                          style: ElevatedButton.styleFrom(
+                            textStyle: TextStyle(color: Colors.white),
+                            padding: EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 15),
+                            primary: Colors.red
+                          ),
+                        ),
+                      )
+                    ]
+                  )).toList(),
+                  // header: Text("Daftar Transaksi"),
                   
                   // columnSpacing: 0,
                   // horizontalMargin: 30,
@@ -115,7 +141,7 @@ class DeliveryFormView extends StatelessWidget {
                         tooltip: header.name,
                       ),
                   ],
-                  source: SourceTransaction(list: listTransaction),
+                  // source: SourceTransaction(list: listTransaction),
                 ),
               ),
               const SizedBox(height: 20,),
