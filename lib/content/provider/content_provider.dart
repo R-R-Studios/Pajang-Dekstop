@@ -1,7 +1,9 @@
+import 'package:beben_pos_desktop/content/model/discount.dart';
 import 'package:beben_pos_desktop/content/model/merchant_bank.dart';
 import 'package:beben_pos_desktop/content/model/bank_create.dart';
 import 'package:beben_pos_desktop/content/model/banner_create.dart';
 import 'package:beben_pos_desktop/content/model/merchant_banner.dart';
+import 'package:beben_pos_desktop/core/fireship/fireship_encrypt.dart';
 import 'package:beben_pos_desktop/service/dio_client.dart';
 import 'package:beben_pos_desktop/service/dio_service.dart';
 import 'package:beben_pos_desktop/utils/global_functions.dart';
@@ -60,6 +62,26 @@ class ContentProvider {
     await DioService.checkConnection(tryAgainMethod: bankCreate, isUseBearer: true, showMessage: true).then((value) async {
       DioClient dioClient = DioClient(value);
       var respose = await dioClient.bankCreate(bankCreate);
+      GlobalFunctions.log("response", respose);
+    });
+  }
+
+  static Future<List<Discount>> discountList() async {
+    List<Discount> list = [];
+    await DioService.checkConnection(tryAgainMethod: discountList, isUseBearer: true, showMessage: true).then((value) async {
+      DioClient dioClient = DioClient(value);
+      var response = await dioClient.discountList();
+      for (var item in response.data) {
+        list.add(Discount.fromJson(item));
+      }
+    });
+    return list;
+  }
+
+  static Future discountCreate(BodyEncrypt bodyEncrypt) async {
+    await DioService.checkConnection(tryAgainMethod: discountCreate, isUseBearer: true, showMessage: true).then((value) async {
+      DioClient dioClient = DioClient(value);
+      var respose = await dioClient.discountCreate(bodyEncrypt.toJson());
       GlobalFunctions.log("response", respose);
     });
   }

@@ -1,15 +1,18 @@
 import 'package:beben_pos_desktop/content/cubit/bank_cubit.dart';
 import 'package:beben_pos_desktop/content/cubit/banner_cubit.dart';
 import 'package:beben_pos_desktop/content/cubit/content_cubit.dart';
+import 'package:beben_pos_desktop/content/cubit/discount_cubit.dart';
 import 'package:beben_pos_desktop/content/cubit/employee_cubit.dart';
 import 'package:beben_pos_desktop/content/view/bank_screen.dart';
 import 'package:beben_pos_desktop/content/view/banner_view.dart';
+import 'package:beben_pos_desktop/content/view/discount_view.dart';
 import 'package:beben_pos_desktop/content/view/employee_view.dart';
 import 'package:beben_pos_desktop/content/view/product_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ContentScreen extends StatelessWidget {
+
   const ContentScreen({Key? key}) : super(key: key);
 
   @override
@@ -45,7 +48,14 @@ class ContentScreen extends StatelessWidget {
                 callback: () => BlocProvider.of<ContentCubit>(context)
                     .navgation(ContentMenu.initial)),
           );
-        } else {
+        } else if (state is ContentDiscount) {
+          return BlocProvider(
+            create: (context) => DiscountCubit(),
+            child: DiscountScreen(
+                callback: () => BlocProvider.of<ContentCubit>(context)
+                    .navgation(ContentMenu.initial)),
+          );
+        }else {
           return Container();
         }
       },
@@ -60,8 +70,7 @@ class ContentScreen extends StatelessWidget {
         children: [
           InkWell(
             onTap: () {
-              BlocProvider.of<ContentCubit>(context)
-                  .navgation(ContentMenu.banner);
+              BlocProvider.of<ContentCubit>(context).navgation(ContentMenu.banner);
             },
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -179,8 +188,39 @@ class ContentScreen extends StatelessWidget {
               ],
             ),
           ),
+          const SizedBox(
+            width: 15,
+          ),
+          InkWell(
+            onTap: () {
+              BlocProvider.of<ContentCubit>(context).navgation(ContentMenu.discount);
+            },
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Icon(
+                      Icons.money,
+                      size: 100,
+                      color: Colors.green,
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  "Diskon",
+                  style: TextStyle(fontSize: 16),
+                )
+              ],
+            ),
+          ),
         ],
       ),
     );
   }
+  
 }

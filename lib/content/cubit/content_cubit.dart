@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 
 part 'content_state.dart';
 
-enum ContentMenu {initial, banner, product, bank, employee}
+enum ContentMenu {initial, banner, product, bank, employee, discount}
 
 class ContentCubit extends Cubit<ContentState> {
 
@@ -25,6 +25,9 @@ class ContentCubit extends Cubit<ContentState> {
         break;  
       case ContentMenu.employee:
         emit(ContentEmployee());
+        break;  
+      case ContentMenu.discount:
+        emit(ContentDiscount());
         break;  
       default:
     }

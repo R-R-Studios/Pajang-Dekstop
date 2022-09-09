@@ -142,4 +142,12 @@ abstract class DioClient {
   Future<CoreModel> customerCreate(
     @Body() Map<String, dynamic> body
   );
+
+  @GET(FireshipEndpoint.MERCHANT_DISCOUNT)
+  Future<CoreModel> discountList();
+
+  @POST(FireshipEndpoint.MERCHANT_DISCOUNT)
+  Future<CoreModel> discountCreate(
+    @Body() Map<String, dynamic> body
+  );
 }
