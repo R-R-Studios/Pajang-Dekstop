@@ -1,6 +1,8 @@
 import 'package:beben_pos_desktop/component/component.dart';
+import 'package:beben_pos_desktop/content/model/employee.dart';
 import 'package:beben_pos_desktop/core/app/constant.dart';
 import 'package:beben_pos_desktop/delivery/model/order_delivery.dart';
+import 'package:beben_pos_desktop/delivery/model/vehicle.dart';
 import 'package:beben_pos_desktop/delivery/source/source_transaction.dart';
 import 'package:beben_pos_desktop/model/head_column_model.dart';
 import 'package:beben_pos_desktop/utils/size_config.dart';
@@ -56,6 +58,30 @@ class DeliveryFormView extends StatelessWidget {
     ),
   ];
 
+  List<Vehicle> listVehicle = [
+    Vehicle(
+      nopol: "D 3283 ADE",
+      deskripsi: "Motor Nmax",
+      merk: "Yamaha"
+    ),
+    Vehicle(
+      nopol: "D 3283 ADE",
+      deskripsi: "Motor Nmax",
+      merk: "Yamaha"
+    ),
+    Vehicle(
+      nopol: "D 3283 ADE",
+      deskripsi: "Motor Nmax",
+      merk: "Yamaha"
+    ),
+  ];
+
+  List<Employee> listEmployee = [
+    Employee(
+      
+    ),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -101,13 +127,13 @@ class DeliveryFormView extends StatelessWidget {
               Container(
                 width: SizeConfig.blockSizeHorizontal * 100,
                 child: DataTable(
-                  rows: listTransaction.map((book) => DataRow(
+                  rows: listTransaction.map((transaction) => DataRow(
                     cells: [
-                      DataCell(Text(book.transactionCode.toString())),
-                      DataCell(Text(book.transactionCode.toString())),
-                      DataCell(Text(book.total.toString())),
-                      DataCell(Text(book.total.toString())),
-                      DataCell(Text(book.date.toString())),
+                      DataCell(Text(transaction.transactionCode.toString())),
+                      DataCell(Text(transaction.transactionCode.toString())),
+                      DataCell(Text(transaction.total.toString())),
+                      DataCell(Text(transaction.total.toString())),
+                      DataCell(Text(transaction.date.toString())),
                       DataCell(
                         ElevatedButton.icon(
                           onPressed: (){
@@ -133,7 +159,6 @@ class DeliveryFormView extends StatelessWidget {
                   // columnSpacing: 0,
                   // horizontalMargin: 30,
                   showCheckboxColumn: false,
-                  
                   columns: <DataColumn>[
                     for (final header in _headColumnTransaction)
                       DataColumn(
@@ -157,6 +182,46 @@ class DeliveryFormView extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20,),
+              Container(
+                width: SizeConfig.blockSizeHorizontal * 100,
+                child: DataTable(
+                  rows: listVehicle.map((vehichle) => DataRow(
+                    cells: [
+                      DataCell(Text(vehichle.nopol.toString())),
+                      DataCell(Text(vehichle.merk.toString())),
+                      DataCell(Text(vehichle.deskripsi.toString())),
+                      DataCell(
+                        ElevatedButton.icon(
+                          onPressed: (){
+                            Navigator.of(context).pop();
+                          },
+                          icon: Icon(
+                            Icons.delete,
+                            color: Colors.white,
+                            size: 16.0,
+                          ),
+                          label: Text("Hapus"),
+                          style: ElevatedButton.styleFrom(
+                            textStyle: TextStyle(color: Colors.white),
+                            padding: EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 15),
+                            primary: Colors.red
+                          ),
+                        ),
+                      )
+                    ]
+                  )).toList(),
+                  showCheckboxColumn: false,
+                  columns: <DataColumn>[
+                    for (final header in _headColumnVehichle)
+                      DataColumn(
+                        label: Text(header.name!),
+                        tooltip: header.name,
+                      ),
+                  ],
+                  // source: SourceTransaction(list: listTransaction),
+                ),
+              ),
+              const SizedBox(height: 20,),
               ElevatedButton(
                 onPressed: () {
                   // showDetailTransaction(row.transactionCode ?? "0", row.date ?? "-");
@@ -166,6 +231,46 @@ class DeliveryFormView extends StatelessWidget {
                   textStyle: TextStyle(color: Colors.white),
                   padding: EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 15),
                   primary: Color(0xff3498db)
+                ),
+              ),
+              const SizedBox(height: 20,),
+              Container(
+                width: SizeConfig.blockSizeHorizontal * 100,
+                child: DataTable(
+                  rows: listVehicle.map((vehichle) => DataRow(
+                    cells: [
+                      DataCell(Text(vehichle.nopol.toString())),
+                      DataCell(Text(vehichle.merk.toString())),
+                      DataCell(Text(vehichle.deskripsi.toString())),
+                      DataCell(
+                        ElevatedButton.icon(
+                          onPressed: (){
+                            Navigator.of(context).pop();
+                          },
+                          icon: Icon(
+                            Icons.delete,
+                            color: Colors.white,
+                            size: 16.0,
+                          ),
+                          label: Text("Hapus"),
+                          style: ElevatedButton.styleFrom(
+                            textStyle: TextStyle(color: Colors.white),
+                            padding: EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 15),
+                            primary: Colors.red
+                          ),
+                        ),
+                      )
+                    ]
+                  )).toList(),
+                  showCheckboxColumn: false,
+                  columns: <DataColumn>[
+                    for (final header in _headColumnVehichle)
+                      DataColumn(
+                        label: Text(header.name!),
+                        tooltip: header.name,
+                      ),
+                  ],
+                  // source: SourceTransaction(list: listTransaction),
                 ),
               ),
               const SizedBox(height: 20,),

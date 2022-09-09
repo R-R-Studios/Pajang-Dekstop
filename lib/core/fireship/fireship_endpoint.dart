@@ -60,6 +60,9 @@ class FireshipEndpoint {
   static const String MERCHANT_DELIVERY_ORDER_EMPLOYEE_LIST = "/api/pos/v1/transaction/merchant_delivery_orders/employee_lists";
   static const String MERCHANT_DELIVERY_ORDER_OPERATION_LIST = "/api/pos/v1/transaction/merchant_delivery_orders/operation_lists";
 
+  //? Merchant Discount
+  static const String MERCHANT_DISCOUNT = "/api/pos/v1/merchant_discounts";
+
   //? User
   static const String CUSTOMER = "pos/v1/users";
 

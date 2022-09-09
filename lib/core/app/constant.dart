@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+enum discountType {percent, nominal}
+enum discountKind {product, transaction}
+
 class Constant {
   static const avenirRegular = "avenir_regular";
   static const poppinsRegular = "poppins_regular";
