@@ -10,7 +10,7 @@ class DeliveryCubit extends Cubit<DeliveryState> {
   }
 
   onGetTransactionList() async {
-    await DeliveryProvider.orderList();
+    // await DeliveryProvider.orderList();
   }
 
 }

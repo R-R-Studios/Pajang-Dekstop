@@ -11,4 +11,17 @@ class DeliveryInitial extends DeliveryState {}
 
 class DeliveryLoading extends DeliveryState {}
 
-class DeliveryLoaded extends DeliveryState {}
+class DeliveryLoaded extends DeliveryState {
+
+  final List<Delivery> listDelivery;
+
+  DeliveryLoaded({
+    required this.listDelivery
+  });
+
+  @override
+  List<Object> get props => [
+    listDelivery
+  ];
+
+}

@@ -1,9 +1,9 @@
 import 'package:beben_pos_desktop/component/component.dart';
 import 'package:beben_pos_desktop/content/model/employee.dart';
 import 'package:beben_pos_desktop/core/app/constant.dart';
+import 'package:beben_pos_desktop/delivery/model/operational.dart';
 import 'package:beben_pos_desktop/delivery/model/order_delivery.dart';
 import 'package:beben_pos_desktop/delivery/model/vehicle.dart';
-import 'package:beben_pos_desktop/delivery/source/source_transaction.dart';
 import 'package:beben_pos_desktop/model/head_column_model.dart';
 import 'package:beben_pos_desktop/utils/size_config.dart';
 import 'package:flutter/material.dart';
@@ -41,7 +41,7 @@ class DeliveryFormView extends StatelessWidget {
     HeadColumnModel(key: "3", name: "Aksi", ischecked: false),
   ];
 
-  List<OrderDelivery> listTransaction = [
+  final List<OrderDelivery> listTransaction = [
     OrderDelivery(
       date: DateTime.now().toString(),
       id: "1",
@@ -58,7 +58,7 @@ class DeliveryFormView extends StatelessWidget {
     ),
   ];
 
-  List<Vehicle> listVehicle = [
+  final List<Vehicle> listVehicle = [
     Vehicle(
       nopol: "D 3283 ADE",
       deskripsi: "Motor Nmax",
@@ -76,9 +76,29 @@ class DeliveryFormView extends StatelessWidget {
     ),
   ];
 
-  List<Employee> listEmployee = [
+  final List<Employee> listEmployee = [
     Employee(
-      
+      id: 1,
+      jobDesk: "Supir",
+      name: "Mamat",
+      phoneNumber: "0812782987329"
+    ),
+    Employee(
+      id: 2,
+      jobDesk: "Kenek",
+      name: "Saepul",
+      phoneNumber: "0812782987329"
+    ),
+  ];
+
+  final List<Operational> listOperational = [
+    Operational(
+      price: "50000",
+      desc: "Bensin"
+    ),
+    Operational(
+      price: "30000",
+      desc: "Makan"
     ),
   ];
 
@@ -237,11 +257,11 @@ class DeliveryFormView extends StatelessWidget {
               Container(
                 width: SizeConfig.blockSizeHorizontal * 100,
                 child: DataTable(
-                  rows: listVehicle.map((vehichle) => DataRow(
+                  rows: listEmployee.map((employee) => DataRow(
                     cells: [
-                      DataCell(Text(vehichle.nopol.toString())),
-                      DataCell(Text(vehichle.merk.toString())),
-                      DataCell(Text(vehichle.deskripsi.toString())),
+                      DataCell(Text(employee.name.toString())),
+                      DataCell(Text(employee.jobDesk.toString())),
+                      DataCell(Text(employee.phoneNumber.toString())),
                       DataCell(
                         ElevatedButton.icon(
                           onPressed: (){
@@ -264,7 +284,7 @@ class DeliveryFormView extends StatelessWidget {
                   )).toList(),
                   showCheckboxColumn: false,
                   columns: <DataColumn>[
-                    for (final header in _headColumnVehichle)
+                    for (final header in _headColumnEmployee)
                       DataColumn(
                         label: Text(header.name!),
                         tooltip: header.name,
@@ -279,6 +299,56 @@ class DeliveryFormView extends StatelessWidget {
                   // showDetailTransaction(row.transactionCode ?? "0", row.date ?? "-");
                 },
                 child: Text("Operasional"),
+                style: ElevatedButton.styleFrom(
+                  textStyle: TextStyle(color: Colors.white),
+                  padding: EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 15),
+                  primary: Color(0xff3498db)
+                ),
+              ),
+              const SizedBox(height: 20,),
+              Container(
+                width: SizeConfig.blockSizeHorizontal * 100,
+                child: DataTable(
+                  rows: listOperational.map((operational) => DataRow(
+                    cells: [
+                      DataCell(Text(operational.price.toString())),
+                      DataCell(Text(operational.desc.toString())),
+                      DataCell(
+                        ElevatedButton.icon(
+                          onPressed: (){
+                            Navigator.of(context).pop();
+                          },
+                          icon: Icon(
+                            Icons.delete,
+                            color: Colors.white,
+                            size: 16.0,
+                          ),
+                          label: Text("Hapus"),
+                          style: ElevatedButton.styleFrom(
+                            textStyle: TextStyle(color: Colors.white),
+                            padding: EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 15),
+                            primary: Colors.red
+                          ),
+                        ),
+                      )
+                    ]
+                  )).toList(),
+                  showCheckboxColumn: false,
+                  columns: <DataColumn>[
+                    for (final header in _headColumnOperational)
+                      DataColumn(
+                        label: Text(header.name!),
+                        tooltip: header.name,
+                      ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20,),
+              ElevatedButton(
+                onPressed: () {
+                  // showDetailTransaction(row.transactionCode ?? "0", row.date ?? "-");
+                },
+                child: Text("Buat Pengiriman"),
                 style: ElevatedButton.styleFrom(
                   textStyle: TextStyle(color: Colors.white),
                   padding: EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 15),

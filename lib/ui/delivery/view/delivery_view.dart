@@ -23,20 +23,6 @@ class DeliveryView extends StatelessWidget {
     HeadColumnModel(key: "4", name: "Aksi", ischecked: false),
   ];
 
-  final List<Delivery> list = [
-    Delivery(id: 1, no: "123123123", product: "TV", status: "Pengemasan", totalPrice: 200000, date: DateTime.now().toString()),
-    Delivery(id: 1, no: "123123123", product: "TV", status: "Pengemasan", totalPrice: 200000, date: DateTime.now().toString()),
-    Delivery(id: 1, no: "123123123", product: "TV", status: "Pengemasan", totalPrice: 200000, date: DateTime.now().toString()),
-    Delivery(id: 1, no: "123123123", product: "TV", status: "Pengemasan", totalPrice: 200000, date: DateTime.now().toString()),
-    Delivery(id: 1, no: "123123123", product: "TV", status: "Pengemasan", totalPrice: 200000, date: DateTime.now().toString()),
-    Delivery(id: 1, no: "123123123", product: "TV", status: "Pengemasan", totalPrice: 200000, date: DateTime.now().toString()),
-    Delivery(id: 1, no: "123123123", product: "TV", status: "Pengemasan", totalPrice: 200000, date: DateTime.now().toString()),
-    Delivery(id: 1, no: "123123123", product: "TV", status: "Pengemasan", totalPrice: 200000, date: DateTime.now().toString()),
-    Delivery(id: 1, no: "123123123", product: "TV", status: "Pengemasan", totalPrice: 200000, date: DateTime.now().toString()),
-    Delivery(id: 1, no: "123123123", product: "TV", status: "Pengemasan", totalPrice: 200000, date: DateTime.now().toString()),
-    Delivery(id: 1, no: "123123123", product: "TV", status: "Pengemasan", totalPrice: 200000, date: DateTime.now().toString()),
-  ];
-
   // dialogCreate(currentContext){
   //   final TextEditingController bankController = TextEditingController();
   //   final TextEditingController nameAccountController = TextEditingController();
@@ -227,7 +213,7 @@ class DeliveryView extends StatelessWidget {
                         tooltip: header.name,
                       ),
                   ],
-                  source: DataSourceDelivery(list: list),
+                  source: DataSourceDelivery(list: state.listDelivery),
                 )
               ],
             ),

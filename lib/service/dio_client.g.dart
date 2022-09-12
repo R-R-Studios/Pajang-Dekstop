@@ -532,6 +532,84 @@ class _DioClient implements DioClient {
   }
 
   @override
+  Future<CoreModel> merchantTransactionList() async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<CoreModel>(
+            Options(method: 'GET', headers: <String, dynamic>{}, extra: _extra)
+                .compose(_dio.options, '/api/pos/v1/merchant_transactions',
+                    queryParameters: queryParameters, data: _data)
+                .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = CoreModel.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<CoreModel> transactionDetail(id) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'transaction_code' : id
+    };
+    final _data = <String, dynamic>{};
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<CoreModel>(
+            Options(method: 'GET', headers: <String, dynamic>{}, extra: _extra)
+                .compose(_dio.options, '/api/pos/v1/merchant_transaction',
+                    queryParameters: queryParameters, data: _data)
+                .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = CoreModel.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<CoreModel> merchantDeliveryList() async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<CoreModel>(
+            Options(method: 'GET', headers: <String, dynamic>{}, extra: _extra)
+                .compose(_dio.options, '/api/pos/v1/transaction/merchant_delivery_orders',
+                    queryParameters: queryParameters, data: _data)
+                .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = CoreModel.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<CoreModel> merchantDeliveryEmployee() async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<CoreModel>(
+            Options(method: 'GET', headers: <String, dynamic>{}, extra: _extra)
+                .compose(_dio.options, '/api/pos/v1/transaction/merchant_delivery_orders/employee_lists',
+                    queryParameters: queryParameters, data: _data)
+                .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = CoreModel.fromJson(_result.data!);
+    return value;
+  }
+
+
+  @override
+  Future<CoreModel> merchantDeliveryOperation() async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<CoreModel>(
+            Options(method: 'GET', headers: <String, dynamic>{}, extra: _extra)
+                .compose(_dio.options, '/api/pos/v1/transaction/merchant_delivery_orders/operation_lists',
+                    queryParameters: queryParameters, data: _data)
+                .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = CoreModel.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
   Future<CoreModel> customerList() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
