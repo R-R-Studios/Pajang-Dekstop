@@ -12,6 +12,8 @@ import 'package:beben_pos_desktop/receivings/menu_receivings.dart';
 import 'package:beben_pos_desktop/reports/reports_merchant.dart';
 import 'package:beben_pos_desktop/sales/sales_input.dart';
 import 'package:beben_pos_desktop/ui/delivery/view/delivery_view.dart';
+import 'package:beben_pos_desktop/ui/transaction/cubit/transaction_cubit.dart';
+import 'package:beben_pos_desktop/ui/transaction/view/transaction_view.dart';
 import 'package:beben_pos_desktop/utils/global_functions.dart';
 import 'package:beben_pos_desktop/utils/size_config.dart';
 import 'package:flutter/cupertino.dart';
@@ -56,8 +58,8 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
     NavigationModel(
         key: "messages", name: "Pesan", icon: "assets/images/ic_messages.png"),
     NavigationModel(
-        key: "expenses",
-        name: "Pengeluaran",
+        key: "transaction",
+        name: "transaksi",
         icon: "assets/images/ic_expenses.png"),
     NavigationModel(
         key: "delivery",
@@ -266,6 +268,11 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
                     BlocProvider(
                       create: (context) => ContentCubit(),
                       child: ContentScreen(),
+                    )
+                  else if (tab.key == "transaction")  
+                    BlocProvider(
+                      create: (context) => TransactionCubit(),
+                      child: TransactionView()
                     )
                   else if (tab.key == "delivery")  
                     BlocProvider(

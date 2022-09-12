@@ -19,3 +19,5 @@ class ContentBank extends ContentState {}
 class ContentEmployee extends ContentState {}
 
 class ContentDiscount extends ContentState {}
+
+class ContentVehicle extends ContentState {}

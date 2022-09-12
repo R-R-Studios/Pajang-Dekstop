@@ -3,11 +3,13 @@ import 'package:beben_pos_desktop/content/cubit/banner_cubit.dart';
 import 'package:beben_pos_desktop/content/cubit/content_cubit.dart';
 import 'package:beben_pos_desktop/content/cubit/discount_cubit.dart';
 import 'package:beben_pos_desktop/content/cubit/employee_cubit.dart';
+import 'package:beben_pos_desktop/content/cubit/vehicle_cubit.dart';
 import 'package:beben_pos_desktop/content/view/bank_screen.dart';
 import 'package:beben_pos_desktop/content/view/banner_view.dart';
 import 'package:beben_pos_desktop/content/view/discount_view.dart';
 import 'package:beben_pos_desktop/content/view/employee_view.dart';
 import 'package:beben_pos_desktop/content/view/product_screen.dart';
+import 'package:beben_pos_desktop/content/view/vehicle_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -55,7 +57,14 @@ class ContentScreen extends StatelessWidget {
                 callback: () => BlocProvider.of<ContentCubit>(context)
                     .navgation(ContentMenu.initial)),
           );
-        }else {
+        } else if (state is ContentVehicle) {
+          return BlocProvider(
+            create: (context) => VehicleCubit(),
+            child: VehicleScreen(
+                callback: () => BlocProvider.of<ContentCubit>(context)
+                    .navgation(ContentMenu.initial)),
+          );
+        } else {
           return Container();
         }
       },
@@ -213,6 +222,36 @@ class ContentScreen extends StatelessWidget {
                 ),
                 Text(
                   "Diskon",
+                  style: TextStyle(fontSize: 16),
+                )
+              ],
+            ),
+          ),
+          const SizedBox(
+            width: 15,
+          ),
+          InkWell(
+            onTap: () {
+              BlocProvider.of<ContentCubit>(context).navgation(ContentMenu.vehicle);
+            },
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Icon(
+                      Icons.car_rental,
+                      size: 100,
+                      color: Colors.green,
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  "Kendaraan",
                   style: TextStyle(fontSize: 16),
                 )
               ],
