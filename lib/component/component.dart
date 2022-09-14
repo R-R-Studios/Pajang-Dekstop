@@ -1,3 +1,4 @@
+import 'package:beben_pos_desktop/core/fireship/fireship_palette.dart';
 import 'package:flutter/material.dart';
 
 class Component {
@@ -19,6 +20,16 @@ class Component {
         // fontFamily: Constant.poppinsRegular,
         fontSize: fontSize.toDouble(),
         overflow: TextOverflow.ellipsis,
+      ),
+    );
+  }
+
+  static Widget divider({int padding = 8}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: Divider(
+        color: FireshipPalette.grey,
+        height: 1,
       ),
     );
   }

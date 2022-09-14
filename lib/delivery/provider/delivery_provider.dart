@@ -1,17 +1,26 @@
 
+import 'package:beben_pos_desktop/delivery/model/delivery_create.dart';
 import 'package:beben_pos_desktop/service/dio_client.dart';
 import 'package:beben_pos_desktop/service/dio_service.dart';
 import 'package:beben_pos_desktop/utils/global_functions.dart';
 
+import '../../core/fireship/fireship_encrypt.dart';
 import '../../ui/delivery/model/delivery.dart';
 
 class DeliveryProvider {
-
 
   static Future transactionList() async {
     await DioService.checkConnection(tryAgainMethod: transactionList, isUseBearer: true, showMessage: true).then((value) async {
       DioClient dioClient = DioClient(value);
       var respose = await dioClient.merchantTransactionList();
+      GlobalFunctions.log("response", respose);
+    });
+  }
+  
+  static Future create(BodyEncrypt bodyEncrypt) async {
+    await DioService.checkConnection(tryAgainMethod: create, isUseBearer: true, showMessage: true, isLoading: true).then((value) async {
+      DioClient dioClient = DioClient(value);
+      var respose = await dioClient.merchantDeliveryCreate(bodyEncrypt.toJson());
       GlobalFunctions.log("response", respose);
     });
   }

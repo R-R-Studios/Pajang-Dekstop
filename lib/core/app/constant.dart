@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 enum discountType {percent, nominal}
 enum discountKind {product, transaction}
+enum FeatureType  {transaction, vehicle, operatinal, employee}
 
 class Constant {
   static const avenirRegular = "avenir_regular";

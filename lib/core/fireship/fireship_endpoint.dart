@@ -41,6 +41,7 @@ class FireshipEndpoint {
   static const String MERCHANT_BANNER = "/api/pos/v1/merchant_banners";
   static const String MERCHANT_BANK = "/api/pos/v1/merchant_banks";
   static const String MERCHANT_EMPLOYEES = "/api/pos/v1/merchant_employees";
+  static const String MERCHANT_VEHICLES = "/api/pos/v1/merchant_vehicles";
 
   //? Taxes
   static const String TAXES = "/api/v1/taxes";

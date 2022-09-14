@@ -8,3 +8,18 @@ abstract class TransactionDetailState extends Equatable {
 }
 
 class TransactionDetailInitial extends TransactionDetailState {}
+
+class TransactionDetailLoading extends TransactionDetailState {}
+
+class TransactionDetailLoaded extends TransactionDetailState {
+
+  final TransactionDetail transactionDetail;
+
+  TransactionDetailLoaded({
+    required this.transactionDetail
+  });
+
+  @override
+  List<Object> get props => [transactionDetail];
+  
+}
