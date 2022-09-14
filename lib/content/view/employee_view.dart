@@ -25,9 +25,9 @@ class EmployeeView extends StatelessWidget {
   ];
 
   dialogCreate(currentContext){
-    final TextEditingController bankController = TextEditingController();
-    final TextEditingController nameAccountController = TextEditingController();
-    final TextEditingController noAccountController = TextEditingController();
+    final TextEditingController nameController = TextEditingController();
+    final TextEditingController jobController = TextEditingController();
+    final TextEditingController phoneController = TextEditingController();
     showDialog(
       context: navGK.currentContext!, 
       builder: (BuildContext context){
@@ -38,7 +38,7 @@ class EmployeeView extends StatelessWidget {
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("Buat Bank"),
+                Text("Tambah Pegawai"),
                 IconButton(
                   onPressed: () {
                     Navigator.pop(context, false);
@@ -54,41 +54,41 @@ class EmployeeView extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Component.text("Bank"),
+              Component.text("Nama"),
               const SizedBox(height: 10,),
               TextFormField(
                 decoration: InputDecoration(
-                  labelText: 'Bank',
+                  labelText: 'Nama',
                   border: OutlineInputBorder(),
                 ),
-                controller: bankController,
+                controller: nameController,
                 enabled: true,
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'Masukan Bank';
+                    return 'Masukan nama';
                   }
                   return null;
                 },
               ),
               const SizedBox(height: 20,),
-              Component.text("Nama Pemilik Rekening"),
+              Component.text("Pekerjaan"),
               const SizedBox(height: 10,),
               TextFormField(
                 decoration: InputDecoration(
-                  labelText: 'Pemilik Rekening',
+                  labelText: 'pekerjaan',
                   border: OutlineInputBorder(),
                 ),
-                controller: nameAccountController,
+                controller: jobController,
                 enabled: true,
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'Masukan Nama Pemilik Rekening';
+                    return 'Masukan pekerjaan';
                   }
                   return null;
                 },
               ),
               const SizedBox(height: 20,),
-              Component.text("No Rekening"),
+              Component.text("No Telepon"),
               const SizedBox(height: 10,),
               TextFormField(
                 keyboardType: TextInputType.number,
@@ -96,14 +96,14 @@ class EmployeeView extends StatelessWidget {
                   FilteringTextInputFormatter.digitsOnly
                 ],
                 decoration: InputDecoration(
-                  labelText: 'No Rekening',
+                  labelText: 'No Telepon',
                   border: OutlineInputBorder(),
                 ),
-                controller: noAccountController,
+                controller: phoneController,
                 enabled: true,
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'Masukan No Rekening';
+                    return 'Masukan No Telepon';
                   }
                   return null;
                 },
@@ -112,7 +112,7 @@ class EmployeeView extends StatelessWidget {
               InkWell(
                   onTap: (){
                     Navigator.of(context).pop();
-                    BlocProvider.of<BankCubit>(currentContext).creteBank(bankController.text, nameAccountController.text, noAccountController.text);
+                    BlocProvider.of<EmployeeCubit>(currentContext).creteEmployee(nameController.text, phoneController.text, jobController.text);
                   },
                   child: Card(
                     color: Colors.green,

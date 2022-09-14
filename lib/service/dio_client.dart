@@ -120,7 +120,15 @@ abstract class DioClient {
 
   @POST(FireshipEndpoint.MERCHANT_EMPLOYEES)
   Future<CoreModel> employeeCreate(
-    @Body() BankCreate body
+    @Body() Map<String, dynamic> body
+  );
+
+  @GET(FireshipEndpoint.MERCHANT_VEHICLES)
+  Future<CoreModel> vehicleList();
+
+  @POST(FireshipEndpoint.MERCHANT_VEHICLES)
+  Future<CoreModel> vehicleCreate(
+    @Body() Map<String, dynamic> body
   );
 
   @GET(FireshipEndpoint.TAXES)
@@ -149,6 +157,11 @@ abstract class DioClient {
 
   @GET(FireshipEndpoint.MERCHANT_DELIVERY_ORDER_OPERATION_LIST)
   Future<CoreModel> merchantDeliveryOperation();
+
+  @POST(FireshipEndpoint.MERCHANT_DELIVERY_ORDER_LIST)
+  Future<CoreModel> merchantDeliveryCreate(
+    @Body() Map<String, dynamic> body
+  );
 
   @GET(FireshipEndpoint.CUSTOMER_LIST)
   Future<CoreModel> customerList();

@@ -36,6 +36,7 @@ class Employee {
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
     data['merchant_id'] = this.merchantId;
+    data.removeWhere((key, value) => value == null);
     return data;
   }
 }
