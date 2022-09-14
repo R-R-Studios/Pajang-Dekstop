@@ -1,9 +1,13 @@
 import 'package:beben_pos_desktop/content/model/discount.dart';
+import 'package:beben_pos_desktop/content/model/employee.dart';
+import 'package:beben_pos_desktop/content/model/employee_create.dart';
 import 'package:beben_pos_desktop/content/model/merchant_bank.dart';
 import 'package:beben_pos_desktop/content/model/bank_create.dart';
 import 'package:beben_pos_desktop/content/model/banner_create.dart';
 import 'package:beben_pos_desktop/content/model/merchant_banner.dart';
+import 'package:beben_pos_desktop/content/model/vehicle_create.dart';
 import 'package:beben_pos_desktop/core/fireship/fireship_encrypt.dart';
+import 'package:beben_pos_desktop/delivery/model/vehicle.dart';
 import 'package:beben_pos_desktop/service/dio_client.dart';
 import 'package:beben_pos_desktop/service/dio_service.dart';
 import 'package:beben_pos_desktop/utils/global_functions.dart';
@@ -29,18 +33,22 @@ class ContentProvider {
     });
   }
 
-  static Future employeeList() async {
+  static Future<List<Employee>> employeeList() async {
+    List<Employee> list = [];
     await DioService.checkConnection(tryAgainMethod: employeeList, isUseBearer: true, showMessage: true).then((value) async {
       DioClient dioClient = DioClient(value);
-      var respose = await dioClient.employeeList();
-      GlobalFunctions.log("response", respose);
+      var response = await dioClient.employeeList();
+      for (var item in response.data) {
+        list.add(Employee.fromJson(item));
+      }
     });
+    return list;
   }
 
-  static Future employeeCreate(BannerCreate bannerCreate) async {
-    await DioService.checkConnection(tryAgainMethod: bannerCreate, isUseBearer: true, showMessage: true).then((value) async {
+  static Future employeeCreate(EmployeeCreate employeeCreate) async {
+    await DioService.checkConnection(tryAgainMethod: employeeCreate, isUseBearer: true, showMessage: true).then((value) async {
       DioClient dioClient = DioClient(value);
-      // var respose = await dioClient.employeeCreate(bannerCreate.toJson());
+      var respose = await dioClient.employeeCreate(employeeCreate.toJson());
       // GlobalFunctions.log("response", respose);
     });
   }
@@ -86,4 +94,24 @@ class ContentProvider {
     });
   }
 
+
+  static Future veheicleCreate(VehicleCreate vehicleCreate) async {
+    await DioService.checkConnection(tryAgainMethod: discountCreate, isUseBearer: true, showMessage: true).then((value) async {
+      DioClient dioClient = DioClient(value);
+      var respose = await dioClient.vehicleCreate(vehicleCreate.toJson());
+      GlobalFunctions.log("response", respose);
+    });
+  }
+
+  static Future<List<Vehicle>> vehicleList() async {
+    List<Vehicle> list = [];
+    await DioService.checkConnection(tryAgainMethod: vehicleList, isUseBearer: true, showMessage: true).then((value) async {
+      DioClient dioClient = DioClient(value);
+      var response = await dioClient.vehicleList();
+      for (var item in response.data) {
+        list.add(Vehicle.fromJson(item));
+      }
+    });
+    return list;
+  }
 }

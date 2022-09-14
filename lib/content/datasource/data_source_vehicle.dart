@@ -23,7 +23,7 @@ class DataSourceVehicle extends DataTableSource {
         ),
         DataCell(Text("${row.nopol ?? ""}")),
         DataCell(Text("${row.merk}")),
-        DataCell(Text("${row.deskripsi ?? ""}")),
+        DataCell(Text("${row.description ?? ""}")),
         DataCell(
           ElevatedButton.icon(
             onPressed: (){},

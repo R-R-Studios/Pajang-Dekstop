@@ -1,25 +1,27 @@
 class Vehicle {
-  
-  int? id;
   String? nopol;
   String? merk;
-  String? description;
+  String? desc;
+  String? kirDate;
+  String? stnkDate;
 
-  Vehicle({this.id, this.nopol, this.merk, this.description});
+  Vehicle({this.nopol, this.merk, this.desc, this.kirDate, this.stnkDate});
 
   Vehicle.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
     nopol = json['nopol'];
     merk = json['merk'];
-    description = json['description'];
+    desc = json['desc'];
+    kirDate = json['kir_date'];
+    stnkDate = json['stnk_date'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
     data['nopol'] = this.nopol;
     data['merk'] = this.merk;
-    data['description'] = this.description;
+    data['desc'] = this.desc;
+    data['kir_date'] = this.kirDate;
+    data['stnk_date'] = this.stnkDate;
     return data;
   }
 }

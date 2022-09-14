@@ -111,7 +111,7 @@ class VehicleScreen extends StatelessWidget {
               InkWell(
                   onTap: (){
                     Navigator.of(context).pop();
-                    // BlocProvider.of<VehicleCubit>(currentContext).creteVehicle(VehicleController.text, nameAccountController.text, noAccountController.text);
+                    BlocProvider.of<VehicleCubit>(currentContext).creteVehicle(nopolController.text, merkAccountController.text, descController.text);
                   },
                   child: Card(
                     color: Colors.green,
