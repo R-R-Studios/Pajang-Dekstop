@@ -14,7 +14,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ContentScreen extends StatelessWidget {
-
   const ContentScreen({Key? key}) : super(key: key);
 
   @override
@@ -79,7 +78,8 @@ class ContentScreen extends StatelessWidget {
         children: [
           InkWell(
             onTap: () {
-              BlocProvider.of<ContentCubit>(context).navgation(ContentMenu.banner);
+              BlocProvider.of<ContentCubit>(context)
+                  .navgation(ContentMenu.banner);
             },
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -87,10 +87,10 @@ class ContentScreen extends StatelessWidget {
                 Card(
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Icon(
-                      Icons.view_in_ar,
-                      size: 100,
-                      color: Colors.green,
+                    child: Image.asset(
+                      'assets/images/ic_banner.png',
+                      height: 80,
+                      width: 80,
                     ),
                   ),
                 ),
@@ -118,10 +118,10 @@ class ContentScreen extends StatelessWidget {
                 Card(
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Icon(
-                      Icons.view_in_ar,
-                      size: 100,
-                      color: Colors.green,
+                    child: Image.asset(
+                      'assets/images/ic_product.png',
+                      height: 80,
+                      width: 80,
                     ),
                   ),
                 ),
@@ -149,10 +149,10 @@ class ContentScreen extends StatelessWidget {
                 Card(
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Icon(
-                      Icons.money,
-                      size: 100,
-                      color: Colors.green,
+                    child: Image.asset(
+                      'assets/images/ic_bank.png',
+                      height: 80,
+                      width: 80,
                     ),
                   ),
                 ),
@@ -180,10 +180,10 @@ class ContentScreen extends StatelessWidget {
                 Card(
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Icon(
-                      Icons.money,
-                      size: 100,
-                      color: Colors.green,
+                    child: Image.asset(
+                      'assets/images/ic_employee.png',
+                      height: 80,
+                      width: 80,
                     ),
                   ),
                 ),
@@ -202,7 +202,8 @@ class ContentScreen extends StatelessWidget {
           ),
           InkWell(
             onTap: () {
-              BlocProvider.of<ContentCubit>(context).navgation(ContentMenu.discount);
+              BlocProvider.of<ContentCubit>(context)
+                  .navgation(ContentMenu.discount);
             },
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -210,10 +211,10 @@ class ContentScreen extends StatelessWidget {
                 Card(
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Icon(
-                      Icons.money,
-                      size: 100,
-                      color: Colors.green,
+                    child: Image.asset(
+                      'assets/images/ic_discount.png',
+                      height: 80,
+                      width: 80,
                     ),
                   ),
                 ),
@@ -232,7 +233,8 @@ class ContentScreen extends StatelessWidget {
           ),
           InkWell(
             onTap: () {
-              BlocProvider.of<ContentCubit>(context).navgation(ContentMenu.vehicle);
+              BlocProvider.of<ContentCubit>(context)
+                  .navgation(ContentMenu.vehicle);
             },
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -240,10 +242,10 @@ class ContentScreen extends StatelessWidget {
                 Card(
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Icon(
-                      Icons.car_rental,
-                      size: 100,
-                      color: Colors.green,
+                    child: Image.asset(
+                      'assets/images/ic_transportation.png',
+                      height: 80,
+                      width: 80,
                     ),
                   ),
                 ),
@@ -253,7 +255,7 @@ class ContentScreen extends StatelessWidget {
                 Text(
                   "Kendaraan",
                   style: TextStyle(fontSize: 16),
-                )
+                ),
               ],
             ),
           ),
@@ -261,5 +263,4 @@ class ContentScreen extends StatelessWidget {
       ),
     );
   }
-  
 }
