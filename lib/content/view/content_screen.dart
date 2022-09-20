@@ -3,6 +3,7 @@ import 'package:beben_pos_desktop/content/cubit/banner_cubit.dart';
 import 'package:beben_pos_desktop/content/cubit/content_cubit.dart';
 import 'package:beben_pos_desktop/content/cubit/discount_cubit.dart';
 import 'package:beben_pos_desktop/content/cubit/employee_cubit.dart';
+import 'package:beben_pos_desktop/content/cubit/product_cubit.dart';
 import 'package:beben_pos_desktop/content/cubit/vehicle_cubit.dart';
 import 'package:beben_pos_desktop/content/view/bank_screen.dart';
 import 'package:beben_pos_desktop/content/view/banner_view.dart';
@@ -13,9 +14,43 @@ import 'package:beben_pos_desktop/content/view/vehicle_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ContentScreen extends StatelessWidget {
+import '../model/content_menu.dart';
 
-  const ContentScreen({Key? key}) : super(key: key);
+class ContentScreen extends StatelessWidget {
+  ContentScreen({Key? key}) : super(key: key);
+
+  final List<ContentMenuModel> listMenu = [
+    ContentMenuModel(
+        title: "Banner",
+        description: "Tampilan Informasi pada halaman home pengguna",
+        image: "",
+        contentMenu: ContentMenu.banner),
+    ContentMenuModel(
+        title: "Product",
+        description: "Daftar Produk anda",
+        image: "",
+        contentMenu: ContentMenu.product),
+    ContentMenuModel(
+        title: "Bank",
+        description: "Daftar informasi bank anda saat transaksi pengguna",
+        image: "",
+        contentMenu: ContentMenu.bank),
+    ContentMenuModel(
+        title: "Pegawai",
+        description: "pegawai anda",
+        image: "",
+        contentMenu: ContentMenu.employee),
+    ContentMenuModel(
+        title: "Diskon",
+        description: "Pengaturan diskon product di aplikasi pengguna",
+        image: "",
+        contentMenu: ContentMenu.discount),
+    ContentMenuModel(
+        title: "Kendaraan",
+        description: "Daftar Kendaraan anda",
+        image: "",
+        contentMenu: ContentMenu.vehicle),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -32,9 +67,12 @@ class ContentScreen extends StatelessWidget {
             ),
           );
         } else if (state is ContentProduct) {
-          return ProductScreen(
-            callback: () => BlocProvider.of<ContentCubit>(context)
-                .navgation(ContentMenu.initial),
+          return BlocProvider(
+            create: (context) => ProductCubit(),
+            child: ProductScreen(
+              callback: () => BlocProvider.of<ContentCubit>(context)
+                  .navgation(ContentMenu.initial),
+            ),
           );
         } else if (state is ContentBank) {
           return BlocProvider(
@@ -73,193 +111,52 @@ class ContentScreen extends StatelessWidget {
 
   Widget menu(context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 15),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          InkWell(
-            onTap: () {
-              BlocProvider.of<ContentCubit>(context).navgation(ContentMenu.banner);
-            },
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Icon(
-                      Icons.view_in_ar,
-                      size: 100,
-                      color: Colors.green,
+        padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 15),
+        child: GridView.builder(
+          itemCount: listMenu.length,
+          shrinkWrap: true,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 8,
+            childAspectRatio: (100 / 200),
+          ),
+          itemBuilder: (BuildContext context, int index) {
+            return InkWell(
+              onTap: () {
+                BlocProvider.of<ContentCubit>(context)
+                    .navgation(listMenu[index].contentMenu!);
+              },
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Icon(
+                        Icons.menu,
+                        size: 100,
+                        color: Colors.green,
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  "Banner",
-                  style: TextStyle(fontSize: 16),
-                )
-              ],
-            ),
-          ),
-          const SizedBox(
-            width: 15,
-          ),
-          InkWell(
-            onTap: () {
-              BlocProvider.of<ContentCubit>(context)
-                  .navgation(ContentMenu.product);
-            },
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Icon(
-                      Icons.view_in_ar,
-                      size: 100,
-                      color: Colors.green,
-                    ),
+                  const SizedBox(
+                    height: 10,
                   ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  "Product",
-                  style: TextStyle(fontSize: 16),
-                )
-              ],
-            ),
-          ),
-          const SizedBox(
-            width: 15,
-          ),
-          InkWell(
-            onTap: () {
-              BlocProvider.of<ContentCubit>(context)
-                  .navgation(ContentMenu.bank);
-            },
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Icon(
-                      Icons.money,
-                      size: 100,
-                      color: Colors.green,
-                    ),
+                  Text(
+                    listMenu[index].title ?? "",
+                    style: TextStyle(fontSize: 16),
                   ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  "Bank",
-                  style: TextStyle(fontSize: 16),
-                )
-              ],
-            ),
-          ),
-          const SizedBox(
-            width: 15,
-          ),
-          InkWell(
-            onTap: () {
-              BlocProvider.of<ContentCubit>(context)
-                  .navgation(ContentMenu.employee);
-            },
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Icon(
-                      Icons.money,
-                      size: 100,
-                      color: Colors.green,
-                    ),
+                  const SizedBox(
+                    height: 10,
                   ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  "Pegawai",
-                  style: TextStyle(fontSize: 16),
-                )
-              ],
-            ),
-          ),
-          const SizedBox(
-            width: 15,
-          ),
-          InkWell(
-            onTap: () {
-              BlocProvider.of<ContentCubit>(context).navgation(ContentMenu.discount);
-            },
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Icon(
-                      Icons.money,
-                      size: 100,
-                      color: Colors.green,
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  "Diskon",
-                  style: TextStyle(fontSize: 16),
-                )
-              ],
-            ),
-          ),
-          const SizedBox(
-            width: 15,
-          ),
-          InkWell(
-            onTap: () {
-              BlocProvider.of<ContentCubit>(context).navgation(ContentMenu.vehicle);
-            },
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Icon(
-                      Icons.car_rental,
-                      size: 100,
-                      color: Colors.green,
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  "Kendaraan",
-                  style: TextStyle(fontSize: 16),
-                )
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
+                  Text(
+                    listMenu[index].description ?? "",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 12),
+                  )
+                ],
+              ),
+            );
+          },
+        ));
   }
-  
 }

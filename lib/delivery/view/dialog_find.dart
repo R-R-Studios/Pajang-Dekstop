@@ -1,3 +1,5 @@
+import 'package:beben_pos_desktop/content/model/brand.dart';
+import 'package:beben_pos_desktop/content/model/category.dart';
 import 'package:beben_pos_desktop/content/model/employee.dart';
 import 'package:beben_pos_desktop/core/app/constant.dart';
 import 'package:beben_pos_desktop/delivery/bloc/find_bloc.dart';
@@ -32,6 +34,12 @@ class _DialogFindState extends State<DialogFind> {
       case FeatureType.vehicle:
         findBloc.getVehicle();
         break;
+      case FeatureType.brands:
+        findBloc.getBrand();
+        break;
+      case FeatureType.category:
+        findBloc.getCategory();
+        break;
       default:
     }
     super.initState();
@@ -45,6 +53,10 @@ class _DialogFindState extends State<DialogFind> {
         return "Transaksi";
       case FeatureType.employee:
         return "Pegawai";
+      case FeatureType.brands:
+        return "Merk";
+      case FeatureType.category:
+        return "Category";
       default:
         return "";
     }
@@ -136,6 +148,66 @@ class _DialogFindState extends State<DialogFind> {
                   ),
                   onTap: () {
                     Navigator.pop(context, snapshot.data![index]);
+                  },
+                );
+              },);
+          },
+          ),
+        );
+      case FeatureType.brands:
+        return Container(
+          height: 300,
+          width: SizeConfig.screenWidth * 0.49,
+          child: StreamBuilder<List<Brand>> (
+            stream: findBloc.brandController,
+            initialData: [],
+            builder: (BuildContext context, AsyncSnapshot<List<Brand>> snapshot) {
+            return ListView.builder(
+              shrinkWrap: true,
+              itemCount: snapshot.data!.length,
+              itemBuilder: (BuildContext context, int index) {
+                return ListTile(
+                  contentPadding: EdgeInsets.only(left: 8, right: 8),
+                  title: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("${snapshot.data![index].name}"),
+                      Text("${snapshot.data![index].description}")
+                    ],
+                  ),
+                  onTap: () {
+                    Navigator.pop(context, snapshot.data![index]);
+                  },
+                );
+              },);
+          },
+          ),
+        );
+      case FeatureType.category:
+        return Container(
+          height: 300,
+          width: SizeConfig.screenWidth * 0.49,
+          child: StreamBuilder<List<Category>> (
+            stream: findBloc.category,
+            initialData: [],
+            builder: (BuildContext context, AsyncSnapshot<List<Category>> snapshot) {
+            return ListView.builder(
+              shrinkWrap: true,
+              itemCount: snapshot.data![3].subCategory?.length,
+              itemBuilder: (BuildContext context, int index) {
+                return ListTile(
+                  contentPadding: EdgeInsets.only(left: 8, right: 8),
+                  title: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("${snapshot.data![3].subCategory?[index].name}"),
+                      // Text("${snapshot.data![3].subCategory?[index].}")
+                    ],
+                  ),
+                  onTap: () {
+                    Navigator.pop(context, snapshot.data![3].subCategory?[index]);
                   },
                 );
               },);

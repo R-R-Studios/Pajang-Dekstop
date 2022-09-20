@@ -3,9 +3,14 @@ class RequestCreateMerchantProduct {
   CreateProduct? product;
   CreateProductStock? productStock;
   CreateProductPrice? productPrice;
+  List<String>? image;
 
-  RequestCreateMerchantProduct(
-      {this.product, this.productStock, this.productPrice});
+  RequestCreateMerchantProduct({
+    this.product, 
+    this.productStock, 
+    this.productPrice,
+    this.image
+  });
 
   RequestCreateMerchantProduct.fromJson(Map<String, dynamic> json) {
     product =
@@ -16,6 +21,7 @@ class RequestCreateMerchantProduct {
     productPrice = json['product_price'] != null
         ? new CreateProductPrice.fromJson(json['product_price'])
         : null;
+    image = json['image'].cast<String>();
   }
 
   Map<String, dynamic> toJson() {
@@ -29,6 +35,9 @@ class RequestCreateMerchantProduct {
     if (this.productPrice != null) {
       data['product_price'] = this.productPrice?.toJson();
     }
+    if (this.image != null) {
+    data['image'] = this.image;
+    }
     return data;
   }
 }
@@ -39,9 +48,18 @@ class CreateProduct {
   String? barcode;
   String? description;
   bool? isActive;
+  int? brandId;
+  int? categoryId;
 
-  CreateProduct(
-      {this.name, this.code, this.barcode, this.description, this.isActive});
+  CreateProduct({
+    this.name, 
+    this.code, 
+    this.barcode, 
+    this.description, 
+    this.isActive,
+    this.brandId,
+    this.categoryId
+  });
 
   CreateProduct.fromJson(Map<String, dynamic> json) {
     name = json['name'];
@@ -49,6 +67,8 @@ class CreateProduct {
     barcode = json['barcode'];
     description = json['description'];
     isActive = json['is_active'];
+    brandId = json['brand_id'];
+    categoryId = json['category_id'];
   }
 
   Map<String, dynamic> toJson() {
@@ -58,6 +78,8 @@ class CreateProduct {
     data['barcode'] = this.barcode;
     data['description'] = this.description;
     data['is_active'] = this.isActive;
+    data['brand_id'] = this.brandId;
+    data['category_id'] = this.categoryId;
     return data;
   }
 }

@@ -34,17 +34,17 @@ class _DialogCreateProductDataState extends State<DialogCreateProductData> {
   ProductBloc productBloc = ProductBloc();
   CreateProductModel createProductModel = CreateProductModel();
 
-  clearForm(){
-    _productNameController.text = "";
-    _productCodeController.text = "";
-    _productBarCodeController.text = "";
-    _productSalePriceController.text = "";
-    _productOriginalPriceController.text = "";
-    _productTotalStockController.text = "";
-    _productUnitsController.text = "";
-    _productDescriptionController.text = "";
-    selectedUnits = new UnitsModel();
-  }
+  // clearForm(){
+  //   _productNameController.text = "";
+  //   _productCodeController.text = "";
+  //   _productBarCodeController.text = "";
+  //   _productSalePriceController.text = "";
+  //   _productOriginalPriceController.text = "";
+  //   _productTotalStockController.text = "";
+  //   _productUnitsController.text = "";
+  //   _productDescriptionController.text = "";
+  //   selectedUnits = new UnitsModel();
+  // }
 
   @override
   void initState() {
@@ -371,18 +371,16 @@ class _DialogCreateProductDataState extends State<DialogCreateProductData> {
                             double originPriceProduct = double.parse(originPrice);
                             double salePriceProduct = double.parse(salePrice);
 
-                            bool isSuccess = false;
                             await productBloc.requestCreateMerchantProduct(
                                 name, code, barCode, description, true,
                                 selectedUnits.id!, totalStockProduct, totalStockProduct,
                                 originPriceProduct, salePriceProduct
                             ).then((value) async {
-                              isSuccess = value;
+                              // isSuccess = value;
                               GlobalFunctions.logPrint("Status Request Create Merchant Transaction", '$value');
-                              clearForm();
+                              // clearForm();
 
                             });
-                            Navigator.pop(context, isSuccess);
                           }
                         },
                         child: Text("Simpan"),
@@ -405,7 +403,7 @@ class _DialogCreateProductDataState extends State<DialogCreateProductData> {
     await showDialog(
         context: context,
         builder: (BuildContext context) {
-          return DialogProductUnits(selectedUnits);
+          return DialogProductUnits();
         }).then((value) async {
       if (value != null)
         selectedUnits = value;

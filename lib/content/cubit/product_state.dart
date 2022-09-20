@@ -8,3 +8,22 @@ abstract class ProductState extends Equatable {
 }
 
 class ProductInitial extends ProductState {}
+
+class ProductLoading extends ProductState {}
+
+class ProductLoaded extends ProductState {
+
+  final List<ProductModel> listProduct;
+
+  ProductLoaded({
+    required this.listProduct
+  });
+
+  @override
+  List<Object> get props => [
+    this.listProduct
+  ];
+
+}
+
+class ProductAdd extends ProductState {}

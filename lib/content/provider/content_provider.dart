@@ -1,3 +1,4 @@
+import 'package:beben_pos_desktop/content/model/brand.dart';
 import 'package:beben_pos_desktop/content/model/discount.dart';
 import 'package:beben_pos_desktop/content/model/employee.dart';
 import 'package:beben_pos_desktop/content/model/employee_create.dart';
@@ -11,6 +12,8 @@ import 'package:beben_pos_desktop/delivery/model/vehicle.dart';
 import 'package:beben_pos_desktop/service/dio_client.dart';
 import 'package:beben_pos_desktop/service/dio_service.dart';
 import 'package:beben_pos_desktop/utils/global_functions.dart';
+
+import '../model/category.dart';
 
 class ContentProvider {
 
@@ -110,6 +113,30 @@ class ContentProvider {
       var response = await dioClient.vehicleList();
       for (var item in response.data) {
         list.add(Vehicle.fromJson(item));
+      }
+    });
+    return list;
+  }
+
+  static Future<List<Brand>> brands() async {
+    List<Brand> list = [];
+    await DioService.checkConnection(tryAgainMethod: brands, isUseBearer: true, showMessage: true).then((value) async {
+      DioClient dioClient = DioClient(value);
+      var response = await dioClient.brands();
+      for (var item in response.data) {
+        list.add(Brand.fromJson(item));
+      }
+    });
+    return list;
+  }
+
+  static Future<List<Category>> category() async {
+    List<Category> list = [];
+    await DioService.checkConnection(tryAgainMethod: category, isUseBearer: true, showMessage: true).then((value) async {
+      DioClient dioClient = DioClient(value);
+      var response = await dioClient.category();
+      for (var item in response.data) {
+        list.add(Category.fromJson(item));
       }
     });
     return list;

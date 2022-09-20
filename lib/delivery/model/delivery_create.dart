@@ -72,9 +72,9 @@ class MerchantOperational {
   MerchantOperational.fromJson(Map<String, dynamic> json) {
     totalAmount = json['total_amount'];
     description = json['description'];
-    if (json['operational_details_attributes'] != null) {
+    if (json['merchant_operational_details_attributes'] != null) {
       operationalDetailsAttributes = <OperationalDetailsAttributes>[];
-      json['operational_details_attributes'].forEach((v) {
+      json['merchant_operational_details_attributes'].forEach((v) {
         operationalDetailsAttributes!
             .add(new OperationalDetailsAttributes.fromJson(v));
       });
@@ -86,7 +86,7 @@ class MerchantOperational {
     data['total_amount'] = this.totalAmount;
     data['description'] = this.description;
     if (this.operationalDetailsAttributes != null) {
-      data['operational_details_attributes'] =
+      data['merchant_operational_details_attributes'] =
           this.operationalDetailsAttributes!.map((v) => v.toJson()).toList();
     }
     return data;

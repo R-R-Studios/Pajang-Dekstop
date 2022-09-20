@@ -6,7 +6,7 @@ import 'package:beben_pos_desktop/utils/size_config.dart';
 import 'package:flutter/material.dart';
 
 class DialogProductUnits extends StatefulWidget {
-  const DialogProductUnits(UnitsModel unitsModel, {Key? key}) : super(key: key);
+  const DialogProductUnits({Key? key}) : super(key: key);
 
   @override
   _DialogProductUnitsState createState() => _DialogProductUnitsState();
