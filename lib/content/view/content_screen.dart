@@ -23,32 +23,32 @@ class ContentScreen extends StatelessWidget {
     ContentMenuModel(
         title: "Banner",
         description: "Tampilan Informasi pada halaman home pengguna",
-        image: "",
+        image: "assets/images/ic_banner.png",
         contentMenu: ContentMenu.banner),
     ContentMenuModel(
         title: "Product",
         description: "Daftar Produk anda",
-        image: "",
+        image: "assets/images/ic_product.png",
         contentMenu: ContentMenu.product),
     ContentMenuModel(
         title: "Bank",
         description: "Daftar informasi bank anda saat transaksi pengguna",
-        image: "",
+        image: "assets/images/ic_bank.png",
         contentMenu: ContentMenu.bank),
     ContentMenuModel(
         title: "Pegawai",
         description: "pegawai anda",
-        image: "",
+        image: "assets/images/ic_employee.png",
         contentMenu: ContentMenu.employee),
     ContentMenuModel(
         title: "Diskon",
         description: "Pengaturan diskon product di aplikasi pengguna",
-        image: "",
+        image: "assets/images/ic_discount.png",
         contentMenu: ContentMenu.discount),
     ContentMenuModel(
         title: "Kendaraan",
         description: "Daftar Kendaraan anda",
-        image: "",
+        image: "assets/images/ic_transportation.png",
         contentMenu: ContentMenu.vehicle),
   ];
 
@@ -78,29 +78,33 @@ class ContentScreen extends StatelessWidget {
           return BlocProvider(
             create: (context) => BankCubit(),
             child: BankScreen(
-                callback: () => BlocProvider.of<ContentCubit>(context)
-                    .navgation(ContentMenu.initial)),
+              callback: () => BlocProvider.of<ContentCubit>(context)
+                  .navgation(ContentMenu.initial),
+            ),
           );
         } else if (state is ContentEmployee) {
           return BlocProvider(
             create: (context) => EmployeeCubit(),
             child: EmployeeView(
-                callback: () => BlocProvider.of<ContentCubit>(context)
-                    .navgation(ContentMenu.initial)),
+              callback: () => BlocProvider.of<ContentCubit>(context)
+                  .navgation(ContentMenu.initial),
+            ),
           );
         } else if (state is ContentDiscount) {
           return BlocProvider(
             create: (context) => DiscountCubit(),
             child: DiscountScreen(
-                callback: () => BlocProvider.of<ContentCubit>(context)
-                    .navgation(ContentMenu.initial)),
+              callback: () => BlocProvider.of<ContentCubit>(context)
+                  .navgation(ContentMenu.initial),
+            ),
           );
         } else if (state is ContentVehicle) {
           return BlocProvider(
             create: (context) => VehicleCubit(),
             child: VehicleScreen(
-                callback: () => BlocProvider.of<ContentCubit>(context)
-                    .navgation(ContentMenu.initial)),
+              callback: () => BlocProvider.of<ContentCubit>(context)
+                  .navgation(ContentMenu.initial),
+            ),
           );
         } else {
           return Container();
@@ -111,52 +115,53 @@ class ContentScreen extends StatelessWidget {
 
   Widget menu(context) {
     return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 15),
-        child: GridView.builder(
-          itemCount: listMenu.length,
-          shrinkWrap: true,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 8,
-            childAspectRatio: (100 / 200),
-          ),
-          itemBuilder: (BuildContext context, int index) {
-            return InkWell(
-              onTap: () {
-                BlocProvider.of<ContentCubit>(context)
-                    .navgation(listMenu[index].contentMenu!);
-              },
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Icon(
-                        Icons.menu,
-                        size: 100,
-                        color: Colors.green,
-                      ),
+      padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 15),
+      child: GridView.builder(
+        itemCount: listMenu.length,
+        shrinkWrap: true,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 8,
+          childAspectRatio: (100 / 200),
+        ),
+        itemBuilder: (BuildContext context, int index) {
+          return InkWell(
+            onTap: () {
+              BlocProvider.of<ContentCubit>(context)
+                  .navgation(listMenu[index].contentMenu!);
+            },
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Image.asset(
+                      listMenu[index].image!,
+                      height: 60,
+                      width: 60,
                     ),
                   ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    listMenu[index].title ?? "",
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    listMenu[index].description ?? "",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 12),
-                  )
-                ],
-              ),
-            );
-          },
-        ));
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  listMenu[index].title ?? "",
+                  style: TextStyle(fontSize: 16),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  listMenu[index].description ?? "",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 12),
+                )
+              ],
+            ),
+          );
+        },
+      ),
+    );
   }
 }
