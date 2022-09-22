@@ -1,3 +1,6 @@
+import 'package:beben_pos_desktop/content/model/employee.dart';
+import 'package:beben_pos_desktop/content/model/vehicle.dart';
+
 class Delivery {
   int? id;
   String? orderNumber;
@@ -8,6 +11,8 @@ class Delivery {
   String? description;
   String? createdAt;
   String? updatedAt;
+  Vehicle? vehicle;
+  Employee? employee;
 
   Delivery({
     this.id,
@@ -18,7 +23,9 @@ class Delivery {
     this.merchantEmployeeId,
     this.description,
     this.createdAt,
-    this.updatedAt
+    this.updatedAt,
+    this.vehicle,
+    this.employee
   });
 
   Delivery.fromJson(Map<String, dynamic> json) {
@@ -31,6 +38,12 @@ class Delivery {
     description = json['description'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
+    if( json['merchant_vehicle'] != null){
+      vehicle = Vehicle.fromJson(json['merchant_vehicle']);
+    }
+    if( json['merchant_employee'] != null){
+      employee = Employee.fromJson(json['merchant_employee']);
+    }
   }
 
   Map<String, dynamic> toJson() {

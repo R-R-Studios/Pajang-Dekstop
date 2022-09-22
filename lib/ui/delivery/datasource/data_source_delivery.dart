@@ -137,8 +137,8 @@ class DataSourceDelivery extends DataTableSource {
           Text("${index + 1}")
         ),
         DataCell(Text("${row.orderNumber ?? ""}")),
-        DataCell(Text("${row.merchantVehicleId}")),
-        DataCell(Text("${row.merchantEmployeeId}")),
+        DataCell(Text("${row.vehicle!.nopol}")),
+        DataCell(Text("${row.employee!.name}")),
         DataCell(Text("${row.totalAmount ?? ""}")),
         DataCell(Text("${row.createdAt ?? ""}")),
         DataCell(
