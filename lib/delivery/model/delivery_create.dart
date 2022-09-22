@@ -38,25 +38,26 @@ class MerchantDeliveryOrder {
   int? vehicleId;
   int? employeeId;
 
-  MerchantDeliveryOrder(
-      {this.totalAmount,
-      this.totalOperationalAmount,
-      this.vehicleId,
-      this.employeeId});
+  MerchantDeliveryOrder({
+    this.totalAmount,
+    this.totalOperationalAmount,
+    this.vehicleId,
+    this.employeeId
+  });
 
   MerchantDeliveryOrder.fromJson(Map<String, dynamic> json) {
     totalAmount = json['total_amount'];
     totalOperationalAmount = json['total_operational_amount'];
-    vehicleId = json['vehicle_id'];
-    employeeId = json['employee_id'];
+    vehicleId = json['merchant_vehicle_id'];
+    employeeId = json['merchant_employee_id'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['total_amount'] = this.totalAmount;
     data['total_operational_amount'] = this.totalOperationalAmount;
-    data['vehicle_id'] = this.vehicleId;
-    data['employee_id'] = this.employeeId;
+    data['merchant_vehicle_id'] = this.vehicleId;
+    data['merchant_employee_id'] = this.employeeId;
     return data;
   }
 }

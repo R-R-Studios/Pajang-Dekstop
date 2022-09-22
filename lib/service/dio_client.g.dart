@@ -608,6 +608,23 @@ class _DioClient implements DioClient {
   }
 
   @override
+  Future<CoreModel> merchantDeliveryDetail(id) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'id' : id
+    };
+    final _data = <String, dynamic>{};
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<CoreModel>(
+            Options(method: 'GET', headers: <String, dynamic>{}, extra: _extra)
+                .compose(_dio.options, '/api/pos/v1/merchant_do_details',
+                    queryParameters: queryParameters, data: _data)
+                .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = CoreModel.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
   Future<CoreModel> merchantDeliveryEmployee() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};

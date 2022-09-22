@@ -1,10 +1,11 @@
 import 'package:beben_pos_desktop/component/component.dart';
 import 'package:beben_pos_desktop/core/app/constant.dart';
+import 'package:beben_pos_desktop/delivery/provider/delivery_provider.dart';
 import 'package:beben_pos_desktop/delivery/view/delivery_form_view.dart';
 import 'package:beben_pos_desktop/model/head_column_model.dart';
 import 'package:beben_pos_desktop/ui/delivery/cubit/delivery_cubit.dart';
 import 'package:beben_pos_desktop/ui/delivery/datasource/data_source_delivery.dart';
-import 'package:beben_pos_desktop/ui/delivery/model/delivery.dart';
+import 'package:beben_pos_desktop/utils/size_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,119 +17,13 @@ class DeliveryView extends StatelessWidget {
 
   final List<HeadColumnModel> _headColumnModel = [
     HeadColumnModel(key: "1", name: "No", ischecked: false),
-    HeadColumnModel(key: "2", name: "No Order", ischecked: false),
-    HeadColumnModel(key: "3", name: "Produk", ischecked: false),
-    HeadColumnModel(key: "4", name: "Status", ischecked: false),
+    HeadColumnModel(key: "2", name: "No Pengiriman", ischecked: false),
+    HeadColumnModel(key: "3", name: "Kendaraan", ischecked: false),
+    HeadColumnModel(key: "3", name: "Supir", ischecked: false),
+    HeadColumnModel(key: "4", name: "Total Harga", ischecked: false),
     HeadColumnModel(key: "4", name: "Tanggal", ischecked: false),
     HeadColumnModel(key: "4", name: "Aksi", ischecked: false),
   ];
-
-  // dialogCreate(currentContext){
-  //   final TextEditingController bankController = TextEditingController();
-  //   final TextEditingController nameAccountController = TextEditingController();
-  //   final TextEditingController noAccountController = TextEditingController();
-  //   showDialog(
-  //     context: navGK.currentContext!, 
-  //     builder: (BuildContext context){
-  //       return AlertDialog(
-  //         title: Container(
-  //           width: 500,
-  //           child: Row(
-  //             mainAxisSize: MainAxisSize.max,
-  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //             children: [
-  //               Text("Buat Bank"),
-  //               IconButton(
-  //                 onPressed: () {
-  //                   Navigator.pop(context, false);
-  //                 },
-  //                 tooltip: "Tutup",
-  //                 padding: EdgeInsets.all(0),
-  //                 icon: Icon(Icons.close)
-  //               )
-  //             ],
-  //           ),
-  //         ),
-  //         content: Column(
-  //           mainAxisSize: MainAxisSize.min,
-  //           crossAxisAlignment: CrossAxisAlignment.start,
-  //           children: [
-  //             Component.text("Bank"),
-  //             const SizedBox(height: 10,),
-  //             TextFormField(
-  //               decoration: InputDecoration(
-  //                 labelText: 'Bank',
-  //                 border: OutlineInputBorder(),
-  //               ),
-  //               controller: bankController,
-  //               enabled: true,
-  //               validator: (value) {
-  //                 if (value!.isEmpty) {
-  //                   return 'Masukan Bank';
-  //                 }
-  //                 return null;
-  //               },
-  //             ),
-  //             const SizedBox(height: 20,),
-  //             Component.text("Nama Pemilik Rekening"),
-  //             const SizedBox(height: 10,),
-  //             TextFormField(
-  //               decoration: InputDecoration(
-  //                 labelText: 'Pemilik Rekening',
-  //                 border: OutlineInputBorder(),
-  //               ),
-  //               controller: nameAccountController,
-  //               enabled: true,
-  //               validator: (value) {
-  //                 if (value!.isEmpty) {
-  //                   return 'Masukan Nama Pemilik Rekening';
-  //                 }
-  //                 return null;
-  //               },
-  //             ),
-  //             const SizedBox(height: 20,),
-  //             Component.text("No Rekening"),
-  //             const SizedBox(height: 10,),
-  //             TextFormField(
-  //               keyboardType: TextInputType.number,
-  //               inputFormatters: [
-  //                 FilteringTextInputFormatter.digitsOnly
-  //               ],
-  //               decoration: InputDecoration(
-  //                 labelText: 'No Rekening',
-  //                 border: OutlineInputBorder(),
-  //               ),
-  //               controller: noAccountController,
-  //               enabled: true,
-  //               validator: (value) {
-  //                 if (value!.isEmpty) {
-  //                   return 'Masukan No Rekening';
-  //                 }
-  //                 return null;
-  //               },
-  //             ),
-  //             const SizedBox(height: 20,),
-  //             InkWell(
-  //                 onTap: (){
-  //                   Navigator.of(context).pop();
-  //                   BlocProvider.of<BankCubit>(currentContext).creteBank(bankController.text, nameAccountController.text, noAccountController.text);
-  //                 },
-  //                 child: Card(
-  //                   color: Colors.green,
-  //                   child: Container(
-  //                     alignment: Alignment.center,
-  //                     width: SizeConfig.blockSizeHorizontal * 60,
-  //                     padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-  //                     child: Component.text("Tambah", colors: Colors.white,),
-  //                   ),
-  //                 ),
-  //               ),
-  //           ],
-  //         ),
-  //       );
-  //     }
-  //   );
-  // }
 
   @override
   Widget build(BuildContext context) {
