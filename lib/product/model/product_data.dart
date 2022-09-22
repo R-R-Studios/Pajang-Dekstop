@@ -16,23 +16,25 @@ class ProductData {
   bool? productStatus;
   bool? priceStatus;
   int? unitId;
+  String? imageUrl;
 
-  ProductData(
-      {this.productId,
-        this.name,
-        this.code,
-        this.barcode,
-        this.description,
-        this.createdAt,
-        this.priceId,
-        this.stockId,
-        this.unit,
-        this.lastStock,
-        this.salePrice,
-        this.originalPrice,
-        this.productStatus,
-        this.priceStatus,
-        this.unitId});
+  ProductData({
+    this.productId,
+    this.name,
+    this.code,
+    this.barcode,
+    this.description,
+    this.createdAt,
+    this.priceId,
+    this.stockId,
+    this.unit,
+    this.lastStock,
+    this.salePrice,
+    this.originalPrice,
+    this.productStatus,
+    this.priceStatus,
+    this.unitId
+  });
 
   ProductData.fromJson(Map<String, dynamic> json) {
     productId = json['product_id'];
@@ -52,6 +54,7 @@ class ProductData {
     productStatus = json['product_status'];
     priceStatus = json['price_status'];
     unitId = json['unit_id'];
+    imageUrl = json['image_url'];
   }
 
   Map<String, dynamic> toJson() {
@@ -71,6 +74,7 @@ class ProductData {
     data['product_status'] = this.productStatus;
     data['price_status'] = this.priceStatus;
     data['unit_id'] = this.unitId;
+    data['image_url'] = this.imageUrl;
     return data;
   }
 }

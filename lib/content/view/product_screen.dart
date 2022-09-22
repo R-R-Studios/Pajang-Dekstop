@@ -106,7 +106,7 @@ class ProductScreen extends StatelessWidget {
                         label: Text("Back"),
                         style: ElevatedButton.styleFrom(
                           textStyle: TextStyle(color: Colors.white),
-                          padding: EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 25),
+                          padding: EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 15),
                           primary: Color(0xff3498db)
                         ),
                       ),
@@ -157,8 +157,8 @@ class ProductScreen extends StatelessWidget {
                     itemCount: state.listProduct.length,
                     shrinkWrap: true,
                     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 4,
-                      // childAspectRatio: (100 / 20),
+                      crossAxisCount: 6,
+                      childAspectRatio: (1 / 1.5),
                     ),
                     itemBuilder: (BuildContext context, int index) {
                       return Card(
@@ -166,9 +166,18 @@ class ProductScreen extends StatelessWidget {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             CachedNetworkImage(
-                              imageUrl: "https://www.lg.com/id/images/lemari-es/md05832693/gallery/Digital_GN-C422SLCN_940x620-02.jpg",
+                              imageUrl: state.listProduct[index].product?.imageUrl ?? "",
                               fit: BoxFit.fill,
+                              height: SizeConfig.blockSizeHorizontal * 17,
+                              width: SizeConfig.blockSizeHorizontal * 15,
+                              placeholder: (context, string) => CupertinoActivityIndicator(),
+                              errorWidget: (context, string, e) => Icon(
+                                Icons.computer, 
+                                color: ColorPalette.primary, 
+                                size: 100,
+                              )
                             ),
+                            const SizedBox(height: 20,),
                             Component.text(
                               state.listProduct[index].product?.name ?? "",
                               fontSize: 14,
@@ -176,7 +185,7 @@ class ProductScreen extends StatelessWidget {
                               colors: Colors.black
                             ),
                             const SizedBox(height: 10,),
-                            Component.text(Core.converNumeric(200000.toString()))
+                            Component.text(Core.converNumeric(state.listProduct[index].product!.salePrice.toString()))
                           ],
                         ),
                       );
@@ -652,9 +661,9 @@ class ProductScreen extends StatelessWidget {
 
                           BlocProvider.of<ProductCubit>(context).createProduct(
                             name, code, barCode, description, true,
-                            unitsModel.id!, totalStockProduct, totalStockProduct,
+                            1, totalStockProduct, totalStockProduct,
                             originPriceProduct, salePriceProduct,
-                            brand.id!, subCategory.id!
+                            1, 1
                           );
                         }
                       },

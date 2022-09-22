@@ -375,12 +375,7 @@ class _DialogCreateProductDataState extends State<DialogCreateProductData> {
                                 name, code, barCode, description, true,
                                 selectedUnits.id!, totalStockProduct, totalStockProduct,
                                 originPriceProduct, salePriceProduct
-                            ).then((value) async {
-                              // isSuccess = value;
-                              GlobalFunctions.logPrint("Status Request Create Merchant Transaction", '$value');
-                              // clearForm();
-
-                            });
+                            );
                           }
                         },
                         child: Text("Simpan"),

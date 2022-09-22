@@ -12,6 +12,7 @@ import 'package:flutter_luban/flutter_luban.dart';
 import 'package:rxdart/subjects.dart';
 
 import '../../core/fireship/fireship_encrypt.dart';
+import 'package:path_provider/path_provider.dart' show getTemporaryDirectory;
 
 part 'product_state.dart';
 
@@ -60,7 +61,7 @@ class ProductCubit extends Cubit<ProductState> {
   }
 
 
-  Future<bool> createProduct(
+  createProduct(
     String productName,
     String productCode, 
     String productBarcode, 
@@ -75,12 +76,14 @@ class ProductCubit extends Cubit<ProductState> {
     int categoryId
   ) async {
 
-    var list = [];
-    _listImage.forEach((element) async {
-      if(element != null){
+
+    List<File> list = [];
+    for (var i = 0; i < _listImage.length; i++) {
+      if(_listImage[i] != null){
+          final tempDir = await getTemporaryDirectory();
         CompressObject compressObject = CompressObject(
-          imageFile: element, //image
-          // path: tempDir.path, //compress to path
+          imageFile: _listImage[i], //image
+          path: tempDir.path, //compress to path
           quality: 80,//first compress quality, default 80
           step: 9,//compress quality step, The bigger the fast, Smaller is more accurate, default 6
           mode: CompressMode.LARGE2SMALL,//default AUTO
@@ -88,9 +91,9 @@ class ProductCubit extends Cubit<ProductState> {
 
         var image = await Luban.compressImage(compressObject);
 
-        list.add(image);
-      } 
-    });
+        list.add(File(image!));
+      }  
+    }
 
     bool isSuccess = false;
     CreateProduct createProduct = CreateProduct(
@@ -118,7 +121,7 @@ class ProductCubit extends Cubit<ProductState> {
       product: createProduct,
       productStock: createProductStock,
       productPrice: createProductPrice,
-      image: list.map((i) => CoreFunction.convertImageToBase64(i!)).toList()
+      image: list.map((i) => CoreFunction.convertImageToBase64(i)).toList()
     );
 
     GlobalFunctions.logPrint("requestMerchantTransaction", jsonEncode(requestCreateMerchantProduct));
@@ -131,7 +134,6 @@ class ProductCubit extends Cubit<ProductState> {
         isSuccess = false;
       }
     });
-    return isSuccess;
   }
 
 }
