@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:beben_pos_desktop/content/model/product_detail_response.dart';
 import 'package:beben_pos_desktop/core/core.dart';
 import 'package:beben_pos_desktop/core/fireship/fireship_box.dart';
 import 'package:beben_pos_desktop/db/product_model_db.dart';
@@ -52,6 +53,13 @@ class ProductProvider {
       }
     }
     return listProduct;
+  }
+
+  static Future<ProductDetailResponse> productDetail(int id) async{
+    var value = await DioService.checkConnection(tryAgainMethod: productDetail, isUseBearer: true, isLoading: true);
+    var dio = DioClient(value);
+    var response = await dio.productDetail(id);
+    return ProductDetailResponse.fromJson(response.data);
   }
 
   static Future<List<ProductModel>> refreshProduct() async{

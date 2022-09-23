@@ -22,6 +22,9 @@ abstract class DioClient {
   @GET(FireshipEndpoint.LIST_PRODUCT)
   Future<CoreModel> listProduct();
 
+  @GET(FireshipEndpoint.LIST_PRODUCT)
+  Future<CoreModel> productDetail(@Query('id') int id);
+
   @GET(FireshipEndpoint.GET_PRODUCT_UNITS)
   Future<CoreModel> getListProductUnits();
 

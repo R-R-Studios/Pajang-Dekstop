@@ -9,6 +9,7 @@ import 'package:beben_pos_desktop/core/app/constant.dart';
 import 'package:beben_pos_desktop/core/core.dart';
 import 'package:beben_pos_desktop/delivery/view/dialog_find.dart';
 import 'package:beben_pos_desktop/product/model/units_model.dart';
+import 'package:beben_pos_desktop/product/provider/product_provider.dart';
 import 'package:beben_pos_desktop/utils/size_config.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:file_picker/file_picker.dart';
@@ -87,7 +88,7 @@ class ProductScreen extends StatelessWidget {
       body: BlocBuilder<ProductCubit, ProductState>(
         builder: (context, state) {
           if(state is ProductLoading){
-            return CupertinoActivityIndicator();
+            return Center(child: CupertinoActivityIndicator());
           } else if (state is ProductLoaded) {
             return Padding(
               padding: Constant.paddingScreen,
@@ -158,35 +159,42 @@ class ProductScreen extends StatelessWidget {
                     shrinkWrap: true,
                     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 6,
-                      childAspectRatio: (1 / 1.5),
+                      childAspectRatio: (1 / 1.7),
                     ),
                     itemBuilder: (BuildContext context, int index) {
-                      return Card(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            CachedNetworkImage(
-                              imageUrl: state.listProduct[index].product?.imageUrl ?? "",
-                              fit: BoxFit.fill,
-                              height: SizeConfig.blockSizeHorizontal * 17,
-                              width: SizeConfig.blockSizeHorizontal * 15,
-                              placeholder: (context, string) => CupertinoActivityIndicator(),
-                              errorWidget: (context, string, e) => Icon(
-                                Icons.computer, 
-                                color: ColorPalette.primary, 
-                                size: 100,
-                              )
-                            ),
-                            const SizedBox(height: 20,),
-                            Component.text(
-                              state.listProduct[index].product?.name ?? "",
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              colors: Colors.black
-                            ),
-                            const SizedBox(height: 10,),
-                            Component.text(Core.converNumeric(state.listProduct[index].product!.salePrice.toString()))
-                          ],
+                      return InkWell(
+                        onTap: () async {
+                          BlocProvider.of<ProductCubit>(context).onDetailProduct(state.listProduct[index].product!.productId!);
+                        },
+                        child: Card(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              CachedNetworkImage(
+                                imageUrl: state.listProduct[index].product?.imageUrl ?? "",
+                                fit: BoxFit.fill,
+                                height: SizeConfig.blockSizeHorizontal * 17,
+                                width: SizeConfig.blockSizeHorizontal * 15,
+                                placeholder: (context, string) => CupertinoActivityIndicator(),
+                                errorWidget: (context, string, e) => Icon(
+                                  Icons.computer, 
+                                  color: ColorPalette.primary, 
+                                  size: 100,
+                                )
+                              ),
+                              const SizedBox(height: 20,),
+                              Component.text(
+                                state.listProduct[index].product?.name ?? "",
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                colors: Colors.black
+                              ),
+                              const SizedBox(height: 10,),
+                              Component.text(Core.converNumeric(state.listProduct[index].product!.salePrice.toString())),
+                              const SizedBox(height: 10,),
+                              Component.text("${state.listProduct[index].product?.lastStock} / ${state.listProduct[index].product?.unit}")
+                            ],
+                          ),
                         ),
                       );
                     }

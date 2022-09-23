@@ -1,5 +1,6 @@
 import 'package:beben_pos_desktop/component/component.dart';
 import 'package:beben_pos_desktop/content/model/employee.dart';
+import 'package:beben_pos_desktop/core/app/color_palette.dart';
 import 'package:beben_pos_desktop/core/app/constant.dart';
 import 'package:beben_pos_desktop/core/util/core_function.dart';
 import 'package:beben_pos_desktop/delivery/bloc/delivery_bloc.dart';
@@ -172,7 +173,7 @@ class DeliveryFormView extends StatelessWidget {
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
-          padding: Constant.paddingScreen,
+          padding: const EdgeInsets.symmetric(horizontal: 25),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -197,15 +198,27 @@ class DeliveryFormView extends StatelessWidget {
               const SizedBox(height: 20,),
               Component.text("Form Delivery", fontSize: 17, colors: Colors.black),
               const SizedBox(height: 50,),
-              ElevatedButton(
-                onPressed: () {
-                  showDialogFind(FeatureType.transaction);
-                },
-                child: Text("Tambah Daftar Transaksi"),
-                style: ElevatedButton.styleFrom(
-                  textStyle: TextStyle(color: Colors.white),
-                  padding: EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 15),
-                  primary: Color(0xff3498db)
+              Container(
+                color: ColorPalette.grey,
+                width: SizeConfig.blockSizeHorizontal * 100,
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Component.text("Transaksi", fontSize: 17, colors: ColorPalette.black),
+                    const SizedBox(width: 50,),
+                    ElevatedButton(
+                      onPressed: () {
+                        showDialogFind(FeatureType.transaction);
+                      },
+                      child: Text("Tambah Transaksi"),
+                      style: ElevatedButton.styleFrom(
+                        textStyle: TextStyle(color: Colors.white),
+                        padding: EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 15),
+                        primary: Color(0xff3498db)
+                      ),
+                    ),
+                  ],
                 ),
               ),
               const SizedBox(height: 20,),
@@ -257,10 +270,11 @@ class DeliveryFormView extends StatelessWidget {
                     } else {
                       return Center(
                         child: Container(
-                          height: 100,
-                          width: 500,
-                          margin: const EdgeInsets.only(top: 50),
-                          child: Component.text("Masukan Transaksi", fontWeight: FontWeight.bold, fontSize: 17),
+                          height: 50,
+                          width: SizeConfig.blockSizeHorizontal * 100,
+                          color: ColorPalette.blue1,
+                          alignment: Alignment.center,
+                          child: Component.text("Belum ada Transaksi", fontSize: 17, colors: ColorPalette.white),
                         ),
                       );
                     }
@@ -268,15 +282,27 @@ class DeliveryFormView extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20,),
-              ElevatedButton(
-                onPressed: () {
-                  showDialogFind(FeatureType.vehicle);
-                },
-                child: Text("Tambah Kendaraan"),
-                style: ElevatedButton.styleFrom(
-                  textStyle: TextStyle(color: Colors.white),
-                  padding: EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 15),
-                  primary: Color(0xff3498db)
+              Container(
+                color: ColorPalette.grey,
+                width: SizeConfig.blockSizeHorizontal * 100,
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Component.text("Transaksi", fontSize: 17, colors: ColorPalette.black),
+                    const SizedBox(width: 50,),
+                    ElevatedButton(
+                      onPressed: () {
+                        showDialogFind(FeatureType.vehicle);
+                      },
+                      child: Text("Tambah Kendaraan"),
+                      style: ElevatedButton.styleFrom(
+                        textStyle: TextStyle(color: Colors.white),
+                        padding: EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 15),
+                        primary: Color(0xff3498db)
+                      ),
+                    ),
+                  ],
                 ),
               ),
               const SizedBox(height: 20,),
@@ -325,10 +351,11 @@ class DeliveryFormView extends StatelessWidget {
                     } else {
                       return Center(
                         child: Container(
-                          height: 100,
-                          width: 500,
-                          margin: const EdgeInsets.only(top: 50),
-                          child: Component.text("Masukan Transaksi", fontWeight: FontWeight.bold, fontSize: 17),
+                          height: 50,
+                          width: SizeConfig.blockSizeHorizontal * 100,
+                          color: ColorPalette.blue1,
+                          alignment: Alignment.center,
+                          child: Component.text("Belum ada Kendaraan", fontSize: 17, colors: ColorPalette.white)
                         ),
                       );
                     }
@@ -336,15 +363,27 @@ class DeliveryFormView extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20,),
-              ElevatedButton(
-                onPressed: () {
-                  showDialogFind(FeatureType.employee);
-                },
-                child: Text("Tambah karyawan"),
-                style: ElevatedButton.styleFrom(
-                  textStyle: TextStyle(color: Colors.white),
-                  padding: EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 15),
-                  primary: Color(0xff3498db)
+              Container(
+                color: ColorPalette.grey,
+                width: SizeConfig.blockSizeHorizontal * 100,
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Component.text("Karyawan", fontSize: 17, colors: ColorPalette.black),
+                    const SizedBox(width: 50,),
+                    ElevatedButton(
+                      onPressed: () {
+                        showDialogFind(FeatureType.employee);
+                      },
+                      child: Text("Tambah Transaksi"),
+                      style: ElevatedButton.styleFrom(
+                        textStyle: TextStyle(color: Colors.white),
+                        padding: EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 15),
+                        primary: Color(0xff3498db)
+                      ),
+                    ),
+                  ],
                 ),
               ),
               const SizedBox(height: 20,),
@@ -393,10 +432,11 @@ class DeliveryFormView extends StatelessWidget {
                     } else {
                       return Center(
                         child: Container(
-                          height: 100,
-                          width: 500,
-                          margin: const EdgeInsets.only(top: 50),
-                          child: Component.text("Masukan Operasional", fontWeight: FontWeight.bold, fontSize: 17),
+                          height: 50,
+                          width: SizeConfig.blockSizeHorizontal * 100,
+                          color: ColorPalette.blue1,
+                          alignment: Alignment.center,
+                          child: Component.text("Belum ada Karyawan", fontSize: 17, colors: ColorPalette.white)
                         ),
                       );
                     }
@@ -404,15 +444,27 @@ class DeliveryFormView extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20,),
-              ElevatedButton(
-                onPressed: () {
-                  dialogCreateOperational();
-                },
-                child: Text("Tambah Operasional"),
-                style: ElevatedButton.styleFrom(
-                  textStyle: TextStyle(color: Colors.white),
-                  padding: EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 15),
-                  primary: Color(0xff3498db)
+              Container(
+                color: ColorPalette.grey,
+                width: SizeConfig.blockSizeHorizontal * 100,
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Component.text("Operasional", fontSize: 17, colors: ColorPalette.black),
+                    const SizedBox(width: 50,),
+                    ElevatedButton(
+                      onPressed: () {
+                        dialogCreateOperational();
+                      },
+                      child: Text("Tambah Operasional"),
+                      style: ElevatedButton.styleFrom(
+                        textStyle: TextStyle(color: Colors.white),
+                        padding: EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 15),
+                        primary: Color(0xff3498db)
+                      ),
+                    ),
+                  ],
                 ),
               ),
               const SizedBox(height: 20,),
@@ -424,7 +476,6 @@ class DeliveryFormView extends StatelessWidget {
                   builder: (BuildContext context, AsyncSnapshot<List<Operational>> snapshot) {
                     if(snapshot.data!.isNotEmpty) {
                       return DataTable(
-
                         columnSpacing: 0, 
                         rows: snapshot.data!.asMap().map((i, operational) => MapEntry(i, DataRow(
                           cells: [
@@ -462,10 +513,11 @@ class DeliveryFormView extends StatelessWidget {
                     } else {
                       return Center(
                         child: Container(
-                          height: 100,
-                          width: 500,
-                          margin: const EdgeInsets.only(top: 50),
-                          child: Component.text("Masukan Operasional", fontWeight: FontWeight.bold, fontSize: 17),
+                          height: 50,
+                          width: SizeConfig.blockSizeHorizontal * 100,
+                          color: ColorPalette.blue1,
+                          alignment: Alignment.center,
+                          child: Component.text("Belum ada Operasional", fontSize: 17, colors: ColorPalette.white)
                         ),
                       );
                     }
@@ -473,15 +525,19 @@ class DeliveryFormView extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20,),
-              ElevatedButton(
-                onPressed: () {
-                  deliveryBloc.onCreateDelivery();
-                },
-                child: Text("Buat Pengiriman"),
-                style: ElevatedButton.styleFrom(
-                  textStyle: TextStyle(color: Colors.white),
-                  padding: EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 15),
-                  primary: Color(0xff3498db)
+              Container(
+                margin: const EdgeInsets.only(bottom: 50),
+                width: SizeConfig.blockSizeHorizontal * 100,
+                child: ElevatedButton(
+                  onPressed: () {
+                    deliveryBloc.onCreateDelivery();
+                  },
+                  child: Text("Buat Pengiriman"),
+                  style: ElevatedButton.styleFrom(
+                    textStyle: TextStyle(color: Colors.white),
+                    padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 20),
+                    primary: ColorPalette.primary
+                  ),
                 ),
               ),
             ],

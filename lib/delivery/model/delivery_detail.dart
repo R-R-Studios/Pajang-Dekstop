@@ -6,7 +6,7 @@ class DeliveryDetail {
   int? totalAmountTransaction;
   String? qty;
   String? transactionCode;
-  String? discountAmount;
+  dynamic discountAmount;
   double? valueTax;
   double? valuePay;
   String? totalOperationalAmount;

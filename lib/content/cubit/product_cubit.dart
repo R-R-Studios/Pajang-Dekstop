@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:beben_pos_desktop/content/widget/product_widget.dart';
 import 'package:beben_pos_desktop/core/util/core_function.dart';
 import 'package:beben_pos_desktop/product/model/product_model.dart';
 import 'package:beben_pos_desktop/product/model/request_create_product_merchant.dart';
@@ -134,6 +135,10 @@ class ProductCubit extends Cubit<ProductState> {
         isSuccess = false;
       }
     });
+  }
+
+  onDetailProduct(id) async {
+    ProductWidget.dialogDetail(await ProductProvider.productDetail(id));
   }
 
 }

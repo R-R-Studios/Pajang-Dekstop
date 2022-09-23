@@ -1,9 +1,7 @@
 
 import 'package:beben_pos_desktop/product/bloc/product_bloc.dart';
 import 'package:beben_pos_desktop/product/model/create_product_model.dart';
-import 'package:beben_pos_desktop/product/model/product_model.dart';
 import 'package:beben_pos_desktop/product/model/units_model.dart';
-import 'package:beben_pos_desktop/utils/global_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 

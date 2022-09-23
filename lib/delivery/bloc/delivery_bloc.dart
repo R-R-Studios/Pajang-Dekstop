@@ -7,6 +7,8 @@ import 'package:beben_pos_desktop/delivery/model/operational.dart';
 import 'package:beben_pos_desktop/delivery/model/vehicle.dart';
 import 'package:beben_pos_desktop/delivery/provider/delivery_provider.dart';
 import 'package:beben_pos_desktop/ui/transaction/model/merchant_transaction.dart';
+import 'package:flutter/material.dart';
+import 'package:nav_router/nav_router.dart';
 import 'package:rxdart/subjects.dart';
 
 import '../../utils/global_functions.dart';
@@ -108,6 +110,7 @@ class DeliveryBloc {
     );
     String key = await FireshipCrypt().encrypt(jsonEncode(deliveryCreate), await FireshipCrypt().getPassKeyPref());
     await DeliveryProvider.create(BodyEncrypt(key, key));
+    Navigator.of(navGK.currentContext!).pop();
   }
 
   close(){
