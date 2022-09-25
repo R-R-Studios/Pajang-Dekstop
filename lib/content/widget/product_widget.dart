@@ -47,7 +47,7 @@ class ProductWidget {
                     CachedNetworkImage(
                       imageUrl: productDetailResponse.product?.listImage?.first ?? "",
                       height: SizeConfig.blockSizeHorizontal * 20,
-                      width: SizeConfig.blockSizeHorizontal * 20  ,
+                      width: SizeConfig.blockSizeHorizontal * 25  ,
                       fit: BoxFit.fill,
                     ),
                     const SizedBox(width: 10,),
@@ -70,7 +70,8 @@ class ProductWidget {
                         const SizedBox(height: 10,),
                         Component.text(
                           productDetailResponse.product?.description ?? "",
-                          fontSize: 15, 
+                          maxLines: 10,
+                          fontSize: 13, 
                           colors: ColorPalette.black
                         ),
                       ],

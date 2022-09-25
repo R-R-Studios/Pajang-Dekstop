@@ -173,8 +173,8 @@ class ProductScreen extends StatelessWidget {
                               CachedNetworkImage(
                                 imageUrl: state.listProduct[index].product?.imageUrl ?? "",
                                 fit: BoxFit.fill,
-                                height: SizeConfig.blockSizeHorizontal * 17,
-                                width: SizeConfig.blockSizeHorizontal * 15,
+                                height: SizeConfig.blockSizeHorizontal * 15,
+                                width: SizeConfig.blockSizeHorizontal * 20,
                                 placeholder: (context, string) => CupertinoActivityIndicator(),
                                 errorWidget: (context, string, e) => Icon(
                                   Icons.computer, 
@@ -540,6 +540,8 @@ class ProductScreen extends StatelessWidget {
                           ),
                           Flexible(
                             child: TextFormField(
+                              maxLines: 5,
+                              minLines: 5,
                               decoration: InputDecoration(
                                 labelText: 'Deskripsi',
                                 border: OutlineInputBorder(),

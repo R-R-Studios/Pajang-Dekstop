@@ -623,6 +623,38 @@ class _DioClient implements DioClient {
     final value = CoreModel.fromJson(_result.data!);
     return value;
   }
+  
+  @override
+  Future<CoreModel> merchantAcceptTransaction(body) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(body);
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<CoreModel>(
+            Options(method: 'POST', headers: <String, dynamic>{}, extra: _extra)
+                .compose(_dio.options, '/api/pos/v1/merchant_transaction/approve_merchant_transaction',
+                    queryParameters: queryParameters, data: _data)
+                .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = CoreModel.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<CoreModel> merchantCancelTransaction(body) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(body);
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<CoreModel>(
+            Options(method: 'POST', headers: <String, dynamic>{}, extra: _extra)
+                .compose(_dio.options, '/api/pos/v1/merchant_transaction/cancel_merchant_transaction',
+                    queryParameters: queryParameters, data: _data)
+                .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = CoreModel.fromJson(_result.data!);
+    return value;
+  }
 
   @override
   Future<CoreModel> merchantDeliveryDetail(id) async {

@@ -20,7 +20,7 @@ class DeliveryView extends StatelessWidget {
     HeadColumnModel(key: "2", name: "No Pengiriman", ischecked: false),
     HeadColumnModel(key: "3", name: "Kendaraan", ischecked: false),
     HeadColumnModel(key: "3", name: "Supir", ischecked: false),
-    HeadColumnModel(key: "4", name: "Total Harga", ischecked: false),
+    HeadColumnModel(key: "4", name: "Total Kuantitas", ischecked: false),
     HeadColumnModel(key: "4", name: "Tanggal", ischecked: false),
     HeadColumnModel(key: "4", name: "Aksi", ischecked: false),
   ];

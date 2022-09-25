@@ -289,7 +289,7 @@ class DeliveryFormView extends StatelessWidget {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Component.text("Transaksi", fontSize: 17, colors: ColorPalette.black),
+                    Component.text("Kendaraan", fontSize: 17, colors: ColorPalette.black),
                     const SizedBox(width: 50,),
                     ElevatedButton(
                       onPressed: () {

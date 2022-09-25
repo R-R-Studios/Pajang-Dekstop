@@ -13,7 +13,7 @@ class TransactionDetailLoading extends TransactionDetailState {}
 
 class TransactionDetailLoaded extends TransactionDetailState {
 
-  final TransactionDetail transactionDetail;
+  final TransactionDetailResponse transactionDetail;
 
   TransactionDetailLoaded({
     required this.transactionDetail

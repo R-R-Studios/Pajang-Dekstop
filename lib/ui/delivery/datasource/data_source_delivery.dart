@@ -81,7 +81,7 @@ class DataSourceDelivery extends DataTableSource {
                 ),
                 const SizedBox(height: 10,),
                 Component.text(
-                  "Total Transaksi : ${CoreFunction.moneyFormatter(listDetail.first.totalAmountTransaction)}", 
+                  "Total Transaksi : ${CoreFunction.moneyFormatter( listDetail.first.totalAmountTransaction)}", 
                   fontWeight: FontWeight.w300, 
                   colors: ColorPalette.black
                 ),

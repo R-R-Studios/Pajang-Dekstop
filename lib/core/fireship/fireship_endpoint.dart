@@ -70,8 +70,10 @@ class FireshipEndpoint {
   static const String MERCHANT_DELIVERY_ORDER_DETAIL = "/api/pos/v1/merchant_do_details";
 
   //? Merchant Transaction Order
-  static const String MERCHANT_TRANSACTION_LIST = "/api/pos/v1/merchant_transactions";
+  static const String MERCHANT_TRANSACTION_LIST   = "/api/pos/v1/merchant_transactions";
   static const String MERCHANT_TRANSACTION_DETAIL = "/api/pos/v1/merchant_transactions/{id}";
+  static const String MERCHANT_TRANSACTION_ACCEPT = "/api/pos/v1/merchant_transaction/approve_merchant_transaction";
+  static const String MERCHANT_TRANSACTION_CANCEL = "/api/pos/v1/merchant_transaction/cancel_merchant_transaction";
 
   //? Merchant Discount
   static const String MERCHANT_DISCOUNT = "/api/pos/v1/merchant_discounts";

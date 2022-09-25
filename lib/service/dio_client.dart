@@ -155,6 +155,12 @@ abstract class DioClient {
   @GET(FireshipEndpoint.MERCHANT_DELIVERY_ORDER_LIST)
   Future<CoreModel> merchantDeliveryList();
 
+  @POST(FireshipEndpoint.MERCHANT_TRANSACTION_ACCEPT)
+  Future<CoreModel> merchantAcceptTransaction(@Body() Map<String, dynamic> body);
+
+  @POST(FireshipEndpoint.MERCHANT_TRANSACTION_ACCEPT)
+  Future<CoreModel> merchantCancelTransaction(@Body() Map<String, dynamic> body);
+
   @GET(FireshipEndpoint.MERCHANT_DELIVERY_ORDER_DETAIL)
   Future<CoreModel> merchantDeliveryDetail(@Query('transaction_code') String id);
 
