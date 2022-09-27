@@ -21,6 +21,8 @@ class DialogFind extends StatefulWidget {
 class _DialogFindState extends State<DialogFind> {
 
   final FindBloc findBloc = FindBloc();
+  bool isSubCategory = false;
+  int indexSub = 0;
 
   @override
   void initState() {
@@ -192,25 +194,69 @@ class _DialogFindState extends State<DialogFind> {
             stream: findBloc.category,
             initialData: [],
             builder: (BuildContext context, AsyncSnapshot<List<Category>> snapshot) {
-            return ListView.builder(
-              shrinkWrap: true,
-              itemCount: snapshot.data![3].subCategory?.length,
-              itemBuilder: (BuildContext context, int index) {
-                return ListTile(
-                  contentPadding: EdgeInsets.only(left: 8, right: 8),
-                  title: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("${snapshot.data![3].subCategory?[index].name}"),
-                      // Text("${snapshot.data![3].subCategory?[index].}")
-                    ],
-                  ),
-                  onTap: () {
-                    Navigator.pop(context, snapshot.data![3].subCategory?[index]);
+              if(isSubCategory) {
+                return ListView(
+                  children: [
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ElevatedButton.icon(
+                          onPressed: (){
+                            setState(() {
+                              isSubCategory = false;
+                              indexSub = 0;
+                            });
+                          },
+                          icon: Icon(
+                            Icons.arrow_back,
+                            color: Colors.white,
+                            size: 16.0,
+                          ),
+                          label: Text("Kebali"),
+                          style: ElevatedButton.styleFrom(
+                            textStyle: TextStyle(color: Colors.white),
+                            padding: EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 15),
+                            primary: Colors.blue
+                          ),
+                        ),
+                      ],
+                    ),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: snapshot.data![indexSub].subCategory?.length,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemBuilder: (BuildContext context, int index) {
+                        return ListTile(
+                          contentPadding: EdgeInsets.only(left: 8, right: 8),
+                          title: Text("${snapshot.data![indexSub].subCategory?[index].name}"),
+                          onTap: () {
+                            Navigator.pop(context, snapshot.data![indexSub].subCategory?[index]);
+                          },
+                        );
+                      },
+                    )
+                  ],
+                );
+              } else {
+                return ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return ListTile(
+                      contentPadding: EdgeInsets.only(left: 8, right: 8),
+                      title: Text("${snapshot.data![index].name}"),
+                      onTap: () {
+                        if(snapshot.data![index].subCategory!.isNotEmpty){
+                          setState(() {
+                            isSubCategory = true;
+                            indexSub = index;
+                          });
+                        }
+                      },
+                    );
                   },
                 );
-              },);
+              }
           },
           ),
         );
@@ -236,7 +282,7 @@ class _DialogFindState extends State<DialogFind> {
             Padding(
               padding: const EdgeInsets.all(24.0),
               child: Text(
-                "Cari Transaksi",
+                title(),
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
