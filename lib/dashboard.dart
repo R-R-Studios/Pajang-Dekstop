@@ -12,6 +12,8 @@ import 'package:beben_pos_desktop/receivings/menu_receivings.dart';
 import 'package:beben_pos_desktop/reports/reports_merchant.dart';
 import 'package:beben_pos_desktop/sales/sales_input.dart';
 import 'package:beben_pos_desktop/ui/delivery/view/delivery_view.dart';
+import 'package:beben_pos_desktop/ui/profile/cubit/profile_cubit.dart';
+import 'package:beben_pos_desktop/ui/profile/view/profile_view.dart';
 import 'package:beben_pos_desktop/ui/transaction/cubit/transaction_cubit.dart';
 import 'package:beben_pos_desktop/ui/transaction/view/transaction_view.dart';
 import 'package:beben_pos_desktop/utils/global_functions.dart';
@@ -70,7 +72,7 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
         name: "Customer",
         icon: "assets/images/ic_cashups.png"),
     NavigationModel(
-        key: "office", name: "Kantor", icon: "assets/images/ic_office.png"),
+        key: "profile", name: "Profile", icon: "assets/images/ic_office.png"),
   ];
 
   late TabController _tabController =
@@ -283,6 +285,11 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
                     BlocProvider(
                       create: (context) => CustomerCubit(),
                       child: CustomerView()
+                    )
+                  else if (tab.key == "profile")  
+                    BlocProvider(
+                      create: (context) => ProfileCubit(),
+                      child: ProfileView()
                     )
                   else
                     MenuCommingSoon(tab)

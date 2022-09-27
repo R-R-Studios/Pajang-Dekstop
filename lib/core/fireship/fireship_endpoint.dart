@@ -80,5 +80,6 @@ class FireshipEndpoint {
 
   //? User
   static const String CUSTOMER = "pos/v1/users";
+  static const String PROFILE = "/api/pos/v1/merchants";
 
 }

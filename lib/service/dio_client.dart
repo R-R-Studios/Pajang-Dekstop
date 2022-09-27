@@ -196,4 +196,7 @@ abstract class DioClient {
 
   @GET(FireshipEndpoint.CATEGORY)
   Future<CoreModel> category();
+
+  @GET(FireshipEndpoint.PROFILE)
+  Future<CoreModel> profile();
 }
