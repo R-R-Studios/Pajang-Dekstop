@@ -114,7 +114,7 @@ class DataSourceTransaction extends DataTableSource {
                   const SizedBox(height: 20,),
 
                   const SizedBox(height: 50,),
-                  InkWell(
+                  if (transactionDetailResponse.status?.code == "1") InkWell(
                     onTap: () async {
                       Navigator.of(context).pop();
                       var key = FireshipCrypt().encrypt(jsonEncode({'id': transactionDetailResponse.id.toString()}), await FireshipCrypt().getPassKeyPref());
@@ -130,7 +130,7 @@ class DataSourceTransaction extends DataTableSource {
                       ),
                     ),
                   ),
-                  InkWell(
+                  if (transactionDetailResponse.status?.code == "1") InkWell(
                     onTap: () async {
                       Navigator.of(context).pop();
                       var key = FireshipCrypt().encrypt(jsonEncode({'id': transactionDetailResponse.id.toString()}), await FireshipCrypt().getPassKeyPref());
@@ -171,6 +171,7 @@ class DataSourceTransaction extends DataTableSource {
         DataCell(Text("${row.typeName}")),
         DataCell(Text("${row.paymentName ?? ""}")),
         DataCell(Text("${CoreFunction.moneyFormatter(row.valueDocument)}")),
+        DataCell(Text("${row.statusName ?? ""}")),
         DataCell(
           ElevatedButton.icon(
             onPressed: () async {

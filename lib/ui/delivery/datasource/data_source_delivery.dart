@@ -79,12 +79,12 @@ class DataSourceDelivery extends DataTableSource {
                     },
                   ),
                 ),
-                const SizedBox(height: 10,),
-                Component.text(
-                  "Total Transaksi : ${CoreFunction.moneyFormatter( listDetail.first.totalAmountTransaction)}", 
-                  fontWeight: FontWeight.w300, 
-                  colors: ColorPalette.black
-                ),
+                // const SizedBox(height: 10,),
+                // Component.text(
+                //   "Total Transaksi : ${CoreFunction.moneyFormatter( listDetail.first.totalAmountTransaction)}", 
+                //   fontWeight: FontWeight.w300, 
+                //   colors: ColorPalette.black
+                // ),
                 const SizedBox(height: 20,),
                 Component.text("Kendaraan", fontWeight: FontWeight.w700, fontSize: 15, colors: ColorPalette.black),
                 const SizedBox(height: 10,),
@@ -102,21 +102,21 @@ class DataSourceDelivery extends DataTableSource {
                   ],
                 ),
                 const SizedBox(height: 50,),
-                InkWell(
-                    onTap: (){
-                      Navigator.of(context).pop();
-                      // BlocProvider.of<EmployeeCubit>(currentContext).creteEmployee(nameController.text, phoneController.text, jobController.text);
-                    },
-                    child: Card(
-                      color: Colors.red,
-                      child: Container(
-                        alignment: Alignment.center,
-                        width: SizeConfig.blockSizeHorizontal * 60,
-                        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-                        child: Component.text("Batalkan", colors: Colors.white,),
-                      ),
-                    ),
-                  ),
+                // InkWell(
+                //     onTap: (){
+                //       Navigator.of(context).pop();
+                //       // BlocProvider.of<EmployeeCubit>(currentContext).creteEmployee(nameController.text, phoneController.text, jobController.text);
+                //     },
+                //     child: Card(
+                //       color: Colors.red,
+                //       child: Container(
+                //         alignment: Alignment.center,
+                //         width: SizeConfig.blockSizeHorizontal * 60,
+                //         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+                //         child: Component.text("Batalkan", colors: Colors.white,),
+                //       ),
+                //     ),
+                //   ),
               ],
             ),
           ),

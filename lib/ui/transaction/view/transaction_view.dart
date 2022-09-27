@@ -20,7 +20,8 @@ class TransactionView extends StatelessWidget {
     HeadColumnModel(key: "4", name: "Tipe", ischecked: false),
     HeadColumnModel(key: "5", name: "Pembayaran", ischecked: false),
     HeadColumnModel(key: "6", name: "Total Transaksi", ischecked: false),
-    HeadColumnModel(key: "7", name: "Aksi", ischecked: false),
+    HeadColumnModel(key: "7", name: "Status", ischecked: false),
+    HeadColumnModel(key: "8", name: "Aksi", ischecked: false),
   ];
 
   @override

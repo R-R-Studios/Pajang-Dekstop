@@ -10,6 +10,7 @@ class MerchantTransaction {
   dynamic valueTax;
   dynamic valueDocument;
   dynamic valuePay;
+  String? statusName;
 
   MerchantTransaction({
     this.id,
@@ -22,7 +23,8 @@ class MerchantTransaction {
     this.cardNumber,
     this.valueTax,
     this.valueDocument,
-    this.valuePay
+    this.valuePay,
+    this.statusName
   });
 
   MerchantTransaction.fromJson(Map<String, dynamic> json) {
@@ -37,6 +39,7 @@ class MerchantTransaction {
     valueTax = json['value_tax'];
     valueDocument = json['value_document'];
     valuePay = json['value_pay'];
+    statusName = json['status_name'];
   }
 
   Map<String, dynamic> toJson() {
@@ -52,6 +55,7 @@ class MerchantTransaction {
     data['value_tax'] = this.valueTax;
     data['value_document'] = this.valueDocument;
     data['value_pay'] = this.valuePay;
+    data['status_name'] = this.statusName;
     return data;
   }
 }

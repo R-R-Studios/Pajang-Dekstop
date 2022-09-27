@@ -59,7 +59,7 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
         key: "messages", name: "Pesan", icon: "assets/images/ic_messages.png"),
     NavigationModel(
         key: "transaction",
-        name: "transaksi",
+        name: "Transaksi",
         icon: "assets/images/ic_expenses.png"),
     NavigationModel(
         key: "delivery",
