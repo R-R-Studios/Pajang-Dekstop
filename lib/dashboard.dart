@@ -11,9 +11,12 @@ import 'package:beben_pos_desktop/product/screen/menu_product.dart';
 import 'package:beben_pos_desktop/receivings/menu_receivings.dart';
 import 'package:beben_pos_desktop/reports/reports_merchant.dart';
 import 'package:beben_pos_desktop/sales/sales_input.dart';
+import 'package:beben_pos_desktop/ui/accounting/cubit/accounting_cubit.dart';
+import 'package:beben_pos_desktop/ui/accounting/view/accounting_view.dart';
 import 'package:beben_pos_desktop/ui/delivery/view/delivery_view.dart';
 import 'package:beben_pos_desktop/ui/profile/cubit/profile_cubit.dart';
 import 'package:beben_pos_desktop/ui/profile/view/profile_view.dart';
+import 'package:beben_pos_desktop/ui/sale/cubit/sale_cubit.dart';
 import 'package:beben_pos_desktop/ui/transaction/cubit/transaction_cubit.dart';
 import 'package:beben_pos_desktop/ui/transaction/view/transaction_view.dart';
 import 'package:beben_pos_desktop/utils/global_functions.dart';
@@ -24,6 +27,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'core/fireship/fireship_encrypt.dart';
 import 'model/navigation_model.dart';
 import 'ui/delivery/cubit/delivery_cubit.dart';
+import 'ui/sale/view/sale_view.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -32,15 +36,15 @@ class DashboardScreen extends StatefulWidget {
   _DashboardScreenState createState() => _DashboardScreenState();
 }
 
-class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProviderStateMixin {
-  
+class _DashboardScreenState extends State<DashboardScreen>
+    with SingleTickerProviderStateMixin {
   List<NavigationModel> _navModel = [
+    NavigationModel(
+        key: "casheer", name: "Kasir", icon: "assets/images/ic_sales.png"),
     // NavigationModel(
     //     name: "Customer", icon: "assets/images/ic_dashboard_customer.png"),
-    NavigationModel(
-      key: "product", 
-      name: "Produk", 
-      icon: "assets/images/ic_items.png"),
+    // NavigationModel(
+    //     key: "product", name: "Produk", icon: "assets/images/ic_items.png"),
     // NavigationModel(
     //     name: "Units", icon: "assets/images/ic_dashboard_item_kits.png"),
     // NavigationModel(
@@ -53,6 +57,10 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
         key: "sales", name: "Penjualan", icon: "assets/images/ic_sales.png"),
     NavigationModel(
         key: "reports", name: "Laporan", icon: "assets/images/ic_reports.png"),
+    NavigationModel(
+        key: "accounting",
+        name: "Akunting",
+        icon: "assets/images/ic_reports.png"),
     NavigationModel(
         key: "content",
         name: "Content",
@@ -139,7 +147,7 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
                 leadingWidth: MediaQuery.of(context).size.width * 0.2,
                 title: Padding(
                   padding: EdgeInsets.only(top: 20),
-                  child: Text('Beben POS'),
+                  child: Text('PAJANG POS'),
                 ),
                 bottom: TabBar(
                   indicatorColor: Colors.white,
@@ -258,11 +266,16 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
                   // if (tab.name == "Customer") MenuCustomer()
                   if (tab.key == "reports")
                     ReportsMerchant()
-                  else if (tab.key == "sales")
+                  else if (tab.key == "casheer")
                     SalesInput()
+                  else if (tab.key == "sales")
+                    BlocProvider(
+                      create: (context) => SaleCubit(),
+                      child: SaleView(),
+                    )
                   // else if (tab.name == "Gift Card") GiftScreen()
-                  else if (tab.key == "product")
-                    MenuProduct(dashboardBloc)
+                  // else if (tab.key == "product")
+                  //   MenuProduct(dashboardBloc)
                   else if (tab.key == "receivings")
                     MenuReceivings(dashboardBloc)
                   // else if (tab.name == "Units") MenuUnits()
@@ -271,26 +284,26 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
                       create: (context) => ContentCubit(),
                       child: ContentScreen(),
                     )
-                  else if (tab.key == "transaction")  
+                  else if (tab.key == "transaction")
                     BlocProvider(
-                      create: (context) => TransactionCubit(),
-                      child: TransactionView()
-                    )
-                  else if (tab.key == "delivery")  
+                        create: (context) => TransactionCubit(),
+                        child: TransactionView())
+                  else if (tab.key == "delivery")
                     BlocProvider(
-                      create: (context) => DeliveryCubit(),
-                      child: DeliveryView()
-                    )
-                  else if (tab.key == "customer")  
+                        create: (context) => DeliveryCubit(),
+                        child: DeliveryView())
+                  else if (tab.key == "customer")
                     BlocProvider(
-                      create: (context) => CustomerCubit(),
-                      child: CustomerView()
-                    )
-                  else if (tab.key == "profile")  
+                        create: (context) => CustomerCubit(),
+                        child: CustomerView())
+                  else if (tab.key == "profile")
                     BlocProvider(
-                      create: (context) => ProfileCubit(),
-                      child: ProfileView()
-                    )
+                        create: (context) => ProfileCubit(),
+                        child: ProfileView())
+                  else if (tab.key == "accounting")
+                    BlocProvider(
+                        create: (context) => AccountingCubit(),
+                        child: AccountingView())
                   else
                     MenuCommingSoon(tab)
               ],
@@ -395,8 +408,7 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
           // );
           return Dialog(
             shape: RoundedRectangleBorder(
-                borderRadius:
-                BorderRadius.circular(20.0)), //this right here
+                borderRadius: BorderRadius.circular(20.0)), //this right here
             child: Container(
               child: Padding(
                 padding: const EdgeInsets.all(24.0),
@@ -414,20 +426,21 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           TextButton(
-                              onPressed: (){
-                                Navigator.pop(ctx);
-                              }, child:
-                          Container(
-                            width: SizeConfig.screenWidth * 0.12,
-                            height: 30,
-                            child: Center(
-                              child: Text(
-                                "Tidak",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(color: Colors.black),
+                            onPressed: () {
+                              Navigator.pop(ctx);
+                            },
+                            child: Container(
+                              width: SizeConfig.screenWidth * 0.12,
+                              height: 30,
+                              child: Center(
+                                child: Text(
+                                  "Tidak",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(color: Colors.black),
+                                ),
                               ),
                             ),
-                          ),),
+                          ),
                           SizedBox(
                             width: 24,
                           ),
@@ -435,7 +448,8 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
                             onPressed: () {
                               logout();
                             },
-                            style: ElevatedButton.styleFrom(primary: Colors.lightBlue),
+                            style: ElevatedButton.styleFrom(
+                                primary: Colors.lightBlue),
                             child: Container(
                               width: SizeConfig.screenWidth * 0.12,
                               height: 30,
@@ -535,7 +549,7 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
                               padding: EdgeInsets.only(left: 2),
                               child: TextFormField(
                                 controller: printerAddressController,
-                                validator: (value){
+                                validator: (value) {
                                   if (value!.isEmpty) {
                                     return 'Masukan printer address';
                                   }
@@ -562,15 +576,13 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
                           padding: const EdgeInsets.all(8.0),
                           child: ElevatedButton(
                             onPressed: () {
-                              onSetupPrinter(printerAddressController.text, ctx);
+                              onSetupPrinter(
+                                  printerAddressController.text, ctx);
                             },
                             style: ElevatedButton.styleFrom(
                                 textStyle: TextStyle(color: Colors.white),
                                 padding: EdgeInsets.only(
-                                    left: 20,
-                                    right: 20,
-                                    top: 15,
-                                    bottom: 15),
+                                    left: 20, right: 20, top: 15, bottom: 15),
                                 primary: Color(0xff3498db)),
                             child: Text("Simpan"),
                           ),
@@ -587,7 +599,7 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
 
   void onSetupPrinter(String address, BuildContext ctx) {
     var form = _formKey.currentState;
-    if(form!= null && form.validate()){
+    if (form != null && form.validate()) {
       FireshipCrypt().setPrinterAddress(address);
       Navigator.pop(ctx);
     }

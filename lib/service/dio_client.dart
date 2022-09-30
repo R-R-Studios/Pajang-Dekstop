@@ -2,7 +2,6 @@ import 'package:beben_pos_desktop/content/model/bank_create.dart';
 import 'package:beben_pos_desktop/content/model/banner_create.dart';
 import 'package:beben_pos_desktop/core/fireship/fireship_endpoint.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 import 'package:retrofit/http.dart';
 
 import 'model/core_model.dart';
@@ -24,6 +23,9 @@ abstract class DioClient {
 
   @GET(FireshipEndpoint.LIST_PRODUCT)
   Future<CoreModel> productDetail(@Query('id') int id);
+
+  @POST(FireshipEndpoint.UPDATE_PRODUCT_PRICE)
+  Future<CoreModel> productPriceUpdate(@Body() Map<String, dynamic> body);
 
   @GET(FireshipEndpoint.GET_PRODUCT_UNITS)
   Future<CoreModel> getListProductUnits();
@@ -199,4 +201,23 @@ abstract class DioClient {
 
   @GET(FireshipEndpoint.PROFILE)
   Future<CoreModel> profile();
+
+  @GET(FireshipEndpoint.BALANCES)
+  Future<CoreModel> balances();
+
+  @GET(FireshipEndpoint.BALANCES)
+  Future<CoreModel> balanceUpdate(
+    @Body() Map<String, dynamic> body
+  );
+
+  @POST(FireshipEndpoint.UPDATE_PASSWORD)
+  Future<CoreModel> updatePassword(
+    @Body() Map<String, dynamic> body
+  );
+
+  @POST(FireshipEndpoint.OTP)
+  Future<CoreModel> otp(
+    @Body() Map<String, dynamic> body
+  );
+  
 }

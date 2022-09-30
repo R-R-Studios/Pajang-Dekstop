@@ -183,11 +183,14 @@ class ProductScreen extends StatelessWidget {
                                 )
                               ),
                               const SizedBox(height: 20,),
-                              Component.text(
-                                state.listProduct[index].product?.name ?? "",
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                colors: Colors.black
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 10),
+                                child: Component.text(
+                                  state.listProduct[index].product?.name ?? "",
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  colors: Colors.black
+                                ),
                               ),
                               const SizedBox(height: 10,),
                               Component.text(Core.converNumeric(state.listProduct[index].product!.salePrice.toString())),

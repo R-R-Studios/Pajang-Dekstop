@@ -1,12 +1,11 @@
-import 'package:beben_pos_desktop/dashboard.dart';
-import 'package:beben_pos_desktop/main.dart';
-import 'package:beben_pos_desktop/profile/bloc/profile_bloc.dart';
+import 'package:beben_pos_desktop/component/component.dart';
+import 'package:beben_pos_desktop/core/app/color_palette.dart';
 import 'package:beben_pos_desktop/utils/global_color_palette.dart';
 import 'package:beben_pos_desktop/utils/global_functions.dart';
 import 'package:beben_pos_desktop/utils/size_config.dart';
 import 'package:bot_toast/bot_toast.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:nav_router/nav_router.dart';
 
 import 'bloc/session_bloc.dart';
@@ -38,13 +37,84 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
+  dialogForgotPassword(){
+    final TextEditingController phoneNumberController = TextEditingController();
+    showDialog(
+      context: navGK.currentContext!, 
+      builder: (BuildContext context){
+        return AlertDialog(
+          title: Container(
+            width: 500,
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text("Lupa Password"),
+                IconButton(
+                  onPressed: () {
+                    Navigator.pop(context, false);
+                  },
+                  tooltip: "Tutup",
+                  padding: EdgeInsets.all(0),
+                  icon: Icon(Icons.close)
+                )
+              ],
+            ),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 10,),
+              Component.text("Masukan No Telepon yang terdaftar dan terakit dengan Whatsapp"),
+              const SizedBox(height: 20,),
+              TextFormField(
+                keyboardType: TextInputType.number,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly
+                ],
+                decoration: InputDecoration(
+                  labelText: 'No Telepon',
+                  border: OutlineInputBorder(),
+                ),
+                controller: phoneNumberController,
+                enabled: true,
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Masukan No Telepon';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 20,),
+              InkWell(
+                onTap: (){
+                  Navigator.of(context).pop();
+                  SessionBloc().otpRequest(phoneNumberController.text);
+                },
+                child: Card(
+                  color: Colors.green,
+                  child: Container(
+                    alignment: Alignment.center,
+                    width: SizeConfig.blockSizeHorizontal * 60,
+                    padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+                    child: Component.text("Kirim OTP", colors: Colors.white,),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      }
+    );
+  }
+
+
   @override
   Widget build(BuildContext context) {
-
     SizeConfig().init(context);
     return MaterialApp(
       home: Scaffold(
@@ -199,6 +269,17 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                               ],
                             )),
+                      ),
+                      TextButton(
+                        onPressed: (){
+                          dialogForgotPassword();
+                        }, 
+                        child: Component.text(
+                          "Lupa Password ?",
+                          colors: ColorPalette.primary,
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold
+                        )
                       )
                     ],
                   ),

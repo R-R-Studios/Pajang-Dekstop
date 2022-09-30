@@ -7,10 +7,13 @@ import 'package:flutter/material.dart';
 import 'package:nav_router/nav_router.dart';
 
 import '../../component/component.dart';
+import 'package:html/parser.dart' show parse;
+import 'package:html/dom.dart' as dom;
+import 'package:flutter_html/flutter_html.dart';
 
 class ProductWidget {
 
-  static dialogDetail(ProductDetailResponse productDetailResponse){
+  static dialogDetail(ProductDetailResponse productDetailResponse, final VoidCallback callback){
     showDialog(
       context: navGK.currentContext!, 
       builder: (BuildContext context){
@@ -37,9 +40,9 @@ class ProductWidget {
             height: 500,
             width: 700,
             // width: double.maxFinite,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: ListView(
+              // mainAxisSize: MainAxisSize.min,
+              // crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   mainAxisSize: MainAxisSize.min,
@@ -68,12 +71,16 @@ class ProductWidget {
                           colors: ColorPalette.black
                         ),
                         const SizedBox(height: 10,),
-                        Component.text(
-                          productDetailResponse.product?.description ?? "",
-                          maxLines: 10,
-                          fontSize: 13, 
-                          colors: ColorPalette.black
-                        ),
+                        // Component.text(
+                        //    ,
+                        //   maxLines: 10,
+                        //   fontSize: 13, 
+                        //   colors: ColorPalette.black
+                        // ),
+                        Container(
+                          width: SizeConfig.blockSizeHorizontal * 25,
+                          child: Html(data: parse(productDetailResponse.product?.description ?? "").outerHtml)
+                        )
                       ],
                     ),
                   ],
@@ -145,6 +152,17 @@ class ProductWidget {
                     ),
                   ],
                 ),
+                const SizedBox(height: 20,),
+                ElevatedButton(
+                  onPressed: callback,
+                  child: Text("Update Harga"),
+                  style: ElevatedButton.styleFrom(
+                    textStyle: TextStyle(color: Colors.white),
+                    padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 20),
+                    primary: Color(0xff3498db)
+                  ),
+                ),
+                const SizedBox(height: 20,),
                 // Component.text("No Pengiriman", fontWeight: FontWeight.w700, fontSize: 15, colors: ColorPalette.black),
                 // const SizedBox(height: 10,),
                 // Component.text(delivery.orderNumber ?? "", fontSize: 15),

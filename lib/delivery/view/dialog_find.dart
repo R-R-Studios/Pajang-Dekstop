@@ -212,7 +212,7 @@ class _DialogFindState extends State<DialogFind> {
                             color: Colors.white,
                             size: 16.0,
                           ),
-                          label: Text("Kebali"),
+                          label: Text("Kembali"),
                           style: ElevatedButton.styleFrom(
                             textStyle: TextStyle(color: Colors.white),
                             padding: EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 15),

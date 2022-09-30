@@ -11,6 +11,7 @@ class FireshipEndpoint {
   static const String LIST_PRODUCT = "/api/pos/v1/products";
   static const String GET_PRODUCT_UNITS = "/api/pos/v1/units";
   static const String CREATE_MERCHANT_PRODUCT = "/api/pos/v1/merchant_product";
+  static const String UPDATE_PRODUCT_PRICE = "/api/pos/v1/product/update_merchant_sale_price";
 
   // Menu Sales
   static const String LIST_MERCHANT_PRODUCT = "/api/pos/v1/merchant_products";
@@ -79,7 +80,10 @@ class FireshipEndpoint {
   static const String MERCHANT_DISCOUNT = "/api/pos/v1/merchant_discounts";
 
   //? User
-  static const String CUSTOMER = "pos/v1/users";
+  static const String CUSTOMER = "/api/pos/v1/users";
   static const String PROFILE = "/api/pos/v1/merchants";
+  static const String BALANCES = "/api/pos/v1/merchant_balances";
+  static const String UPDATE_PASSWORD = "/api/pos/v1/user/update_password";
+  static const String OTP = "/api/mobile/v1/registration/agent/phones";
 
 }

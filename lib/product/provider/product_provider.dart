@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:beben_pos_desktop/content/model/product_detail_response.dart';
 import 'package:beben_pos_desktop/core/core.dart';
 import 'package:beben_pos_desktop/core/fireship/fireship_box.dart';
+import 'package:beben_pos_desktop/core/fireship/fireship_encrypt.dart';
 import 'package:beben_pos_desktop/db/product_model_db.dart';
 import 'package:beben_pos_desktop/product/bloc/product_bloc.dart';
 import 'package:beben_pos_desktop/product/model/product_data.dart';
@@ -60,6 +61,12 @@ class ProductProvider {
     var dio = DioClient(value);
     var response = await dio.productDetail(id);
     return ProductDetailResponse.fromJson(response.data);
+  }
+
+  static Future productPriceUpdate(BodyEncrypt bodyEncrypt) async{
+    var value = await DioService.checkConnection(tryAgainMethod: productPriceUpdate, isUseBearer: true, isLoading: true);
+    var dio = DioClient(value);
+    var response = await dio.productPriceUpdate(bodyEncrypt.toJson());
   }
 
   static Future<List<ProductModel>> refreshProduct() async{

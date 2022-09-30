@@ -458,7 +458,7 @@ class _ReceivingsStructState extends State<ReceivingsStruct> {
           pw.Padding(
             padding: pw.EdgeInsets.only(bottom: 3),
             child: pw.Text(
-              "Beben Pos Desktop",
+              "Pajang Pos Desktop",
               style: pw.TextStyle(
                 fontSize: 14,
               ),

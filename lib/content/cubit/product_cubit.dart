@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:beben_pos_desktop/content/model/product_price_update.dart';
+import 'package:beben_pos_desktop/content/view/dialog_product_price.dart';
 import 'package:beben_pos_desktop/content/widget/product_widget.dart';
 import 'package:beben_pos_desktop/core/util/core_function.dart';
 import 'package:beben_pos_desktop/product/model/product_model.dart';
@@ -9,7 +11,9 @@ import 'package:beben_pos_desktop/product/provider/product_provider.dart';
 import 'package:beben_pos_desktop/utils/global_functions.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_luban/flutter_luban.dart';
+import 'package:nav_router/nav_router.dart';
 import 'package:rxdart/subjects.dart';
 
 import '../../core/fireship/fireship_encrypt.dart';
@@ -27,6 +31,8 @@ class ProductCubit extends Cubit<ProductState> {
   BehaviorSubject<List<File?>> listImageController = BehaviorSubject();
 
   Stream<List<File?>> get listImage => listImageController.stream;
+
+  int productId = -1;
 
   onGetProduct() async {
     var list = await ProductProvider.refreshProduct();
@@ -127,18 +133,61 @@ class ProductCubit extends Cubit<ProductState> {
 
     GlobalFunctions.logPrint("requestMerchantTransaction", jsonEncode(requestCreateMerchantProduct));
     var key = FireshipCrypt().encrypt(jsonEncode(requestCreateMerchantProduct), await FireshipCrypt().getPassKeyPref());
-    await ProductProvider.requestCreateMerchantProduct(BodyEncrypt(key, key).toJson()).then((value) async {
-    GlobalFunctions.logPrint("Return Status from provider RequestCreateMerchantProduct", '$value');
-      if (value) {
-        isSuccess = true;
-      } else {
-        isSuccess = false;
+    await ProductProvider.requestCreateMerchantProduct(BodyEncrypt(key, key).toJson());
+    emit(ProductLoading());
+    onGetProduct();
+  }
+
+  onDetailProduct(id) async {
+    productId = id;
+    ProductWidget.dialogDetail(await ProductProvider.productDetail(id), dialogUpdatePrice);
+  }
+
+  dialogUpdatePrice(){
+    Navigator.of(navGK.currentContext!).pop();
+    showDialog(
+      context: navGK.currentContext!, 
+      builder: (BuildContext context){
+        return AlertDialog(
+          title: Container(
+            width: 500,
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text("Upate harga product"),
+                IconButton(
+                  onPressed: () {
+                    Navigator.pop(context, false);
+                  },
+                  tooltip: "Tutup",
+                  padding: EdgeInsets.all(0),
+                  icon: Icon(Icons.close)
+                )
+              ],
+            ),
+          ),
+          content: DialogProductPrice(),
+        );
+      }
+    ).then((value) {
+      if(value != null){
+        value as ProductPriceUpdateRequest;
+        onUpdateProductPrice(productId, value.salePrice ?? 0, value.type ?? "");
       }
     });
   }
 
-  onDetailProduct(id) async {
-    ProductWidget.dialogDetail(await ProductProvider.productDetail(id));
+  onUpdateProductPrice(int id, int salePrice, String type) async {
+    ProductPriceUpdateRequest productPriceUpdateRequest = ProductPriceUpdateRequest(
+      productId: id,
+      salePrice: salePrice,
+      type: type
+    );
+    var key = FireshipCrypt().encrypt(jsonEncode(productPriceUpdateRequest), await FireshipCrypt().getPassKeyPref());
+    await ProductProvider.productPriceUpdate(BodyEncrypt(key, key));
+    emit(ProductLoading());
+    onGetProduct();
   }
 
 }
