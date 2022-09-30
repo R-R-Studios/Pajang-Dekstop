@@ -9,6 +9,7 @@ import 'package:beben_pos_desktop/main.dart';
 import 'package:beben_pos_desktop/profile/bloc/profile_bloc.dart';
 import 'package:beben_pos_desktop/service/dio_client.dart';
 import 'package:beben_pos_desktop/service/dio_service.dart';
+import 'package:beben_pos_desktop/session/model/otp_response.dart';
 import 'package:beben_pos_desktop/session/model/response_session.dart';
 import 'package:beben_pos_desktop/utils/global_functions.dart';
 import 'package:flutter/material.dart';
@@ -44,4 +45,12 @@ class SessionProvider {
       }
     });
   }
+
+  static Future<OTPResponse> otpRequest(BodyEncrypt bodyEncrypt) async {
+    var dio = await DioService.checkConnection(tryAgainMethod: otpRequest, isLoading: true);
+    DioClient dioClient = DioClient(dio);
+    var response = await dioClient.otp(bodyEncrypt.toJson());
+    return OTPResponse.fromJson(response.data);
+  }
+
 }
