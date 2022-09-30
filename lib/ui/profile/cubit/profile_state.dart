@@ -8,3 +8,20 @@ abstract class ProfileState extends Equatable {
 }
 
 class ProfileInitial extends ProfileState {}
+
+class ProfileLoaded extends ProfileState {
+  
+  final Responseprofile responseprofile;
+
+  ProfileLoaded({
+    required this.responseprofile
+  });
+
+  @override
+  List<Object> get props => [
+    responseprofile
+  ];
+
+}
+
+class ProfileLoading extends ProfileState {}
